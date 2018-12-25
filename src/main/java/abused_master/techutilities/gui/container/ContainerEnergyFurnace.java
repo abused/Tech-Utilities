@@ -88,6 +88,6 @@ public class ContainerEnergyFurnace extends CraftingContainer {
 
     @Override
     public ItemStack transferSlot(PlayerEntity playerEntity, int i) {
-        return super.transferSlot(playerEntity, i);
+        return ItemStack.EMPTY;
     }
 }

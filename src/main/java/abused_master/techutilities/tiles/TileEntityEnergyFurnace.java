@@ -2,14 +2,16 @@ package abused_master.techutilities.tiles;
 
 import abused_master.techutilities.api.phase.EnergyStorage;
 import abused_master.techutilities.registry.ModTiles;
+import net.fabricmc.fabric.block.entity.ClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.client.network.packet.BlockEntityUpdateClientPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeManager;
 import net.minecraft.recipe.smelting.SmeltingRecipe;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.text.TextComponent;
@@ -18,9 +20,7 @@ import net.minecraft.util.InventoryUtil;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.Direction;
 
-import java.util.Iterator;
-
-public class TileEntityEnergyFurnace extends BlockEntity implements Tickable, SidedInventory {
+public class TileEntityEnergyFurnace extends BlockEntity implements Tickable, SidedInventory, ClientSerializable {
 
     private DefaultedList<ItemStack> inventory;
     public EnergyStorage storage = new EnergyStorage(50000);
@@ -57,60 +57,54 @@ public class TileEntityEnergyFurnace extends BlockEntity implements Tickable, Si
 
     @Override
     public void tick() {
-        if(!world.isClient) {
-            BlockState state = world.getBlockState(pos);
-            world.updateListeners(pos, state, state, 3);
-        }
         this.storage.recieveEnergy(100);
 
-        if(canRun(getRecipeFromInput())) {
+        if(canRun()) {
             smeltTime++;
             if(smeltTime >= this.getTotalSmeltTime()) {
                 smeltTime = 0;
-                this.smeltItem(this.getRecipeFromInput());
+                this.smeltItem();
                 storage.extractEnergy(energyUsagePerSmelt);
+                BlockState state = world.getBlockState(pos);
+                world.updateListeners(pos, state, state, 3);
             }
         }else {
             if (smeltTime > 0) {
                 smeltTime = 0;
+                BlockState state = world.getBlockState(pos);
+                world.updateListeners(pos, state, state, 3);
             }
         }
     }
 
-    public Recipe getRecipeFromInput() {
-        Iterator var2 = this.world.getRecipeManager().values().iterator();
+    public SmeltingRecipe getRecipeFromInput() {
+        Recipe recipe = null;
 
-        Recipe recipe;
-        do {
-            if (!var2.hasNext()) {
-                return null;
-            }
-
-            recipe = (Recipe)var2.next();
-        } while(!(recipe instanceof SmeltingRecipe) || !((Ingredient)recipe.getPreviewInputs().get(0)).matches(inventory.get(0)));
-
-        return recipe;
-    }
-
-    public boolean canRun(Recipe recipe) {
-        if(!inventory.get(0).isEmpty()) {
-            if(recipe != null && !recipe.getOutput().isEmpty() && inventory.get(1).getAmount() < 64 && storage.getEnergyStored() >= energyUsagePerSmelt) {
-                if(inventory.get(1).isEmpty()) {
-                    return true;
-                }else {
-                    if(ItemStack.areEqual(recipe.getOutput(), inventory.get(1))) {
-                        return true;
-                    }else {
-                        return false;
-                    }
-                }
+        for (Recipe recipe1 : world.getRecipeManager().values()) {
+            if(recipe1 instanceof SmeltingRecipe && recipe1.getPreviewInputs().get(0).matches(inventory.get(0))) {
+                recipe = recipe1;
+                break;
             }
         }
 
-        return false;
+        return (SmeltingRecipe) recipe;
     }
 
-    public void smeltItem(Recipe recipe) {
+    public boolean canRun() {
+        SmeltingRecipe recipe = getRecipeFromInput();
+        if(recipe == null || inventory.get(0).isEmpty()|| recipe.getOutput().isEmpty() || inventory.get(1).getAmount() > 64 || storage.getEnergyStored() < energyUsagePerSmelt) {
+            return false;
+        }else if(!inventory.get(1).isEmpty()) {
+            if (!ItemStack.areEqual(recipe.getOutput(), inventory.get(1))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void smeltItem() {
+        SmeltingRecipe recipe = getRecipeFromInput();
         ItemStack output = recipe.getOutput();
 
         if(inventory.get(1).isEmpty()) {
@@ -188,5 +182,20 @@ public class TileEntityEnergyFurnace extends BlockEntity implements Tickable, Si
     @Override
     public TextComponent getName() {
         return new StringTextComponent("RF Furnace");
+    }
+
+    @Override
+    public void fromClientTag(CompoundTag tag) {
+        this.fromTag(tag);
+    }
+
+    @Override
+    public CompoundTag toClientTag(CompoundTag tag) {
+        return this.toTag(tag);
+    }
+
+    @Override
+    public BlockEntityUpdateClientPacket toUpdatePacket() {
+        return super.toUpdatePacket();
     }
 }
