@@ -9,4 +9,7 @@ public class Config {
     public static boolean generateSilver = true;
     public static boolean generatePlatinum = true;
     public static boolean generateNickel = true;
+
+    public static void initConfig() {
+    }
 }

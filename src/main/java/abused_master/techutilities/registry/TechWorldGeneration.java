@@ -6,7 +6,6 @@ import abused_master.techutilities.blocks.BlockResources;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkProvider;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 
 import java.util.Random;
@@ -14,7 +13,6 @@ import java.util.Random;
 public class TechWorldGeneration implements IWorldGenerator {
 
     public TechWorldGeneration() {
-        System.out.println("Beginning Tech Utilities World Generation!");
     }
 
     private void runGenerator(WorldGenerator generator, World world, Random rand, int chunk_X, int chunk_Z, int chancesToSpawn, int minHeight, int maxHeight) {
@@ -32,11 +30,10 @@ public class TechWorldGeneration implements IWorldGenerator {
 
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, ChunkGenerator chunkGenerator, ChunkProvider chunkProvider) {
-        if(world.getDimension().getType() == DimensionType.OVERWORLD) {
-            for (BlockResources.EnumResourceOres ore : BlockResources.EnumResourceOres.values()) {
-                if(ore.generateOre()) {
-                    this.runGenerator(ore.getOreWorldGenerator(), world, random, chunkX, chunkZ, ore.getSpawnRate(), 0, ore.getMaxHeight());
-                }
+        System.out.println("Beginning Tech Utilities World Generation!");
+        for (BlockResources.EnumResourceOres ore : BlockResources.EnumResourceOres.values()) {
+            if (ore.generateOre()) {
+                this.runGenerator(ore.getOreWorldGenerator(), world, random, chunkX, chunkZ, ore.getSpawnRate(), 0, ore.getMaxHeight());
             }
         }
     }

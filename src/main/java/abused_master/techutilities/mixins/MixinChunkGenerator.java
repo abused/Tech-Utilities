@@ -11,8 +11,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ChunkGenerator.class)
 public class MixinChunkGenerator {
 
-    @Inject(method = "generateFeatures", at = @At("RETURN"))
-    public void generateFeatures(class_3233 class_3233_1, CallbackInfo info) {
+    @Inject(method = "generateFeatures", at = @At("HEAD"))
+    public void generateFeatures(class_3233 class_3233_1, CallbackInfo ci) {
         WorldGenRegistry.generateWorld(class_3233_1.method_14336(), class_3233_1.method_14339(), class_3233_1.getWorld(), class_3233_1.getWorld().getChunkManager().getChunkGenerator(), class_3233_1.getWorld().getChunkManager());
     }
+
 }
