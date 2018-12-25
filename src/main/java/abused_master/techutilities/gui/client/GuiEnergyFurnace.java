@@ -1,0 +1,68 @@
+package abused_master.techutilities.gui.client;
+
+import abused_master.techutilities.TechUtilities;
+import abused_master.techutilities.gui.container.ContainerEnergyFurnace;
+import abused_master.techutilities.tiles.TileEntityEnergyFurnace;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.ContainerGui;
+import net.minecraft.util.Identifier;
+
+@Environment(EnvType.CLIENT)
+public class GuiEnergyFurnace extends ContainerGui {
+
+    public Identifier RFFurnace = new Identifier(TechUtilities.MODID, "textures/gui/energy_furnace_gui.png");
+    public TileEntityEnergyFurnace tile;
+
+    public GuiEnergyFurnace(TileEntityEnergyFurnace tile, ContainerEnergyFurnace containerRFFurnace) {
+        super(containerRFFurnace);
+        this.width = 176;
+        this.height = 166;
+        this.tile = tile;
+    }
+
+    @Override
+    protected void onInitialized() {
+        super.onInitialized();
+    }
+
+    @Override
+    public void draw(int var1, int var2, float var3) {
+        this.drawBackground();
+        super.draw(var1, var2, var3);
+        this.drawMousoverTooltip(var1, var2);
+    }
+
+    @Override
+    public void drawBackground(float v, int i, int i1) {
+        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        client.getTextureManager().bindTexture(RFFurnace);
+        int guiLeft = (this.width - this.containerWidth) / 2;
+        int guiTop = (this.height - this.containerHeight) / 2;
+        drawTexturedRect(guiLeft, guiTop, 0, 0, containerWidth, containerHeight);
+
+        renderEnergy(guiLeft, guiTop);
+        renderProgress(guiLeft, guiTop);
+
+        if(this.isPointWithinBounds(10, 9, 20, 64, i, i1)) {
+            this.drawTooltip(tile.storage.getEnergyStored() + " / " + tile.storage.getEnergyCapacity() + " Phase Energy", i, i1);
+        }
+    }
+
+    public void renderEnergy(int guiLeft, int guiTop) {
+        if(this.tile.storage.getEnergyStored() > 0) {
+            int k = 62;
+            int i = tile.storage.getEnergyStored() * k / tile.storage.getEnergyCapacity();
+            this.drawTexturedRect(guiLeft + 10, guiTop + 71 - i, 178, 66 - i, 18, i);
+        }
+    }
+
+    public void renderProgress(int guiLeft, int guiTop) {
+        if(tile.isRunning) {
+            int k = 22;
+            int i = tile.getSmeltTime() * k / tile.getTotalSmeltTime();
+            this.drawTexturedRect(guiLeft, guiTop, 177, 68, i, 0);
+        }
+    }
+}

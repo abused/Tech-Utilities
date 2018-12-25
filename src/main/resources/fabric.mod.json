@@ -1,0 +1,17 @@
+{
+  "id": "techutilities",
+  "name": "Tech Utilities",
+  "description": "A fabric tech mod",
+  "version": "1.0.0",
+  "side": "universal",
+  "initializers": [
+    "abused_master.techutilities.TechUtilities"
+  ],
+  "requires": {
+    "fabric": "*"
+  },
+  "mixins": {
+    "client": "techutilities.client.json",
+    "common": "techutilities.common.json"
+  }
+}
