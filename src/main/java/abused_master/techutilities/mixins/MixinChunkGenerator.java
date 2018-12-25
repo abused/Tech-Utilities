@@ -2,13 +2,13 @@ package abused_master.techutilities.mixins;
 
 import abused_master.techutilities.api.utils.world.WorldGenRegistry;
 import net.minecraft.class_3233;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.chunk.ChunkGenerator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(Chunk.class)
+@Mixin(ChunkGenerator.class)
 public class MixinChunkGenerator {
 
     @Inject(method = "generateFeatures", at = @At("RETURN"))
