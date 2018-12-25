@@ -22,7 +22,6 @@ import net.minecraft.util.registry.Registry;
 public class TechUtilities implements ModInitializer, ClientModInitializer {
 
     public static String MODID = "techutilities";
-    //TODO CHANGE THIS TO A CUSTOM CREATIVE TAB
     public static ItemGroup modItemGroup = FabricItemGroupBuilder.build(new Identifier(MODID, "techutilities"), () -> new ItemStack(BlockResources.EnumResourceOres.COPPER_ORE.getBlockOres()));
 
     @Override
