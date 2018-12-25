@@ -36,5 +36,7 @@ public class TechWorldGeneration implements IWorldGenerator {
                 this.runGenerator(ore.getOreWorldGenerator(), world, random, chunkX, chunkZ, ore.getSpawnRate(), 0, ore.getMaxHeight());
             }
         }
+
+        System.out.println("Completed Tech Utilities World Generation");
     }
 }

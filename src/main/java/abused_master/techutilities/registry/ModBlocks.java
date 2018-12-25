@@ -2,7 +2,7 @@ package abused_master.techutilities.registry;
 
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.blocks.BlockResources;
-import abused_master.techutilities.blocks.EnergyFurnace;
+import abused_master.techutilities.blocks.machines.EnergyFurnace;
 import net.minecraft.block.Block;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;

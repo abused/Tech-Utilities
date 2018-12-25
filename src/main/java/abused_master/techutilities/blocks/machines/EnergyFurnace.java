@@ -1,4 +1,4 @@
-package abused_master.techutilities.blocks;
+package abused_master.techutilities.blocks.machines;
 
 import abused_master.techutilities.registry.ModGuis;
 import abused_master.techutilities.tiles.TileEntityEnergyFurnace;
