@@ -15,6 +15,7 @@ import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 
 
@@ -35,6 +36,10 @@ public class TechUtilities implements ModInitializer, ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        GuiProviderRegistry.INSTANCE.registerFactory(ModGuis.ENERGY_FURNACE_CONTAINER, (identifier, player, buf) -> new GuiEnergyFurnace((TileEntityEnergyFurnace) player.world.getBlockEntity(buf.readBlockPos()), new ContainerEnergyFurnace(player.inventory, (TileEntityEnergyFurnace) player.world.getBlockEntity(buf.readBlockPos()))));
+        GuiProviderRegistry.INSTANCE.registerFactory(ModGuis.ENERGY_FURNACE_CONTAINER, ((identifier, player, buf) -> {
+            BlockPos pos = buf.readBlockPos();
+            TileEntityEnergyFurnace furnace = (TileEntityEnergyFurnace) player.world.getBlockEntity(pos);
+            return new GuiEnergyFurnace(furnace, new ContainerEnergyFurnace(player.inventory, furnace));
+        }));
     }
 }

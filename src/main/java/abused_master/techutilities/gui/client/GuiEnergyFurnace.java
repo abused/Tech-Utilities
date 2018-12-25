@@ -59,10 +59,10 @@ public class GuiEnergyFurnace extends ContainerGui {
     }
 
     public void renderProgress(int guiLeft, int guiTop) {
-        if(tile.isRunning) {
+        if(tile.getSmeltTime() > 0) {
             int k = 22;
             int i = tile.getSmeltTime() * k / tile.getTotalSmeltTime();
-            this.drawTexturedRect(guiLeft, guiTop, 177, 68, i, 0);
+            this.drawTexturedRect(guiLeft + 80, guiTop + 26, 177, 68, i, 15);
         }
     }
 }

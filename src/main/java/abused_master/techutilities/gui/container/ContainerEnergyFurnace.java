@@ -1,5 +1,6 @@
 package abused_master.techutilities.gui.container;
 
+import abused_master.techutilities.gui.slots.OutputSlot;
 import net.minecraft.container.ContainerListener;
 import net.minecraft.container.CraftingContainer;
 import net.minecraft.container.FurnaceOutputSlot;
@@ -13,6 +14,8 @@ import net.minecraft.recipe.RecipeFinder;
 import net.minecraft.recipe.RecipeInputProvider;
 import net.minecraft.world.World;
 
+import java.util.Iterator;
+
 public class ContainerEnergyFurnace extends CraftingContainer {
 
     private final Inventory inventory;
@@ -23,7 +26,7 @@ public class ContainerEnergyFurnace extends CraftingContainer {
         this.world = playerInventory.player.world;
 
         this.addSlot(new Slot(inventory, 0, 56, 26));
-        this.addSlot(new FurnaceOutputSlot(playerInventory.player, inventory, 1, 116, 26));
+        this.addSlot(new OutputSlot(inventory, 1, 116, 26));
 
 
         int i;
