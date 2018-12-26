@@ -35,6 +35,12 @@ public class GuiEnergyFurnace extends ContainerGui {
     }
 
     @Override
+    public void drawForeground(int int_1, int int_2) {
+        String string_1 = this.tile.getName().getString();
+        this.fontRenderer.draw(string_1, (float)(this.containerWidth / 2 - this.fontRenderer.getStringWidth(string_1) / 2), 6.0F, 4210752);
+    }
+
+    @Override
     public void drawBackground(float v, int i, int i1) {
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         client.getTextureManager().bindTexture(RFFurnace);

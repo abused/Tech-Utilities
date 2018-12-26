@@ -49,11 +49,14 @@ public class ContainerEnergyFurnace extends CraftingContainer {
 
     @Override
     public void populateRecipeFinder(RecipeFinder recipeFinder) {
-        ((RecipeInputProvider)this.inventory).provideRecipeInputs(recipeFinder);
+        if (this.inventory instanceof RecipeInputProvider) {
+            ((RecipeInputProvider) this.inventory).provideRecipeInputs(recipeFinder);
+        }
     }
 
     @Override
     public void clearCraftingSlots() {
+        this.inventory.clearInv();
     }
 
     @Override
@@ -78,7 +81,12 @@ public class ContainerEnergyFurnace extends CraftingContainer {
 
     @Override
     public int getCraftingSlotCount() {
-        return 1;
+        return 2;
+    }
+
+    @Override
+    public void setProperty(int int_1, int int_2) {
+        this.inventory.setInvProperty(int_1, int_2);
     }
 
     @Override

@@ -11,7 +11,6 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeManager;
 import net.minecraft.recipe.smelting.SmeltingRecipe;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.text.TextComponent;
@@ -57,8 +56,6 @@ public class TileEntityEnergyFurnace extends BlockEntity implements Tickable, Si
 
     @Override
     public void tick() {
-        this.storage.recieveEnergy(100);
-
         if(canRun()) {
             smeltTime++;
             if(smeltTime >= this.getTotalSmeltTime()) {
