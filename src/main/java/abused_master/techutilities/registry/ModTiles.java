@@ -3,7 +3,10 @@ package abused_master.techutilities.registry;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.tiles.TileEntityEnergyFurnace;
 import abused_master.techutilities.tiles.TileEntityQuarry;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
+import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 

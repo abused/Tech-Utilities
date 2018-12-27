@@ -1,9 +1,8 @@
-package abused_master.techutilities.gui.container;
+package abused_master.techutilities.client.gui.container;
 
-import abused_master.techutilities.gui.slots.OutputSlot;
+import abused_master.techutilities.client.gui.slots.OutputSlot;
 import net.minecraft.container.ContainerListener;
 import net.minecraft.container.CraftingContainer;
-import net.minecraft.container.FurnaceOutputSlot;
 import net.minecraft.container.Slot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -13,8 +12,6 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeFinder;
 import net.minecraft.recipe.RecipeInputProvider;
 import net.minecraft.world.World;
-
-import java.util.Iterator;
 
 public class ContainerEnergyFurnace extends CraftingContainer {
 

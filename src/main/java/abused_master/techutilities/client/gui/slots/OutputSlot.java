@@ -1,4 +1,4 @@
-package abused_master.techutilities.gui.slots;
+package abused_master.techutilities.client.gui.slots;
 
 import net.minecraft.container.Slot;
 import net.minecraft.entity.player.PlayerEntity;

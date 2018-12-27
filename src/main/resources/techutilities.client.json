@@ -3,6 +3,7 @@
   "package": "abused_master.techutilities.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "MixinBlockEntityRenderDispatcher"
   ],
   "injectors": {
     "defaultRequire": 1

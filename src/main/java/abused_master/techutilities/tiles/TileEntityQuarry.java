@@ -20,6 +20,8 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
     public BlockPos[] torchPositions = new BlockPos[3];
     public Direction forwardDirection, horizontalDirection;
     public int maxSize = 500;
+    public int blocksX = 0, blocksZ = 0;
+    public int miningSpeed = 0;
 
     public TileEntityQuarry() {
         super(ModTiles.QUARRY);
@@ -29,6 +31,8 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
     public void fromTag(CompoundTag nbt) {
         super.fromTag(nbt);
         this.running = nbt.getBoolean("running");
+        this.blocksX = nbt.getInt("blocksX");
+        this.blocksZ = nbt.getInt("blocksZ");
         if (nbt.containsKey("x1") && nbt.containsKey("y1") && nbt.containsKey("z1")) {
             miningPos = new BlockPos(nbt.getInt("x1"), nbt.getInt("y1"), nbt.getInt("z1"));
         }
@@ -52,6 +56,8 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
     public CompoundTag toTag(CompoundTag nbt) {
         super.toTag(nbt);
         nbt.putBoolean("running", this.running);
+        nbt.putInt("blocksX", this.blocksX);
+        nbt.putInt("blocksZ", this.blocksZ);
         if (miningPos != null) {
             nbt.putInt("x1", miningPos.getX());
             nbt.putInt("y1", miningPos.getY());
@@ -88,40 +94,39 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
     @Override
     public void tick() {
         if (running && canRun()) {
+            miningSpeed++;
             Inventory inventory = getNearbyInventory();
-            BlockPos currentMiningPos;
-            int distanceForward = (int) torchPositions[0].distanceTo(torchPositions[1]);
-            int distanceSide = (int) torchPositions[1].distanceTo(torchPositions[2]);
+            for (int y = pos.getY() - 1; y > 0; y--) {
+                this.mineBlocks(inventory, y);
+            }
+        }
+    }
 
-            for (int y = pos.getY(); y > 0; y--) {
-                currentMiningPos = new BlockPos(pos);
-                currentMiningPos.down(1);
+    public void mineBlocks(Inventory inventory, int yPos) {
+        for (int x = 1; x < blocksX; x++) {
+            BlockPos currentMiningPos = new BlockPos(pos.getX(), yPos, pos.getZ()).offset(horizontalDirection, x).offset(forwardDirection, 1);
 
-                for (int x = 0; x < distanceSide - 1; x++) {
-                    currentMiningPos.offset(horizontalDirection, 1);
+            for (int z = 1; z < blocksZ; z++) {
+                currentMiningPos = currentMiningPos.offset(forwardDirection, 1);
+                BlockState state = world.getBlockState(currentMiningPos);
 
-                    for (int z = 0; z < distanceForward - 1; z++) {
-                        currentMiningPos.offset(forwardDirection, 1);
-                        BlockState state = world.getBlockState(currentMiningPos);
-
-                        if (!state.isAir() && state.getBlock() != Blocks.BEDROCK && !(state.getBlock() instanceof FluidBlock)) {
-                            this.miningPos = currentMiningPos;
-                            ItemStack blockItemStack = new ItemStack(state.getBlock());
-                            world.setBlockState(currentMiningPos, Blocks.AIR.getDefaultState());
-
-                            //Stop quarry if it has nowhere to place blocks
-                            //if(!this.insertItemIfPossible(inventory, blockItemStack)) {
-                            //    this.setRunning(false);
-                            //}
+                if(!world.isAir(currentMiningPos) && state.getBlock() != Blocks.BEDROCK && !(state.getBlock() instanceof FluidBlock) && world.getBlockEntity(currentMiningPos) == null) {
+                    this.miningPos = currentMiningPos;
+                    ItemStack blockItemStack = new ItemStack(state.getBlock());
+                    if(miningSpeed >= 20) {
+                        miningSpeed = 0;
+                        world.setBlockState(currentMiningPos, Blocks.AIR.getDefaultState());
+                        if (!insertItemIfPossible(inventory, blockItemStack)) {
+                            setRunning(false);
                         }
                     }
-
                 }
             }
         }
     }
 
     public boolean canRun() {
+        runTorchLocationChecker();
         if(torchPositions.length <= 0 || torchPositions[0] == null || torchPositions[1] == null || torchPositions[2] == null || getNearbyInventory() == null) {
             return false;
         }
@@ -130,13 +135,15 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
     }
 
     public boolean insertItemIfPossible(Inventory inventory, ItemStack stack) {
-        for (int i = 0; i < inventory.getInvSize() - 1; i++) {
+        for (int i = 0; i < inventory.getInvSize(); i++) {
             if (inventory.getInvStack(i).isEmpty()) {
                 inventory.setInvStack(i, stack);
                 return true;
             }else if (ItemStack.areEqual(inventory.getInvStack(i), stack)) {
                 if(inventory.getInvStack(i).getAmount() < 64) {
                     inventory.getInvStack(i).addAmount(1);
+                    stack.addAmount(inventory.getInvStack(i).getAmount());
+                    inventory.setInvStack(i, stack);
                     return true;
                 }
             }
@@ -144,6 +151,7 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
 
         return false;
     }
+
     public Inventory getNearbyInventory() {
         for (Direction direction : Direction.values()) {
             BlockPos offsetPosition = new BlockPos(pos).offset(direction);
@@ -159,67 +167,78 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
 
     //TODO CHANGE TORCHES TO CUSTOM TORCH
     public void runTorchLocationChecker() {
-        BlockPos firstTorch = null, secondTorch = null, thirdTorch = null;
-        Direction torchDirection = null;
+        BlockPos adjacentTorchPos = null, lengthTorchPos = null, widthTorchPos = null;
+        Direction adjacentTorchDirection = null;
+        Direction horizontalTorchDirection = null;
+        int distanceZ = 0, distanceX = 0;
 
-        //Loop for first and second torch
         for (Direction direction : Direction.values()) {
             BlockPos directionPos = new BlockPos(pos).offset(direction);
-            BlockState block = world.getBlockState(directionPos);
-            if (block.getBlock() == Blocks.TORCH) {
-                torchDirection = direction;
-                firstTorch = directionPos;
+            if(world.getBlockState(directionPos).getBlock() == Blocks.TORCH) {
+                adjacentTorchPos = directionPos;
+                adjacentTorchDirection = direction;
 
-                for (int i = 0; i < maxSize; i++) {
-                    directionPos.offset(direction, 1);
-                    block = world.getBlockState(directionPos);
+                if(adjacentTorchDirection == Direction.NORTH || adjacentTorchDirection == Direction.SOUTH) {
+                    horizontalTorchDirection = Direction.EAST;
+                }else if(adjacentTorchDirection == Direction.EAST || adjacentTorchDirection == Direction.WEST) {
+                    horizontalTorchDirection = Direction.NORTH;
+                }
 
-                    if (!block.isAir() && block.getBlock() == Blocks.TORCH) {
-                        secondTorch = directionPos;
+                for (int z = 0; z < maxSize; z++) {
+                    BlockPos zPos = new BlockPos(adjacentTorchPos).offset(direction, z);
+                    if(world.getBlockState(zPos).getBlock() == Blocks.TORCH && !areEqual(zPos, adjacentTorchPos)) {
+                        lengthTorchPos = zPos;
+                        distanceZ = (int) adjacentTorchPos.distanceTo(lengthTorchPos);
+
+                        for (int x = 0; x < maxSize; x++) {
+                            BlockPos xPos = new BlockPos(adjacentTorchPos).offset(horizontalTorchDirection, x);
+                            if(world.getBlockState(xPos).getBlock() == Blocks.TORCH && !areEqual(xPos, adjacentTorchPos)) {
+                                widthTorchPos = xPos;
+                                distanceX = (int) adjacentTorchPos.distanceTo(widthTorchPos);
+                                break;
+                            }
+
+                            BlockPos xPosOpposite = new BlockPos(adjacentTorchPos).offset(horizontalTorchDirection.getOpposite(), x);
+
+                            if(world.getBlockState(xPosOpposite).getBlock() == Blocks.TORCH && !areEqual(xPosOpposite, adjacentTorchPos)) {
+                                widthTorchPos = xPosOpposite;
+                                horizontalTorchDirection = horizontalTorchDirection.getOpposite();
+                                distanceX = (int) adjacentTorchPos.distanceTo(widthTorchPos);
+                                break;
+                            }
+                        }
                         break;
                     }
                 }
-
                 break;
             }
         }
 
-        Direction thirdTorchDirection = null;
+        this.torchPositions[0] = adjacentTorchPos;
+        this.torchPositions[1] = lengthTorchPos;
+        this.torchPositions[2] = widthTorchPos;
+        this.forwardDirection = adjacentTorchDirection;
+        this.horizontalDirection = horizontalTorchDirection;
+        this.blocksX = distanceX;
+        this.blocksZ = distanceZ;
+    }
 
-        if (torchDirection == Direction.NORTH || torchDirection == Direction.SOUTH) {
-            thirdTorchDirection = Direction.WEST;
-        } else {
-            thirdTorchDirection = Direction.NORTH;
-        }
-
-        //Loop for third torch
-        for (int i = 0; i < (maxSize * 2); i++) {
-            BlockPos leftRightLookup = null;
-            if (i <= maxSize) {
-                leftRightLookup = new BlockPos(firstTorch).offset(thirdTorchDirection, i);
-                BlockState block = world.getBlockState(leftRightLookup);
-                if (!block.isAir() && block.getBlock() == Blocks.TORCH) {
-                    thirdTorch = leftRightLookup;
-                    break;
-                }
-            } else {
-                leftRightLookup = new BlockPos(firstTorch).offset(thirdTorchDirection, -i);
-                BlockState block = world.getBlockState(leftRightLookup);
-                if (!block.isAir() && block.getBlock() == Blocks.TORCH) {
-                    thirdTorch = leftRightLookup;
-                    break;
-                }
+    public boolean contains(Iterable<BlockPos> pos1, BlockPos pos2) {
+        for (BlockPos pos3 : pos1) {
+            if(areEqual(pos3, pos2)) {
+                return true;
             }
         }
 
-        this.torchPositions[0] = firstTorch;
-        this.torchPositions[1] = secondTorch;
-        this.torchPositions[2] = thirdTorch;
-        this.forwardDirection = torchDirection;
-        this.horizontalDirection = thirdTorchDirection;
+        return false;
+    }
+
+    public boolean areEqual(BlockPos pos1, BlockPos pos2) {
+        return pos1.getX() == pos2.getX() && pos1.getZ() == pos2.getZ() && pos1.getY() == pos2.getY();
     }
 
     public void setRunning(boolean running) {
+        if (running) runTorchLocationChecker();
         this.running = running;
     }
 
