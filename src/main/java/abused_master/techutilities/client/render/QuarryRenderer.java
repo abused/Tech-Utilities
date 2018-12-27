@@ -7,6 +7,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class QuarryRenderer extends BlockEntityRenderer<TileEntityQuarry> {
 
+    @SuppressWarnings("Duplicates")
     @Override
     public void render(TileEntityQuarry tile, double x, double y, double z, float float_1, int int_1) {
         if(tile.torchPositions[0] != null && tile.torchPositions[1] != null && tile.torchPositions[2] != null) {
@@ -15,10 +16,10 @@ public class QuarryRenderer extends BlockEntityRenderer<TileEntityQuarry> {
             BlockPos third = tile.torchPositions[2];
             BlockPos fourth = completeSquare(tile);
 
-            RenderHelper.renderLaser(first.getX(), first.getY(), first.getZ(), second.getX(), second.getY(), second.getZ(), 120, 0.35F, 0.05, new float[]{0F, 124F / 255F, 16F / 255F});
-            RenderHelper.renderLaser(first.getX(), first.getY(), first.getZ(), third.getX(), third.getY(), third.getZ(), 120, 0.35F, 0.05, new float[]{0F, 124F / 255F, 16F / 255F});
-            RenderHelper.renderLaser(second.getX(), second.getY(), second.getZ(), fourth.getX(), fourth.getY(), fourth.getZ(), 120, 0.35F, 0.05, new float[]{0F, 124F / 255F, 16F / 255F});
-            RenderHelper.renderLaser(third.getX(), third.getY(), third.getZ(), fourth.getX(), fourth.getY(), fourth.getZ(), 120, 0.35F, 0.05, new float[]{0F, 124F / 255F, 16F / 255F});
+            RenderHelper.renderLaser(first.getX() + 0.5, first.getY() + 0.5, first.getZ() + 0.5, second.getX() + 0.5, second.getY() + 0.5, second.getZ() + 0.5, 120, 0.35F, 0.15, new float[]{0, 191 / 255f, 255 / 255f});
+            RenderHelper.renderLaser(first.getX() + 0.5, first.getY() + 0.5, first.getZ() + 0.5, third.getX() + 0.5, third.getY() + 0.5, third.getZ() + 0.5, 120, 0.35F, 0.15, new float[]{0, 191 / 255f, 255 / 255f});
+            RenderHelper.renderLaser(second.getX() + 0.5, second.getY() + 0.5, second.getZ() + 0.5, fourth.getX() + 0.5, fourth.getY() + 0.5, fourth.getZ() + 0.5, 120, 0.35F, 0.15, new float[]{0, 191 / 255f, 255 / 255f});
+            RenderHelper.renderLaser(third.getX() + 0.5, third.getY() + 0.5, third.getZ() + 0.5, fourth.getX() + 0.5, fourth.getY() + 0.5, fourth.getZ() + 0.5, 120, 0.35F, 0.15, new float[]{0, 191 / 255f, 255 / 255f});
         }
     }
 

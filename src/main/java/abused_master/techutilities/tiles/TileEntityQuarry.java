@@ -19,7 +19,7 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
     public BlockPos miningPos;
     public BlockPos[] torchPositions = new BlockPos[3];
     public Direction forwardDirection, horizontalDirection;
-    public int maxSize = 500;
+    public int maxSize = 1000;
     public int blocksX = 0, blocksZ = 0;
     public int miningSpeed = 0;
 
@@ -93,12 +93,14 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
 
     @Override
     public void tick() {
-        if (running && canRun()) {
+        if (running && torchPositionsActive()) {
             miningSpeed++;
             Inventory inventory = getNearbyInventory();
             for (int y = pos.getY() - 1; y > 0; y--) {
                 this.mineBlocks(inventory, y);
             }
+        }else if(running && !torchPositionsActive()) {
+            this.setRunning(false);
         }
     }
 
@@ -125,9 +127,17 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
         }
     }
 
+    public boolean torchPositionsActive() {
+        if(torchPositions.length <= 0 || torchPositions[0] == null || torchPositions[1] == null || torchPositions[2] == null || getNearbyInventory() == null) {
+            return false;
+        }
+
+        return true;
+    }
+
     public boolean canRun() {
         runTorchLocationChecker();
-        if(torchPositions.length <= 0 || torchPositions[0] == null || torchPositions[1] == null || torchPositions[2] == null || getNearbyInventory() == null) {
+        if(!torchPositionsActive()) {
             return false;
         }
 
@@ -221,16 +231,6 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
         this.horizontalDirection = horizontalTorchDirection;
         this.blocksX = distanceX;
         this.blocksZ = distanceZ;
-    }
-
-    public boolean contains(Iterable<BlockPos> pos1, BlockPos pos2) {
-        for (BlockPos pos3 : pos1) {
-            if(areEqual(pos3, pos2)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public boolean areEqual(BlockPos pos1, BlockPos pos2) {
