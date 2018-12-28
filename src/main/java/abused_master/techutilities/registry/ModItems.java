@@ -13,6 +13,7 @@ public class ModItems {
     public static void registerItems(Registry<Item> registry) {
         Registry.register(registry, new Identifier(TechUtilities.MODID, "energy_furnace"), new BlockItem(ModBlocks.RF_FURNACE, new Item.Settings().itemGroup(TechUtilities.modItemGroup)));
         Registry.register(registry, new Identifier(TechUtilities.MODID, "quarry"), new BlockItem(ModBlocks.QUARRY, new Item.Settings().itemGroup(TechUtilities.modItemGroup)));
+        Registry.register(registry, new Identifier(TechUtilities.MODID, "quarry_marker"), new BlockItem(ModBlocks.QUARRY_MARKER, new Item.Settings().itemGroup(TechUtilities.modItemGroup)));
 
         for (BlockResources.EnumResourceOres ore : BlockResources.EnumResourceOres.values()) {
             Registry.register(registry, ore.getOresIdentifier(), new BlockItem(ore.getBlockOres(), new Item.Settings().itemGroup(TechUtilities.modItemGroup)));

@@ -1,5 +1,7 @@
 package abused_master.techutilities.tiles;
 
+import abused_master.techutilities.api.phase.EnergyStorage;
+import abused_master.techutilities.registry.ModBlocks;
 import abused_master.techutilities.registry.ModTiles;
 import net.fabricmc.fabric.block.entity.ClientSerializable;
 import net.minecraft.block.BlockState;
@@ -7,19 +9,25 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.loot.context.LootContext;
+
+import java.util.List;
 
 public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSerializable {
 
+    public EnergyStorage storage = new EnergyStorage(100000);
     private boolean running = false;
     public BlockPos miningPos;
     public BlockPos[] torchPositions = new BlockPos[3];
     public Direction forwardDirection, horizontalDirection;
-    public int maxSize = 1000;
+    public int maxSize = 1000, energyUsagePerBlock = 500;
     public int blocksX = 0, blocksZ = 0;
     public int miningSpeed = 0;
 
@@ -30,6 +38,7 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
     @Override
     public void fromTag(CompoundTag nbt) {
         super.fromTag(nbt);
+        this.storage.readFromNBT(nbt);
         this.running = nbt.getBoolean("running");
         this.blocksX = nbt.getInt("blocksX");
         this.blocksZ = nbt.getInt("blocksZ");
@@ -55,6 +64,7 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
     @Override
     public CompoundTag toTag(CompoundTag nbt) {
         super.toTag(nbt);
+        this.storage.writeEnergyToNBT(nbt);
         nbt.putBoolean("running", this.running);
         nbt.putInt("blocksX", this.blocksX);
         nbt.putInt("blocksZ", this.blocksZ);
@@ -94,13 +104,18 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
     @Override
     public void tick() {
         if (running && torchPositionsActive()) {
-            miningSpeed++;
-            Inventory inventory = getNearbyInventory();
-            for (int y = pos.getY() - 1; y > 0; y--) {
-                this.mineBlocks(inventory, y);
-            }
+            //if(storage.getEnergyStored() >= energyUsagePerBlock) {
+                miningSpeed++;
+                Inventory inventory = getNearbyInventory();
+                for (int y = pos.getY() - 1; y > 0; y--) {
+                    this.mineBlocks(inventory, y);
+                    this.storage.extractEnergy(energyUsagePerBlock);
+                }
+            //}
         }else if(running && !torchPositionsActive()) {
             this.setRunning(false);
+            BlockState state = world.getBlockState(pos);
+            world.updateListeners(pos, state, state, 3);
         }
     }
 
@@ -114,12 +129,15 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
 
                 if(!world.isAir(currentMiningPos) && state.getBlock() != Blocks.BEDROCK && !(state.getBlock() instanceof FluidBlock) && world.getBlockEntity(currentMiningPos) == null) {
                     this.miningPos = currentMiningPos;
-                    ItemStack blockItemStack = new ItemStack(state.getBlock());
+                    //ItemStack blockItemStack = new ItemStack(state.getBlock());
                     if(miningSpeed >= 20) {
                         miningSpeed = 0;
                         world.setBlockState(currentMiningPos, Blocks.AIR.getDefaultState());
-                        if (!insertItemIfPossible(inventory, blockItemStack)) {
-                            setRunning(false);
+                        List<ItemStack> drops = state.getBlock().getDroppedStacks(state, new LootContext.Builder(world.getServer().getWorld(world.getDimension().getType())));
+                        for (ItemStack itemStack : drops) {
+                            if (!insertItemIfPossible(inventory, itemStack)) {
+                                setRunning(false);
+                            }
                         }
                     }
                 }
@@ -149,9 +167,8 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
             if (inventory.getInvStack(i).isEmpty()) {
                 inventory.setInvStack(i, stack);
                 return true;
-            }else if (ItemStack.areEqual(inventory.getInvStack(i), stack)) {
+            }else if (!inventory.getInvStack(i).isEmpty() && ItemStack.areEqual(inventory.getInvStack(i), stack)) {
                 if(inventory.getInvStack(i).getAmount() < 64) {
-                    inventory.getInvStack(i).addAmount(1);
                     stack.addAmount(inventory.getInvStack(i).getAmount());
                     inventory.setInvStack(i, stack);
                     return true;
@@ -175,7 +192,6 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
         return null;
     }
 
-    //TODO CHANGE TORCHES TO CUSTOM TORCH
     public void runTorchLocationChecker() {
         BlockPos adjacentTorchPos = null, lengthTorchPos = null, widthTorchPos = null;
         Direction adjacentTorchDirection = null;
@@ -184,7 +200,7 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
 
         for (Direction direction : Direction.values()) {
             BlockPos directionPos = new BlockPos(pos).offset(direction);
-            if(world.getBlockState(directionPos).getBlock() == Blocks.TORCH) {
+            if(world.getBlockState(directionPos).getBlock() == ModBlocks.QUARRY_MARKER) {
                 adjacentTorchPos = directionPos;
                 adjacentTorchDirection = direction;
 
@@ -196,13 +212,13 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
 
                 for (int z = 0; z < maxSize; z++) {
                     BlockPos zPos = new BlockPos(adjacentTorchPos).offset(direction, z);
-                    if(world.getBlockState(zPos).getBlock() == Blocks.TORCH && !areEqual(zPos, adjacentTorchPos)) {
+                    if(world.getBlockState(zPos).getBlock() == ModBlocks.QUARRY_MARKER && !areEqual(zPos, adjacentTorchPos)) {
                         lengthTorchPos = zPos;
                         distanceZ = (int) adjacentTorchPos.distanceTo(lengthTorchPos);
 
                         for (int x = 0; x < maxSize; x++) {
                             BlockPos xPos = new BlockPos(adjacentTorchPos).offset(horizontalTorchDirection, x);
-                            if(world.getBlockState(xPos).getBlock() == Blocks.TORCH && !areEqual(xPos, adjacentTorchPos)) {
+                            if(world.getBlockState(xPos).getBlock() == ModBlocks.QUARRY_MARKER && !areEqual(xPos, adjacentTorchPos)) {
                                 widthTorchPos = xPos;
                                 distanceX = (int) adjacentTorchPos.distanceTo(widthTorchPos);
                                 break;
@@ -210,7 +226,7 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
 
                             BlockPos xPosOpposite = new BlockPos(adjacentTorchPos).offset(horizontalTorchDirection.getOpposite(), x);
 
-                            if(world.getBlockState(xPosOpposite).getBlock() == Blocks.TORCH && !areEqual(xPosOpposite, adjacentTorchPos)) {
+                            if(world.getBlockState(xPosOpposite).getBlock() == ModBlocks.QUARRY_MARKER && !areEqual(xPosOpposite, adjacentTorchPos)) {
                                 widthTorchPos = xPosOpposite;
                                 horizontalTorchDirection = horizontalTorchDirection.getOpposite();
                                 distanceX = (int) adjacentTorchPos.distanceTo(widthTorchPos);
@@ -239,6 +255,8 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
 
     public void setRunning(boolean running) {
         if (running) runTorchLocationChecker();
+        BlockState state = world.getBlockState(pos);
+        world.updateListeners(pos, state, state, 3);
         this.running = running;
     }
 
