@@ -4,21 +4,21 @@ import abused_master.techutilities.api.phase.EnergyStorage;
 import abused_master.techutilities.registry.ModBlocks;
 import abused_master.techutilities.registry.ModTiles;
 import net.fabricmc.fabric.block.entity.ClientSerializable;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.loot.context.LootContext;
 
 import java.util.List;
+import java.util.Random;
 
 public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSerializable {
 
@@ -30,6 +30,9 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
     public int maxSize = 1000, energyUsagePerBlock = 500;
     public int blocksX = 0, blocksZ = 0;
     public int miningSpeed = 0;
+
+    public boolean silkTouch = false;
+    public int fortuneLevel = 0, speedMultiplier = 1;
 
     public TileEntityQuarry() {
         super(ModTiles.QUARRY);
@@ -129,14 +132,24 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
 
                 if(!world.isAir(currentMiningPos) && state.getBlock() != Blocks.BEDROCK && !(state.getBlock() instanceof FluidBlock) && world.getBlockEntity(currentMiningPos) == null) {
                     this.miningPos = currentMiningPos;
-                    //ItemStack blockItemStack = new ItemStack(state.getBlock());
-                    if(miningSpeed >= 20) {
+                    ItemStack blockItemStack = new ItemStack(state.getBlock());
+                    if(miningSpeed >= (20 / speedMultiplier)) {
                         miningSpeed = 0;
                         world.setBlockState(currentMiningPos, Blocks.AIR.getDefaultState());
-                        List<ItemStack> drops = state.getBlock().getDroppedStacks(state, new LootContext.Builder(world.getServer().getWorld(world.getDimension().getType())));
-                        for (ItemStack itemStack : drops) {
-                            if (!insertItemIfPossible(inventory, itemStack)) {
+                        List<ItemStack> drops = Block.getDroppedStacks(state, world.getServer().getWorld(world.getDimension().getType()), currentMiningPos, this, null, new ItemStack(Items.DIAMOND_PICKAXE));
+
+                        if(silkTouch) {
+                            if (!insertItemIfPossible(inventory, blockItemStack)) {
                                 setRunning(false);
+                            }
+                        }else {
+                            for (ItemStack itemStack : drops) {
+                                Random random = new Random();
+                                ItemStack stackWithFortune = new ItemStack(itemStack.getItem(), fortuneLevel == 1 ? 1 : random.nextInt(2) + 1);
+
+                                if (!insertItemIfPossible(inventory, itemStack)) {
+                                    setRunning(false);
+                                }
                             }
                         }
                     }
