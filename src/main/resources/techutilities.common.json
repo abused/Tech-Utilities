@@ -3,7 +3,6 @@
   "package": "abused_master.techutilities.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MixinChunkGenerator"
   ],
   "injectors": {
     "defaultRequire": 1

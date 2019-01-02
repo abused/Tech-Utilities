@@ -4,32 +4,30 @@ import abused_master.techutilities.api.phase.EnergyStorage;
 import abused_master.techutilities.registry.ModBlocks;
 import abused_master.techutilities.registry.ModTiles;
 import net.fabricmc.fabric.block.entity.ClientSerializable;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSerializable {
 
-    public EnergyStorage storage = new EnergyStorage(100000);
+    //TODO CHANGE AMOUNT TO 0
+    public EnergyStorage storage = new EnergyStorage(100000, 100000);
     private boolean running = false;
     public BlockPos miningPos;
     public BlockPos[] torchPositions = new BlockPos[3];
     public Direction forwardDirection, horizontalDirection;
-    public int maxSize = 1000, energyUsagePerBlock = 500;
-    public int blocksX = 0, blocksZ = 0;
-    public int miningSpeed = 0;
+    public int maxSize = 1000, energyUsagePerBlock = 500, blocksX = 0, blocksZ = 0, miningSpeed = 0;
+    public BlockState miningBlock = null;
+    public boolean completedArea = false, miningError = false;
 
     public boolean silkTouch = false;
     public int fortuneLevel = 0, speedMultiplier = 1;
@@ -45,9 +43,9 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
         this.running = nbt.getBoolean("running");
         this.blocksX = nbt.getInt("blocksX");
         this.blocksZ = nbt.getInt("blocksZ");
-        if (nbt.containsKey("x1") && nbt.containsKey("y1") && nbt.containsKey("z1")) {
-            miningPos = new BlockPos(nbt.getInt("x1"), nbt.getInt("y1"), nbt.getInt("z1"));
-        }
+        this.silkTouch = nbt.getBoolean("silkTouch");
+        this.fortuneLevel = nbt.getInt("fortuneLevel");
+        this.speedMultiplier = nbt.getInt("speedMultiplier");
 
         if(nbt.containsKey("positions")) {
             for (int i = 0; i < 2; i++) {
@@ -71,11 +69,10 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
         nbt.putBoolean("running", this.running);
         nbt.putInt("blocksX", this.blocksX);
         nbt.putInt("blocksZ", this.blocksZ);
-        if (miningPos != null) {
-            nbt.putInt("x1", miningPos.getX());
-            nbt.putInt("y1", miningPos.getY());
-            nbt.putInt("z1", miningPos.getZ());
-        }
+
+        nbt.putBoolean("silkTouch", this.silkTouch);
+        nbt.putInt("fortuneLevel", this.fortuneLevel);
+        nbt.putInt("speedMultiplier", this.speedMultiplier);
 
         if (torchPositions.length > 0) {
             int posNumber = 0;
@@ -106,61 +103,86 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
 
     @Override
     public void tick() {
-        if (running && torchPositionsActive()) {
-            //if(storage.getEnergyStored() >= energyUsagePerBlock) {
+        this.storage.recieveEnergy(1000);
+        if(!miningError) {
+            if (running && torchPositionsActive() && storage.getEnergyStored() >= energyUsagePerBlock && !completedArea) {
+                if(!world.isChunkLoaded(pos.getX(), pos.getZ())) {
+                    world.getChunk(pos).loadToWorld();
+                }
+
                 miningSpeed++;
-                Inventory inventory = getNearbyInventory();
-                for (int y = pos.getY() - 1; y > 0; y--) {
-                    this.mineBlocks(inventory, y);
-                    this.storage.extractEnergy(energyUsagePerBlock);
+                if (miningSpeed >= (5 / speedMultiplier)) {
+                    Inventory inventory = getNearbyInventory();
+                    this.mineBlocks(inventory);
                 }
-            //}
-        }else if(running && !torchPositionsActive()) {
-            this.setRunning(false);
-            BlockState state = world.getBlockState(pos);
-            world.updateListeners(pos, state, state, 3);
-        }
-    }
-
-    public void mineBlocks(Inventory inventory, int yPos) {
-        for (int x = 1; x < blocksX; x++) {
-            BlockPos currentMiningPos = new BlockPos(pos.getX(), yPos, pos.getZ()).offset(horizontalDirection, x).offset(forwardDirection, 1);
-
-            for (int z = 1; z < blocksZ; z++) {
-                currentMiningPos = currentMiningPos.offset(forwardDirection, 1);
-                BlockState state = world.getBlockState(currentMiningPos);
-
-                if(!world.isAir(currentMiningPos) && state.getBlock() != Blocks.BEDROCK && !(state.getBlock() instanceof FluidBlock) && world.getBlockEntity(currentMiningPos) == null) {
-                    this.miningPos = currentMiningPos;
-                    ItemStack blockItemStack = new ItemStack(state.getBlock());
-                    if(miningSpeed >= (20 / speedMultiplier)) {
-                        miningSpeed = 0;
-                        world.setBlockState(currentMiningPos, Blocks.AIR.getDefaultState());
-                        List<ItemStack> drops = Block.getDroppedStacks(state, world.getServer().getWorld(world.getDimension().getType()), currentMiningPos, this, null, new ItemStack(Items.DIAMOND_PICKAXE));
-
-                        if(silkTouch) {
-                            if (!insertItemIfPossible(inventory, blockItemStack)) {
-                                setRunning(false);
-                            }
-                        }else {
-                            for (ItemStack itemStack : drops) {
-                                Random random = new Random();
-                                ItemStack stackWithFortune = new ItemStack(itemStack.getItem(), fortuneLevel == 1 ? 1 : random.nextInt(2) + 1);
-
-                                if (!insertItemIfPossible(inventory, itemStack)) {
-                                    setRunning(false);
-                                }
-                            }
-                        }
-                    }
-                }
+            } else if (running && !torchPositionsActive()) {
+                this.setRunning(false);
+                BlockState state = world.getBlockState(pos);
+                world.updateListeners(pos, state, state, 3);
+            }
+        }else {
+            if (insertItemIfPossible(getNearbyInventory(), new ItemStack(world.getBlockState(miningPos).getBlock()), true)) {
+                this.setMiningError(false);
             }
         }
     }
 
+    public void mineBlocks(Inventory inventory) {
+        BlockPos firstCorner = new BlockPos(torchPositions[0]).down(1).offset(horizontalDirection, 1).offset(forwardDirection, 1);
+        BlockPos secondCorner = new BlockPos(completeSquare().getX(), 0, completeSquare().getZ()).offset(horizontalDirection, -1).offset(forwardDirection, -1);
+        Iterable<BlockPos> blocksInQuarry = BlockPos.iterateBoxPositions(firstCorner, secondCorner);
+
+        for (Iterator<BlockPos> it = blocksInQuarry.iterator(); it.hasNext();) {
+            BlockPos currentMiningPos = it.next();
+
+            if (world.isAir(currentMiningPos) || world.getBlockState(currentMiningPos).getBlock() == Blocks.BEDROCK || world.getBlockState(currentMiningPos).getBlock() instanceof FluidBlock || world.getBlockEntity(currentMiningPos) != null) {
+                continue;
+            }
+
+            if (miningSpeed >= (20 / speedMultiplier)) {
+                this.miningPos = currentMiningPos;
+                miningSpeed = 0;
+                BlockState state = world.getBlockState(currentMiningPos);
+                miningBlock = state;
+                //List<ItemStack> drops = Block.getDroppedStacks(state, world instanceof ServerWorld ? (ServerWorld) world : null, currentMiningPos, world.getBlockEntity(currentMiningPos));
+                List<ItemStack> drops = Arrays.asList(new ItemStack[]{new ItemStack(state.getBlock())});
+                world.setBlockState(currentMiningPos, Blocks.AIR.getDefaultState());
+
+                if (silkTouch) {
+                    if (!insertItemIfPossible(inventory, new ItemStack(state.getBlock()), false)) {
+                        setMiningError(true);
+                    }
+                } else {
+                    for (ItemStack itemStack : drops) {
+                        Random random = new Random();
+                        ItemStack stackWithFortune = new ItemStack(itemStack.getItem(), fortuneLevel == 0 ? 1 : random.nextInt(fortuneLevel * 2));
+
+                        if (!insertItemIfPossible(inventory, stackWithFortune, false)) {
+                            setMiningError(true);
+                        }
+                    }
+                }
+            }
+
+            if(!it.hasNext()) {
+                completedArea = true;
+            }
+        }
+    }
+
+    public BlockPos completeSquare() {
+        return new BlockPos(torchPositions[0]).offset(forwardDirection, blocksZ).offset(horizontalDirection, blocksX);
+    }
+
     public boolean torchPositionsActive() {
-        if(torchPositions.length <= 0 || torchPositions[0] == null || torchPositions[1] == null || torchPositions[2] == null || getNearbyInventory() == null) {
+        if(torchPositions.length <= 0) {
             return false;
+        }
+
+        for (BlockPos torchPos : torchPositions) {
+            if(torchPos == null || world.getBlockState(torchPos).getBlock() != ModBlocks.QUARRY_MARKER) {
+                return false;
+            }
         }
 
         return true;
@@ -175,15 +197,17 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
         return true;
     }
 
-    public boolean insertItemIfPossible(Inventory inventory, ItemStack stack) {
+    public boolean insertItemIfPossible(Inventory inventory, ItemStack stack, boolean simulate) {
         for (int i = 0; i < inventory.getInvSize(); i++) {
             if (inventory.getInvStack(i).isEmpty()) {
-                inventory.setInvStack(i, stack);
+                if(!simulate)
+                    inventory.setInvStack(i, stack);
                 return true;
             }else if (!inventory.getInvStack(i).isEmpty() && ItemStack.areEqual(inventory.getInvStack(i), stack)) {
                 if(inventory.getInvStack(i).getAmount() < 64) {
                     stack.addAmount(inventory.getInvStack(i).getAmount());
-                    inventory.setInvStack(i, stack);
+                    if(!simulate)
+                        inventory.setInvStack(i, stack);
                     return true;
                 }
             }
@@ -271,6 +295,12 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
         BlockState state = world.getBlockState(pos);
         world.updateListeners(pos, state, state, 3);
         this.running = running;
+    }
+
+    public void setMiningError(boolean miningError) {
+        BlockState state = world.getBlockState(pos);
+        world.updateListeners(pos, state, state, 3);
+        this.miningError = miningError;
     }
 
     public boolean isRunning() {

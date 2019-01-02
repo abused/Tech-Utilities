@@ -1,7 +1,6 @@
 package abused_master.techutilities;
 
 import abused_master.techutilities.api.utils.OreLexicon;
-import abused_master.techutilities.api.utils.world.WorldGenRegistry;
 import abused_master.techutilities.blocks.BlockResources;
 import abused_master.techutilities.client.gui.client.GuiEnergyFurnace;
 import abused_master.techutilities.client.gui.container.ContainerEnergyFurnace;
@@ -31,7 +30,7 @@ public class TechUtilities implements ModInitializer, ClientModInitializer {
         ModItems.registerItems(Registry.ITEM);
         ModTiles.registerTile(Registry.BLOCK_ENTITY);
         ContainerProviderRegistry.INSTANCE.registerFactory(ModGuis.ENERGY_FURNACE_CONTAINER, (identifier, player, buf) -> new ContainerEnergyFurnace(player.inventory, (TileEntityEnergyFurnace) player.world.getBlockEntity(buf.readBlockPos())));
-        WorldGenRegistry.registerWorldGenerator(new TechWorldGeneration());
+        TechWorldGeneration.generateOres();
     }
 
     @Override

@@ -2,8 +2,6 @@ package abused_master.techutilities.blocks;
 
 import abused_master.techutilities.Config;
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.api.utils.world.WorldGenMinable;
-import abused_master.techutilities.api.utils.world.WorldGenerator;
 import net.fabricmc.fabric.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
@@ -25,18 +23,18 @@ public class BlockResources extends Block {
 
         private BlockResources blockOres;
         private Identifier oresIdentifier;
-        private WorldGenerator oreWorldGenerator;
         private int maxHeight;
         private int spawnRate;
         private boolean generateOre;
+        private int veinSize;
 
         EnumResourceOres(float hardness, int veinSize, int maxHeight, int spawnRate, boolean generate) {
             this.blockOres = new BlockResources(hardness);
             this.oresIdentifier = new Identifier(TechUtilities.MODID, getName());
-            this.oreWorldGenerator = new WorldGenMinable(this.getBlockOres().getDefaultState(), veinSize);
             this.maxHeight = maxHeight;
             this.spawnRate = spawnRate;
             this.generateOre = generate;
+            this.veinSize = veinSize;
         }
 
         public String getName() {
@@ -51,16 +49,16 @@ public class BlockResources extends Block {
             return oresIdentifier;
         }
 
-        public WorldGenerator getOreWorldGenerator() {
-            return oreWorldGenerator;
-        }
-
         public int getMaxHeight() {
             return maxHeight;
         }
 
         public int getSpawnRate() {
             return spawnRate;
+        }
+
+        public int getVeinSize() {
+            return veinSize;
         }
 
         public boolean generateOre() {
