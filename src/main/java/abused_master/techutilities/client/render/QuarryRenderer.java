@@ -1,5 +1,6 @@
 package abused_master.techutilities.client.render;
 
+import abused_master.techutilities.api.utils.hud.HudRender;
 import abused_master.techutilities.api.utils.RenderHelper;
 import abused_master.techutilities.tiles.TileEntityQuarry;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -12,9 +13,11 @@ import net.minecraft.util.math.BlockPos;
 
 public class QuarryRenderer extends BlockEntityRenderer<TileEntityQuarry> {
 
-    @SuppressWarnings("Duplicates")
     @Override
     public void render(TileEntityQuarry tile, double x, double y, double z, float float_1, int int_1) {
+        super.render(tile, x, y, z, float_1, int_1);
+        HudRender.renderHud(tile, x, y, z);
+
         if (tile.miningPos != null && tile.miningBlock != null) {
             GlStateManager.pushMatrix();
             GlStateManager.translated(x + 0.5, y + 0.5, z + 0.5);
@@ -24,8 +27,6 @@ public class QuarryRenderer extends BlockEntityRenderer<TileEntityQuarry> {
             GlStateManager.alphaFunc(516, 0.003921569F);
             MinecraftClient.getInstance().getItemRenderer().renderItemWithTransformation(new ItemStack(tile.miningBlock.getBlock()), ModelTransformation.Type.GROUND);
             GlStateManager.popMatrix();
-
-
         }
 
         if(tile.isRunning()) {
@@ -50,23 +51,38 @@ public class QuarryRenderer extends BlockEntityRenderer<TileEntityQuarry> {
 
         }
 
-        if (tile.torchPositionsActive()) {
-            BlockPos first = tile.torchPositions[0];
-            BlockPos second = tile.torchPositions[1];
-            BlockPos third = tile.torchPositions[2];
-            BlockPos fourth = tile.completeSquare();
+        if (tile.listFourCorners() != null) {
+            BlockPos first = tile.listFourCorners()[0];
+            BlockPos second = tile.listFourCorners()[1];
+            BlockPos third = tile.listFourCorners()[2];
+            BlockPos fourth = tile.listFourCorners()[3];
+            int y1 = tile.secondCorner.getY();
 
-            //Render 4 Torch Beams
-            RenderHelper.renderLaser(first.getX() + 0.5, first.getY() + 0.5, first.getZ() + 0.5, second.getX() + 0.5, second.getY() + 0.5, second.getZ() + 0.5, 120, 0.35F, 0.15, new float[]{0, 191 / 255f, 255 / 255f});
-            RenderHelper.renderLaser(first.getX() + 0.5, first.getY() + 0.5, first.getZ() + 0.5, third.getX() + 0.5, third.getY() + 0.5, third.getZ() + 0.5, 120, 0.35F, 0.15, new float[]{0, 191 / 255f, 255 / 255f});
-            RenderHelper.renderLaser(second.getX() + 0.5, second.getY() + 0.5, second.getZ() + 0.5, fourth.getX() + 0.5, fourth.getY() + 0.5, fourth.getZ() + 0.5, 120, 0.35F, 0.15, new float[]{0, 191 / 255f, 255 / 255f});
-            RenderHelper.renderLaser(third.getX() + 0.5, third.getY() + 0.5, third.getZ() + 0.5, fourth.getX() + 0.5, fourth.getY() + 0.5, fourth.getZ() + 0.5, 120, 0.35F, 0.15, new float[]{0, 191 / 255f, 255 / 255f});
+            double beamWidth = 0.07;
+            float[] beamColor = new float[] {0, 191 / 255f, 255 / 255f};
+
+            //Render 4 Beams
+            RenderHelper.renderLaser(first.getX() + 0.5, first.getY() + 0.5, first.getZ() + 0.5, third.getX() + 0.5, third.getY() + 0.5, third.getZ() + 0.5, 120, 0.35F, beamWidth, beamColor);
+            RenderHelper.renderLaser(first.getX() + 0.5, first.getY() + 0.5, first.getZ() + 0.5, second.getX() + 0.5, second.getY() + 0.5, second.getZ() + 0.5, 120, 0.35F, beamWidth, beamColor);
+            RenderHelper.renderLaser(second.getX() + 0.5, second.getY() + 0.5, second.getZ() + 0.5, fourth.getX() + 0.5, fourth.getY() + 0.5, fourth.getZ() + 0.5, 120, 0.35F, beamWidth,  beamColor);
+            RenderHelper.renderLaser(third.getX() + 0.5, third.getY() + 0.5, third.getZ() + 0.5, fourth.getX() + 0.5, fourth.getY() + 0.5, fourth.getZ() + 0.5, 120, 0.35F, beamWidth,  beamColor);
+
+            //Render 4 beams down
+            RenderHelper.renderLaser(first.getX() + 0.5, first.getY() + 0.5, first.getZ() + 0.5, first.getX() + 0.5, y1 + 0.5, first.getZ() + 0.5, 120, 0.35F, beamWidth, beamColor);
+            RenderHelper.renderLaser(second.getX() + 0.5, second.getY() + 0.5, second.getZ() + 0.5, second.getX() + 0.5, y1 + 0.5, second.getZ() + 0.5, 120, 0.35F, beamWidth, beamColor);
+            RenderHelper.renderLaser(third.getX() + 0.5, third.getY() + 0.5, third.getZ() + 0.5, third.getX() + 0.5, y1 + 0.5, third.getZ() + 0.5, 120, 0.35F, beamWidth, beamColor);
+            RenderHelper.renderLaser(fourth.getX() + 0.5, fourth.getY() + 0.5, fourth.getZ() + 0.5, fourth.getX() + 0.5, y1 + 0.5, fourth.getZ() + 0.5, 120, 0.35F, beamWidth, beamColor);
+
+            RenderHelper.renderLaser(first.getX() + 0.5, y1 + 0.5, first.getZ() + 0.5, third.getX() + 0.5, y1 + 0.5, third.getZ() + 0.5, 120, 0.35F, beamWidth, beamColor);
+            RenderHelper.renderLaser(first.getX() + 0.5, y1 + 0.5, first.getZ() + 0.5, second.getX() + 0.5, y1 + 0.5, second.getZ() + 0.5, 120, 0.35F, beamWidth, beamColor);
+            RenderHelper.renderLaser(second.getX() + 0.5, y1 + 0.5, second.getZ() + 0.5, fourth.getX() + 0.5, y1 + 0.5, fourth.getZ() + 0.5, 120, 0.35F, beamWidth, beamColor);
+            RenderHelper.renderLaser(third.getX() + 0.5, y1 + 0.5, third.getZ() + 0.5, fourth.getX() + 0.5, y1 + 0.5, fourth.getZ() + 0.5, 120, 0.35F, beamWidth, beamColor);
 
             //Render 4 model pillars
-            RenderHelper.renderLaser(tile.getPos().getX() + 0.025, tile.getPos().getY() + 0.25, tile.getPos().getZ() + 0.025, tile.getPos().getX() + 0.025, tile.getPos().getY() + 0.75, tile.getPos().getZ() + 0.025, 120, 0.35f, 0.05, new float[]{20 / 255f, 160 / 255f, 255 / 255f});
-            RenderHelper.renderLaser(tile.getPos().getX() + 0.975, tile.getPos().getY() + 0.25, tile.getPos().getZ() + 0.025, tile.getPos().getX() + 0.975, tile.getPos().getY() + 0.75, tile.getPos().getZ() + 0.025, 120, 0.35f, 0.05, new float[]{20 / 255f, 160 / 255f, 255 / 255f});
-            RenderHelper.renderLaser(tile.getPos().getX() + 0.025, tile.getPos().getY() + 0.25, tile.getPos().getZ() + 0.975, tile.getPos().getX() + 0.025, tile.getPos().getY() + 0.75, tile.getPos().getZ() + 0.975, 120, 0.35f, 0.05, new float[]{20 / 255f, 160 / 255f, 255 / 255f});
-            RenderHelper.renderLaser(tile.getPos().getX() + 0.975, tile.getPos().getY() + 0.25, tile.getPos().getZ() + 0.975, tile.getPos().getX() + 0.975, tile.getPos().getY() + 0.75, tile.getPos().getZ() + 0.975, 120, 0.35f, 0.05, new float[]{20 / 255f, 160 / 255f, 255 / 255f});
+            RenderHelper.renderLaser(tile.getPos().getX() + 0.025, tile.getPos().getY() + 0.25, tile.getPos().getZ() + 0.025, tile.getPos().getX() + 0.025, tile.getPos().getY() + 0.75, tile.getPos().getZ() + 0.025, 120, 0.35f, 0.05, beamColor);
+            RenderHelper.renderLaser(tile.getPos().getX() + 0.975, tile.getPos().getY() + 0.25, tile.getPos().getZ() + 0.025, tile.getPos().getX() + 0.975, tile.getPos().getY() + 0.75, tile.getPos().getZ() + 0.025, 120, 0.35f, 0.05, beamColor);
+            RenderHelper.renderLaser(tile.getPos().getX() + 0.025, tile.getPos().getY() + 0.25, tile.getPos().getZ() + 0.975, tile.getPos().getX() + 0.025, tile.getPos().getY() + 0.75, tile.getPos().getZ() + 0.975, 120, 0.35f, 0.05, beamColor);
+            RenderHelper.renderLaser(tile.getPos().getX() + 0.975, tile.getPos().getY() + 0.25, tile.getPos().getZ() + 0.975, tile.getPos().getX() + 0.975, tile.getPos().getY() + 0.75, tile.getPos().getZ() + 0.975, 120, 0.35f, 0.05, beamColor);
         }
     }
 

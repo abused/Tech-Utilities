@@ -13,12 +13,10 @@ public class ModBlocks {
 
     public static EnergyFurnace RF_FURNACE = new EnergyFurnace();
     public static Quarry QUARRY = new Quarry();
-    public static QuarryMarker QUARRY_MARKER = new QuarryMarker();
 
     public static void registerBlocks(Registry<Block> registry) {
         Registry.register(registry, new Identifier(TechUtilities.MODID, "energy_furnace"), RF_FURNACE);
         Registry.register(registry, new Identifier(TechUtilities.MODID, "quarry"), QUARRY);
-        Registry.register(registry, new Identifier(TechUtilities.MODID, "quarry_marker"), QUARRY_MARKER);
 
         for (BlockResources.EnumResourceOres ore : BlockResources.EnumResourceOres.values()) {
             Registry.register(registry, ore.getOresIdentifier(), ore.getBlockOres());
