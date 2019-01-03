@@ -15,7 +15,7 @@ public class QuarryRenderer extends BlockEntityRenderer<TileEntityQuarry> {
     @SuppressWarnings("Duplicates")
     @Override
     public void render(TileEntityQuarry tile, double x, double y, double z, float float_1, int int_1) {
-        if (tile.miningPos != null) {
+        if (tile.miningPos != null && tile.miningBlock != null) {
             GlStateManager.pushMatrix();
             GlStateManager.translated(x + 0.5, y + 0.5, z + 0.5);
             GlStateManager.scaled(0.6, 0.6, 0.6);

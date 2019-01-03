@@ -43,7 +43,7 @@ public class Quarry extends BlockWithEntity {
             }
 
             if(!world.isClient)
-                playerEntity.addChatMessage(new StringTextComponent("Quarry now mining at X:" + quarry.miningPos.getX() + ", Y: " + quarry.miningPos.getY() + ", Z: " + quarry.miningPos.getY()), false);
+                playerEntity.addChatMessage(new StringTextComponent("Quarry now mining at X: " + quarry.miningPos.getX() + ", Y: " + quarry.miningPos.getY() + ", Z: " + quarry.miningPos.getY()), false);
         }
 
         return true;
