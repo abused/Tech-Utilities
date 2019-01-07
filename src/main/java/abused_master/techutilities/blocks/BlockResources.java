@@ -66,7 +66,7 @@ public class BlockResources extends Block {
         }
     }
 
-    public enum EnumResoueceBlocks {
+    public enum EnumResourceBlocks {
         COPPER_BLOCK,
         TIN_BLOCK,
         LEAD_BLOCK,
@@ -79,7 +79,7 @@ public class BlockResources extends Block {
         private BlockResources blockOres;
         private Identifier oresIdentifier;
 
-        EnumResoueceBlocks() {
+        EnumResourceBlocks() {
             this.blockOres = new BlockResources(2.0f);
             this.oresIdentifier = new Identifier(TechUtilities.MODID, getName());
         }

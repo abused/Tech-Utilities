@@ -1,4 +1,4 @@
-package abused_master.techutilities.client.gui.client;
+package abused_master.techutilities.client.gui.gui;
 
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.client.gui.container.ContainerEnergyFurnace;

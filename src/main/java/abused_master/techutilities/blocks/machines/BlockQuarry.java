@@ -4,12 +4,8 @@ import abused_master.techutilities.items.ItemQuarryRecorder;
 import abused_master.techutilities.registry.ModItems;
 import abused_master.techutilities.tiles.TileEntityQuarry;
 import net.fabricmc.fabric.block.FabricBlockSettings;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.Material;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.render.block.BlockRenderLayer;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -22,9 +18,9 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-public class Quarry extends BlockWithEntity {
+public class BlockQuarry extends BlockWithEntity {
 
-    public Quarry() {
+    public BlockQuarry() {
         super(FabricBlockSettings.of(Material.STONE).build().strength(1, 1));
     }
 

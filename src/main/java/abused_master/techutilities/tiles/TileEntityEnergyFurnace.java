@@ -2,10 +2,7 @@ package abused_master.techutilities.tiles;
 
 import abused_master.techutilities.api.phase.EnergyStorage;
 import abused_master.techutilities.registry.ModTiles;
-import net.fabricmc.fabric.block.entity.ClientSerializable;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.network.packet.BlockEntityUpdateClientPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
@@ -16,10 +13,9 @@ import net.minecraft.text.StringTextComponent;
 import net.minecraft.text.TextComponent;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.InventoryUtil;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.math.Direction;
 
-public class TileEntityEnergyFurnace extends BlockEntity implements Tickable, SidedInventory, ClientSerializable {
+public class TileEntityEnergyFurnace extends TileEntityEnergyBase implements SidedInventory {
 
     private DefaultedList<ItemStack> inventory;
     public EnergyStorage storage = new EnergyStorage(50000);
@@ -182,17 +178,12 @@ public class TileEntityEnergyFurnace extends BlockEntity implements Tickable, Si
     }
 
     @Override
-    public void fromClientTag(CompoundTag tag) {
-        this.fromTag(tag);
+    public EnergyStorage getEnergyStorage() {
+        return storage;
     }
 
     @Override
-    public CompoundTag toClientTag(CompoundTag tag) {
-        return this.toTag(tag);
-    }
-
-    @Override
-    public BlockEntityUpdateClientPacket toUpdatePacket() {
-        return super.toUpdatePacket();
+    public boolean isEnergyReceiver() {
+        return true;
     }
 }

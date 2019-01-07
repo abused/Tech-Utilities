@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube",
+    "textures": {
+		"particle": "techutilities:blocks/glass/glass0",
+        "down": "techutilities:blocks/glass/glass9",
+		"up": "techutilities:blocks/glass/glass15",
+		"north": "techutilities:blocks/glass/glass5",
+		"south": "techutilities:blocks/glass/glass15",
+		"west": "techutilities:blocks/glass/glass9",
+		"east": "techutilities:blocks/glass/glass15"
+    }
+}

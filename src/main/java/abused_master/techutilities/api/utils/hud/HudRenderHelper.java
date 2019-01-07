@@ -92,15 +92,15 @@ public class HudRenderHelper {
     }
 
     private static void renderLog(FontRenderer fontrenderer, List<String> messages, int lines) {
-        int currenty = 7;
+        int currently = 7;
         int height = 10;
         int logsize = messages.size();
         int i = 0;
         for (String s : messages) {
             if (i >= logsize - lines) {
-                if (currenty + height <= 124) {
-                    fontrenderer.draw(fontrenderer.wrapStringToWidth(s, 115), 7, currenty, 0xffffff);
-                    currenty += height;
+                if (currently + height <= 124) {
+                    fontrenderer.draw(s, 7, currently, 0xffffff);
+                    currently += height;
                 }
             }
             i++;

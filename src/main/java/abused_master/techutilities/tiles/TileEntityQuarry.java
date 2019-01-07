@@ -4,6 +4,7 @@ import abused_master.techutilities.api.phase.EnergyStorage;
 import abused_master.techutilities.api.utils.hud.IHudSupport;
 import abused_master.techutilities.registry.ModTiles;
 import net.fabricmc.fabric.block.entity.ClientSerializable;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
@@ -11,16 +12,17 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 import java.util.*;
 
-public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSerializable, IHudSupport {
+//TODO MAKE UPGRADES FOR QUARRY
+public class TileEntityQuarry extends TileEntityEnergyBase implements IHudSupport {
 
-    //TODO CHANGE AMOUNT TO 0
-    public EnergyStorage storage = new EnergyStorage(100000, 100000);
+    public EnergyStorage storage = new EnergyStorage(100000, 0);
     private boolean running = false;
     public BlockPos miningPos = null, firstCorner = null, secondCorner = null;
     public int energyUsagePerBlock = 500, miningSpeed = 0;
@@ -80,6 +82,7 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
                 if (miningSpeed >= (20 / speedMultiplier)) {
                     Inventory inventory = getNearbyInventory();
                     this.mineBlocks(inventory);
+                    storage.extractEnergy(energyUsagePerBlock);
                 }
             } else {
                 if (world.getBlockState(miningPos) != null && insertItemIfPossible(getNearbyInventory(), new ItemStack(world.getBlockState(miningPos).getBlock()), true)) {
@@ -88,8 +91,6 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
             }
         } else if (running && !canRun()) {
             this.setRunning(false);
-            BlockState state = world.getBlockState(pos);
-            world.updateListeners(pos, state, state, 3);
         }
     }
 
@@ -106,21 +107,22 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
                 miningSpeed = 0;
                 BlockState state = world.getBlockState(currentMiningPos);
                 miningBlock = state;
-                //List<ItemStack> drops = Block.getDroppedStacks(state, world instanceof ServerWorld ? (ServerWorld) world : null, currentMiningPos, world.getBlockEntity(currentMiningPos));
-                List<ItemStack> drops = Arrays.asList(new ItemStack[]{new ItemStack(state.getBlock())});
-                world.setBlockState(currentMiningPos, Blocks.AIR.getDefaultState());
+                if (!world.isClient) {
+                    List<ItemStack> drops = Block.getDroppedStacks(state, (ServerWorld) world, currentMiningPos, world.getBlockEntity(currentMiningPos));
+                    world.setBlockState(currentMiningPos, Blocks.AIR.getDefaultState());
 
-                if (silkTouch) {
-                    if (!insertItemIfPossible(inventory, new ItemStack(state.getBlock()), false)) {
-                        setMiningError(true);
-                    }
-                } else {
-                    for (ItemStack itemStack : drops) {
-                        Random random = new Random();
-                        ItemStack stackWithFortune = new ItemStack(itemStack.getItem(), fortuneLevel == 0 ? 1 : random.nextInt(fortuneLevel * 2));
-
-                        if (!insertItemIfPossible(inventory, stackWithFortune, false)) {
+                    if (silkTouch) {
+                        if (!insertItemIfPossible(inventory, new ItemStack(state.getBlock()), false)) {
                             setMiningError(true);
+                        }
+                    } else {
+                        for (ItemStack itemStack : drops) {
+                            Random random = new Random();
+                            ItemStack stackWithFortune = new ItemStack(itemStack.getItem(), fortuneLevel == 0 ? 1 : random.nextInt(fortuneLevel * 2));
+
+                            if (!insertItemIfPossible(inventory, stackWithFortune, false)) {
+                                setMiningError(true);
+                            }
                         }
                     }
                 }
@@ -146,23 +148,9 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
         }
 
         BlockPos corner1 = this.firstCorner.offset(Direction.UP, 1);
-        BlockPos corner2;
-        BlockPos corner3;
+        BlockPos corner2 = new BlockPos(firstCorner.getX(), corner1.getY(), secondCorner.getZ());
+        BlockPos corner3 = new BlockPos(secondCorner.getX(), corner1.getY(), firstCorner.getZ());
         BlockPos corner4 = new BlockPos(secondCorner.getX(), corner1.getY(), secondCorner.getZ());
-
-        double xCenter = (firstCorner.getX() + secondCorner.getX()) / 2;
-        double zCenter = (firstCorner.getZ() + secondCorner.getZ()) / 2;
-
-        double xDistance = (firstCorner.getX() - secondCorner.getX()) / 2;
-        double zDistance = (firstCorner.getZ() - secondCorner.getZ()) / 2;
-
-        double x1 = (xCenter - zDistance);
-        double z1 = (zCenter + xDistance);
-        corner2 = new BlockPos(x1, corner1.getY(), z1);
-
-        double x2 = (xCenter + zDistance);
-        double z2 = (zCenter - xDistance);
-        corner3 = new BlockPos(x2, corner1.getY(), z2);
 
         return new BlockPos[] {corner1, corner2, corner3, corner4};
     }
@@ -233,35 +221,19 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
     }
 
     public void setRunning(boolean running) {
-        BlockState state = world.getBlockState(pos);
-        world.updateListeners(pos, state, state, 3);
         this.running = running;
     }
 
     public void setMiningError(boolean miningError) {
-        BlockState state = world.getBlockState(pos);
-        world.updateListeners(pos, state, state, 3);
         this.miningError = miningError;
     }
 
     public void setHasQuarryRecorder(boolean hasQuarryRecorder) {
-        BlockState state = world.getBlockState(pos);
-        world.updateListeners(pos, state, state, 3);
         this.hasQuarryRecorder = hasQuarryRecorder;
     }
 
     public boolean isRunning() {
         return running;
-    }
-
-    @Override
-    public void fromClientTag(CompoundTag tag) {
-        this.fromTag(tag);
-    }
-
-    @Override
-    public CompoundTag toClientTag(CompoundTag tag) {
-        return this.toTag(tag);
     }
 
     @Override
@@ -290,5 +262,15 @@ public class TileEntityQuarry extends BlockEntity implements Tickable, ClientSer
 
         toDisplay.add("Energy: " + storage.getEnergyStored() + " / " + storage.getEnergyCapacity() + " PE");
         return toDisplay;
+    }
+
+    @Override
+    public EnergyStorage getEnergyStorage() {
+        return storage;
+    }
+
+    @Override
+    public boolean isEnergyReceiver() {
+        return true;
     }
 }

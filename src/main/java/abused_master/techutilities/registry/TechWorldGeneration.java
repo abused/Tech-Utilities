@@ -3,9 +3,9 @@ package abused_master.techutilities.registry;
 import abused_master.techutilities.blocks.BlockResources;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStep;
-import net.minecraft.world.gen.config.decorator.RangeDecoratorConfig;
-import net.minecraft.world.gen.config.feature.OreFeatureConfig;
 import net.minecraft.world.gen.decorator.Decorator;
+import net.minecraft.world.gen.decorator.RangeDecoratorConfig;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
 
 public class TechWorldGeneration {
 

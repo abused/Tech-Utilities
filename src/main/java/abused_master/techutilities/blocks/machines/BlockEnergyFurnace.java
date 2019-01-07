@@ -16,9 +16,9 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-public class EnergyFurnace extends BlockWithEntity {
+public class BlockEnergyFurnace extends BlockWithEntity {
 
-    public EnergyFurnace() {
+    public BlockEnergyFurnace() {
         super(FabricBlockSettings.of(Material.STONE).build().strength(1, 1));
     }
 
