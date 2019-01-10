@@ -1,10 +1,9 @@
 package abused_master.techutilities.items;
 
+import abused_master.abusedlib.items.ItemBase;
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.tiles.TileEntityQuarry;
 import net.minecraft.client.item.TooltipOptions;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.CompoundTag;
@@ -18,10 +17,10 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class ItemQuarryRecorder extends Item {
+public class ItemQuarryRecorder extends ItemBase {
 
     public ItemQuarryRecorder() {
-        super(new Settings().itemGroup(TechUtilities.modItemGroup).stackSize(1));
+        super("quarry_recorder", new Settings().itemGroup(TechUtilities.modItemGroup).stackSize(1));
     }
 
     @Override

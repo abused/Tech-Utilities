@@ -1,4 +1,4 @@
-package abused_master.techutilities.api.utils;
+package abused_master.techutilities.utils;
 
 public class EmptyItemException extends RuntimeException {
 

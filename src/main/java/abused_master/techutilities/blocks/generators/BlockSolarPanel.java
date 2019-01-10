@@ -1,7 +1,8 @@
 package abused_master.techutilities.blocks.generators;
 
+import abused_master.abusedlib.blocks.BlockBase;
+import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.tiles.TileEntitySolarPanel;
-import net.fabricmc.fabric.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,12 +15,12 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockSolarPanel extends BlockWithEntity {
+public class BlockSolarPanel extends BlockBase {
 
     public EnumSolarPanelTypes solarPanelType;
 
-    public BlockSolarPanel(EnumSolarPanelTypes type) {
-        super(FabricBlockSettings.of(Material.STONE).strength(1.0f, 1.0f).build());
+    public BlockSolarPanel(EnumSolarPanelTypes type, String name) {
+        super(name, Material.STONE, 1.0f, TechUtilities.modItemGroup);
         this.solarPanelType = type;
     }
 
@@ -32,11 +33,6 @@ public class BlockSolarPanel extends BlockWithEntity {
         }
 
         return true;
-    }
-
-    @Override
-    public BlockRenderType getRenderType(BlockState var1) {
-        return BlockRenderType.MODEL;
     }
 
     @Override

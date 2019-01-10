@@ -1,7 +1,9 @@
 package abused_master.techutilities.blocks.decoration;
 
-import abused_master.techutilities.api.utils.block.BlockFacings;
-import abused_master.techutilities.api.utils.block.PropertyBlockFacings;
+import abused_master.abusedlib.blocks.BlockBase;
+import abused_master.abusedlib.blocks.property.BlockFacings;
+import abused_master.abusedlib.blocks.property.PropertyBlockFacings;
+import abused_master.techutilities.TechUtilities;
 import net.fabricmc.fabric.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.item.ItemPlacementContext;
@@ -15,12 +17,12 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockGlassBase extends Block {
+public class BlockGlassBase extends BlockBase {
 
     private boolean[] actualFacings;
 
-    public BlockGlassBase() {
-        super(FabricBlockSettings.of(Material.GLASS).sounds(BlockSoundGroup.GLASS).strength(1, 1).build());
+    public BlockGlassBase(String name) {
+        super(name, TechUtilities.modItemGroup, FabricBlockSettings.of(Material.GLASS).sounds(BlockSoundGroup.GLASS).strength(1, 1).build());
         this.actualFacings = new boolean[Direction.values().length];
         this.setDefaultState(this.stateFactory.getDefaultState().with(PropertyBlockFacings.FACINGS, PropertyBlockFacings.None));
     }
@@ -47,11 +49,6 @@ public class BlockGlassBase extends Block {
     }
 
     @Override
-    public boolean isWaterLogged(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1) {
-        return true;
-    }
-
-    @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
@@ -59,6 +56,11 @@ public class BlockGlassBase extends Block {
     @Override
     public boolean isSimpleFullBlock(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1) {
         return false;
+    }
+
+    @Override
+    public boolean isWaterLogged(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1) {
+        return true;
     }
 
     public BlockFacings handleBlockFacing(BlockPos pos, World world) {

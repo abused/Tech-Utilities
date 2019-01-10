@@ -1,6 +1,7 @@
 package abused_master.techutilities;
 
-import abused_master.techutilities.api.utils.OreLexicon;
+import abused_master.abusedlib.utils.Config;
+import abused_master.techutilities.utils.OreLexicon;
 import abused_master.techutilities.blocks.BlockResources;
 import abused_master.techutilities.client.gui.gui.GuiEnergyFurnace;
 import abused_master.techutilities.client.gui.container.ContainerEnergyFurnace;
@@ -15,9 +16,6 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-
-import java.io.File;
 
 
 public class TechUtilities implements ModInitializer, ClientModInitializer {
@@ -25,13 +23,14 @@ public class TechUtilities implements ModInitializer, ClientModInitializer {
     public static String MODID = "techutilities";
     public static ItemGroup modItemGroup = FabricItemGroupBuilder.build(new Identifier(MODID, "techutilities"), () -> new ItemStack(BlockResources.EnumResourceOres.COPPER_ORE.getBlockOres()));
 
+    public static Config config = new Config(MODID, TechUtilities.class, true);
+
     @Override
     public void onInitialize() {
-        runConfigSetup();
         OreLexicon.initVanillaLexiconEntries();
-        ModBlocks.registerBlocks(Registry.BLOCK);
-        ModItems.registerItems(Registry.ITEM);
-        ModTiles.registerTile(Registry.BLOCK_ENTITY);
+        ModBlocks.registerBlocks();
+        ModItems.registerItems();
+        ModTiles.registerTile();
         ContainerProviderRegistry.INSTANCE.registerFactory(ModGuis.ENERGY_FURNACE_CONTAINER, (identifier, player, buf) -> new ContainerEnergyFurnace(player.inventory, (TileEntityEnergyFurnace) player.world.getBlockEntity(buf.readBlockPos())));
         TechWorldGeneration.generateOres();
     }
@@ -43,15 +42,5 @@ public class TechUtilities implements ModInitializer, ClientModInitializer {
             TileEntityEnergyFurnace furnace = (TileEntityEnergyFurnace) player.world.getBlockEntity(pos);
             return new GuiEnergyFurnace(furnace, new ContainerEnergyFurnace(player.inventory, furnace));
         }));
-    }
-
-    public void runConfigSetup() {
-        File folderLocation = new File(System.getProperty("user.dir"));
-        File configLocation = new File(folderLocation.getPath() + "/config");
-
-        if(!configLocation.exists()) {
-            configLocation.mkdir();
-            Config.initConfig(configLocation.getPath() + "/config.yml");
-        }
     }
 }

@@ -1,5 +1,7 @@
 package abused_master.techutilities.blocks.machines;
 
+import abused_master.abusedlib.blocks.BlockBase;
+import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.registry.ModGuis;
 import abused_master.techutilities.tiles.TileEntityEnergyFurnace;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
@@ -16,10 +18,10 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-public class BlockEnergyFurnace extends BlockWithEntity {
+public class BlockEnergyFurnace extends BlockBase {
 
     public BlockEnergyFurnace() {
-        super(FabricBlockSettings.of(Material.STONE).build().strength(1, 1));
+        super("energy_furnace", Material.STONE, 1.0f, TechUtilities.modItemGroup);
     }
 
     @Override
@@ -29,11 +31,6 @@ public class BlockEnergyFurnace extends BlockWithEntity {
         }
 
         return true;
-    }
-
-    @Override
-    public BlockRenderType getRenderType(BlockState var1) {
-        return BlockRenderType.MODEL;
     }
 
     @Override

@@ -1,9 +1,9 @@
 package abused_master.techutilities.tiles;
 
-import abused_master.techutilities.api.phase.EnergyStorage;
-import abused_master.techutilities.api.utils.hud.IHudSupport;
+import abused_master.abusedlib.client.render.IHudSupport;
+import abused_master.abusedlib.tiles.TileEntityEnergyBase;
+import abused_master.abusedlib.utils.energy.EnergyStorage;
 import abused_master.techutilities.registry.ModTiles;
-import net.fabricmc.fabric.block.entity.ClientSerializable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -13,7 +13,6 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 

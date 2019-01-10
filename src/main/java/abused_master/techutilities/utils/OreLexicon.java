@@ -1,4 +1,4 @@
-package abused_master.techutilities.api.utils;
+package abused_master.techutilities.utils;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;

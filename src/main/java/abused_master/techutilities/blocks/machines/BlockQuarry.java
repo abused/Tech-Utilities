@@ -1,5 +1,7 @@
 package abused_master.techutilities.blocks.machines;
 
+import abused_master.abusedlib.blocks.BlockBase;
+import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.items.ItemQuarryRecorder;
 import abused_master.techutilities.registry.ModItems;
 import abused_master.techutilities.tiles.TileEntityQuarry;
@@ -18,10 +20,10 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-public class BlockQuarry extends BlockWithEntity {
+public class BlockQuarry extends BlockBase {
 
     public BlockQuarry() {
-        super(FabricBlockSettings.of(Material.STONE).build().strength(1, 1));
+        super("quarry", Material.STONE, 1.0f, TechUtilities.modItemGroup);
     }
 
     @Override
@@ -79,20 +81,6 @@ public class BlockQuarry extends BlockWithEntity {
     }
 
     @Override
-    public void onBroken(IWorld world, BlockPos blockPos, BlockState blockState) {
-        TileEntityQuarry quarry = (TileEntityQuarry) world.getBlockEntity(blockPos);
-
-        if(quarry != null && quarry.hasQuarryRecorder) {
-            world.spawnEntity(new ItemEntity(world.getWorld(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(ModItems.recorder)));
-        }
-    }
-
-    @Override
-    public BlockRenderType getRenderType(BlockState var1) {
-        return BlockRenderType.MODEL;
-    }
-
-    @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
@@ -105,6 +93,15 @@ public class BlockQuarry extends BlockWithEntity {
     @Override
     public boolean isSideVisible(BlockState blockState_1, BlockState blockState_2, Direction direction_1) {
         return blockState_1.getBlock() == this ? true : super.isSideVisible(blockState_1, blockState_2, direction_1);
+    }
+
+    @Override
+    public void onBroken(IWorld world, BlockPos blockPos, BlockState blockState) {
+        TileEntityQuarry quarry = (TileEntityQuarry) world.getBlockEntity(blockPos);
+
+        if(quarry != null && quarry.hasQuarryRecorder) {
+            world.spawnEntity(new ItemEntity(world.getWorld(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(ModItems.recorder)));
+        }
     }
 
     @Override

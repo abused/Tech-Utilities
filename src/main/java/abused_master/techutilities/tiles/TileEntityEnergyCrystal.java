@@ -1,6 +1,7 @@
 package abused_master.techutilities.tiles;
 
-import abused_master.techutilities.api.phase.EnergyStorage;
+import abused_master.abusedlib.tiles.TileEntityEnergyBase;
+import abused_master.abusedlib.utils.energy.EnergyStorage;
 import abused_master.techutilities.registry.ModTiles;
 
 public class TileEntityEnergyCrystal extends TileEntityEnergyBase {

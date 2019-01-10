@@ -1,7 +1,7 @@
 package abused_master.techutilities.items;
 
+import abused_master.abusedlib.items.ItemBase;
 import abused_master.techutilities.TechUtilities;
-import net.minecraft.util.Identifier;
 
 public enum EnumResourceItems {
     //Ingots
@@ -29,11 +29,9 @@ public enum EnumResourceItems {
     INVAR_DUST;
 
     private ItemBase itemResource;
-    private Identifier ingotIdentifier;
 
     EnumResourceItems() {
-        this.itemResource = new ItemBase();
-        ingotIdentifier = new Identifier(TechUtilities.MODID, getName());
+        this.itemResource = new ItemBase(getName(), TechUtilities.modItemGroup);
     }
 
     public String getName() {
@@ -42,9 +40,5 @@ public enum EnumResourceItems {
 
     public ItemBase getItemIngot() {
         return itemResource;
-    }
-
-    public Identifier getIngotIdentifier() {
-        return ingotIdentifier;
     }
 }

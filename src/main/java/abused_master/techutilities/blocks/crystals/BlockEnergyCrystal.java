@@ -1,7 +1,8 @@
 package abused_master.techutilities.blocks.crystals;
 
+import abused_master.abusedlib.blocks.BlockBase;
+import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.tiles.TileEntityEnergyCrystal;
-import net.fabricmc.fabric.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
@@ -10,15 +11,10 @@ import net.minecraft.world.BlockView;
 
 import javax.annotation.Nullable;
 
-public class BlockEnergyCrystal extends BlockWithEntity {
+public class BlockEnergyCrystal extends BlockBase {
 
     public BlockEnergyCrystal() {
-        super(FabricBlockSettings.of(Material.STONE).build().strength(1, 1));
-    }
-
-    @Override
-    public BlockRenderType getRenderType(BlockState var1) {
-        return BlockRenderType.MODEL;
+        super("energy_crystal", Material.STONE, 1.0f, TechUtilities.modItemGroup);
     }
 
     @Override
