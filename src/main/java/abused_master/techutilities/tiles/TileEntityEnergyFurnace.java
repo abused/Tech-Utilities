@@ -174,11 +174,6 @@ public class TileEntityEnergyFurnace extends TileEntityEnergyBase implements Sid
     }
 
     @Override
-    public TextComponent getName() {
-        return new StringTextComponent("RF Furnace");
-    }
-
-    @Override
     public EnergyStorage getEnergyStorage() {
         return storage;
     }

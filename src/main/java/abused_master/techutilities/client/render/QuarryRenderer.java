@@ -1,7 +1,7 @@
 package abused_master.techutilities.client.render;
 
-import abused_master.abusedlib.client.render.HudRender;
 import abused_master.abusedlib.client.render.RenderHelper;
+import abused_master.abusedlib.client.render.hud.HudRender;
 import abused_master.techutilities.tiles.TileEntityQuarry;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;

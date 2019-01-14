@@ -36,7 +36,7 @@ public class GuiEnergyFurnace extends ContainerGui {
 
     @Override
     public void drawForeground(int int_1, int int_2) {
-        String string_1 = this.tile.getName().getString();
+        String string_1 = "RF Furnace";
         this.fontRenderer.draw(string_1, (float)(this.containerWidth / 2 - this.fontRenderer.getStringWidth(string_1) / 2), 6.0F, 4210752);
     }
 

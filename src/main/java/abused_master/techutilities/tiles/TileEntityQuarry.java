@@ -1,6 +1,6 @@
 package abused_master.techutilities.tiles;
 
-import abused_master.abusedlib.client.render.IHudSupport;
+import abused_master.abusedlib.client.render.hud.IHudSupport;
 import abused_master.abusedlib.tiles.TileEntityEnergyBase;
 import abused_master.abusedlib.utils.energy.EnergyStorage;
 import abused_master.techutilities.registry.ModTiles;

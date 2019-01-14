@@ -44,8 +44,13 @@ public class BlockGlassBase extends BlockBase {
     }
 
     @Override
-    public boolean isSideVisible(BlockState blockState_1, BlockState blockState_2, Direction direction_1) {
-        return blockState_2.getBlock() == this ? true : super.isSideVisible(blockState_1, blockState_2, direction_1);
+    public boolean skipRenderingSide(BlockState blockState_1, BlockState blockState_2, Direction direction_1) {
+        return blockState_1.getBlock() == this ? true : super.skipRenderingSide(blockState_1, blockState_2, direction_1);
+    }
+
+    @Override
+    public boolean isTranslucent(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1) {
+        return true;
     }
 
     @Override
@@ -56,11 +61,6 @@ public class BlockGlassBase extends BlockBase {
     @Override
     public boolean isSimpleFullBlock(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1) {
         return false;
-    }
-
-    @Override
-    public boolean isWaterLogged(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1) {
-        return true;
     }
 
     public BlockFacings handleBlockFacing(BlockPos pos, World world) {

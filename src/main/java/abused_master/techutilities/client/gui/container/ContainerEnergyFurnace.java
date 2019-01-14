@@ -2,6 +2,7 @@ package abused_master.techutilities.client.gui.container;
 
 import abused_master.techutilities.client.gui.slots.OutputSlot;
 import net.minecraft.container.ContainerListener;
+import net.minecraft.container.ContainerType;
 import net.minecraft.container.CraftingContainer;
 import net.minecraft.container.Slot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,12 +20,12 @@ public class ContainerEnergyFurnace extends CraftingContainer {
     private final World world;
 
     public ContainerEnergyFurnace(PlayerInventory playerInventory, Inventory inventory) {
+        super(0);
         this.inventory = inventory;
         this.world = playerInventory.player.world;
 
         this.addSlot(new Slot(inventory, 0, 56, 26));
         this.addSlot(new OutputSlot(inventory, 1, 116, 26));
-
 
         int i;
         for(i = 0; i < 3; ++i) {
@@ -39,9 +40,14 @@ public class ContainerEnergyFurnace extends CraftingContainer {
     }
 
     @Override
+    public ContainerType<?> getType() {
+        return null;
+    }
+
+    @Override
     public void addListener(ContainerListener containerListener) {
         super.addListener(containerListener);
-        containerListener.onContainerInvRegistered(this, this.inventory);
+        containerListener.onContainerRegistered(this, this.inventory);
     }
 
     @Override
