@@ -1,5 +1,8 @@
 {
     "variants": {
-        "": { "model": "techutilities:block/energy_furnace" }
+        "facing=north": { "model": "techutilities:block/energy_furnace" },
+        "facing=south": { "model": "techutilities:block/energy_furnace", "y": 180 },
+        "facing=west":  { "model": "techutilities:block/energy_furnace", "y": 270 },
+        "facing=east":  { "model": "techutilities:block/energy_furnace", "y": 90 }
     }
 }

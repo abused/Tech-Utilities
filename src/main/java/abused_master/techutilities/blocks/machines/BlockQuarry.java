@@ -1,11 +1,10 @@
 package abused_master.techutilities.blocks.machines;
 
-import abused_master.abusedlib.blocks.BlockBase;
 import abused_master.techutilities.TechUtilities;
+import abused_master.techutilities.blocks.BlockWithEntityBase;
 import abused_master.techutilities.items.ItemQuarryRecorder;
 import abused_master.techutilities.registry.ModItems;
 import abused_master.techutilities.tiles.TileEntityQuarry;
-import net.fabricmc.fabric.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
@@ -13,6 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.StringTextComponent;
+import net.minecraft.util.BlockHitResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -20,20 +20,20 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-public class BlockQuarry extends BlockBase {
+public class BlockQuarry extends BlockWithEntityBase {
 
     public BlockQuarry() {
         super("quarry", Material.STONE, 1.0f, TechUtilities.modItemGroup);
     }
 
     @Override
-    public boolean activate(BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, Direction direction, float float_1, float float_2, float float_3) {
+    public boolean activate(BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockHitResult blockHitResult) {
         TileEntityQuarry quarry = (TileEntityQuarry) world.getBlockEntity(blockPos);
         ItemStack stack = playerEntity.getStackInHand(hand);
 
         if(!(stack.getItem() instanceof ItemQuarryRecorder)) {
             if(playerEntity.isSneaking() && stack.isEmpty() && quarry.hasQuarryRecorder) {
-                playerEntity.setStackInHand(hand, new ItemStack(ModItems.recorder));
+                playerEntity.setStackInHand(hand, new ItemStack(ModItems.RECORDER));
                 quarry.setRunning(false);
                 quarry.setHasQuarryRecorder(false);
                 quarry.setCorners(null, null);
@@ -69,9 +69,7 @@ public class BlockQuarry extends BlockBase {
                 return true;
             }
 
-            int x = tag.getIntArray("coordinates1")[0], y = tag.getIntArray("coordinates1")[1], z = tag.getIntArray("coordinates1")[2];
-            int x1 = tag.getIntArray("coordinates2")[0], y1 = tag.getIntArray("coordinates2")[1], z1 = tag.getIntArray("coordinates2")[2];
-            quarry.setCorners(new BlockPos(x, y, z), new BlockPos(x1, y1, z1));
+            quarry.setCorners(BlockPos.fromLong(tag.getLong("coordinates1")), BlockPos.fromLong(tag.getLong("coordinates2")));
             quarry.hasQuarryRecorder = true;
             playerEntity.setStackInHand(Hand.MAIN, ItemStack.EMPTY);
             playerEntity.addChatMessage(new StringTextComponent("Successfully linked quarry to positions"), true);
@@ -101,11 +99,16 @@ public class BlockQuarry extends BlockBase {
     }
 
     @Override
+    public BlockRenderType getRenderType(BlockState var1) {
+        return BlockRenderType.MODEL;
+    }
+
+    @Override
     public void onBroken(IWorld world, BlockPos blockPos, BlockState blockState) {
         TileEntityQuarry quarry = (TileEntityQuarry) world.getBlockEntity(blockPos);
 
-        if(quarry != null && quarry.hasQuarryRecorder) {
-            world.spawnEntity(new ItemEntity(world.getWorld(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(ModItems.recorder)));
+        if(quarry.hasQuarryRecorder) {
+            world.spawnEntity(new ItemEntity(world.getWorld(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(ModItems.RECORDER)));
         }
     }
 

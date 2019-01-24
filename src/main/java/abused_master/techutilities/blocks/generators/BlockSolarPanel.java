@@ -1,12 +1,13 @@
 package abused_master.techutilities.blocks.generators;
 
-import abused_master.abusedlib.blocks.BlockBase;
 import abused_master.techutilities.TechUtilities;
+import abused_master.techutilities.blocks.BlockWithEntityBase;
 import abused_master.techutilities.tiles.TileEntitySolarPanel;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.StringTextComponent;
+import net.minecraft.util.BlockHitResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -15,7 +16,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockSolarPanel extends BlockBase {
+public class BlockSolarPanel extends BlockWithEntityBase {
 
     public EnumSolarPanelTypes solarPanelType;
 
@@ -25,7 +26,7 @@ public class BlockSolarPanel extends BlockBase {
     }
 
     @Override
-    public boolean activate(BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, Direction direction, float float_1, float float_2, float float_3) {
+    public boolean activate(BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockHitResult blockHitResult) {
         TileEntitySolarPanel panel = (TileEntitySolarPanel) world.getBlockEntity(blockPos);
 
         if(!world.isClient) {

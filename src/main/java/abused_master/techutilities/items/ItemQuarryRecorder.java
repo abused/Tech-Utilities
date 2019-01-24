@@ -1,6 +1,5 @@
 package abused_master.techutilities.items;
 
-import abused_master.abusedlib.items.ItemBase;
 import abused_master.techutilities.TechUtilities;
 import net.minecraft.client.item.TooltipOptions;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,13 +36,13 @@ public class ItemQuarryRecorder extends ItemBase {
             }
 
             if (!tag.containsKey("coordinates1")) {
-                tag.putIntArray("coordinates1", new int[]{pos.getX(), pos.getY(), pos.getZ()});
+                tag.putLong("coordinates1", pos.asLong());
                 if (!world.isClient) {
                     player.addChatMessage(new StringTextComponent("Set coordinates for the first corner"), true);
                 }
 
             } else if (!tag.containsKey("coordinates2")) {
-                tag.putIntArray("coordinates2", new int[]{pos.getX(), pos.getY(), pos.getZ()});
+                tag.putLong("coordinates2", pos.asLong());
                 if (!world.isClient) {
                     player.addChatMessage(new StringTextComponent("Set coordinates for the second corner"), true);
                 }
@@ -78,13 +77,13 @@ public class ItemQuarryRecorder extends ItemBase {
         CompoundTag tag = itemStack.getTag();
         if(tag != null) {
             if(tag.containsKey("coordinates1")) {
-                int x = tag.getIntArray("coordinates1")[0], y = tag.getIntArray("coordinates1")[1], z = tag.getIntArray("coordinates1")[2];
-                list.add(new StringTextComponent("First Corner, x: " + x + " y: " + y + " z: " + z));
+                BlockPos pos = BlockPos.fromLong(tag.getLong("coordinates1"));
+                list.add(new StringTextComponent("First Corner, x: " + pos.getX() + " y: " + pos.getY() + " z: " + pos.getZ()));
             }
 
             if(tag.containsKey("coordinates2")) {
-                int x1 = tag.getIntArray("coordinates2")[0], y1 = tag.getIntArray("coordinates2")[1], z1 = tag.getIntArray("coordinates2")[2];
-                list.add(new StringTextComponent("Second Corner, x: " + x1 + " y: " + y1 + " z: " + z1));
+                BlockPos pos = BlockPos.fromLong(tag.getLong("coordinates2"));
+                list.add(new StringTextComponent("Second Corner, x: " + pos.getX() + " y: " + pos.getY() + " z: " + pos.getZ()));
             }
         }else {
             list.add(new StringTextComponent("Recorder not yet linked to any blocks."));

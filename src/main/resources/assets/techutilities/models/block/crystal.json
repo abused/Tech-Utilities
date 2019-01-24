@@ -1,0 +1,78 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+		"particle": "techutilities:blocks/crystal",
+        "crystal": "techutilities:blocks/crystal"
+    },
+    "display": {
+        "gui": {
+            "rotation": [ 30, 45, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 0.625, 0.625, 0.625 ]
+        },
+        "ground": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 0, 3, 0 ],
+            "scale": [ 0.25, 0.25, 0.25 ]
+        },
+        "fixed": {
+            "rotation": [ 0, 180, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 1, 1, 1 ]
+        },
+        "head": {
+            "rotation": [ 0, 180, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 1, 1, 1 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 0, 315, 0 ],
+            "translation": [ 0, 2.5, 0 ],
+            "scale": [ 0.4, 0.4, 0.4 ]
+        },
+        "thirdperson_righthand": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 0, -1.5, -2 ],
+            "scale": [ 0.375, 0.375, 0.375 ]
+        }
+    },
+    "elements": [
+        {
+            "name": "Cube",
+            "from": [ 6, 2, 6 ], 
+            "to": [ 10, 14, 10 ], 
+            "faces": {
+                "north": { "texture": "#crystal", "uv": [ 4, 1, 8, 13 ] },
+                "east": { "texture": "#crystal", "uv": [ 6, 4, 10, 16 ] },
+                "south": { "texture": "#crystal", "uv": [ 3, 1, 7, 14 ] },
+                "west": { "texture": "#crystal", "uv": [ 4, 3, 8, 15 ] },
+                "up": { "texture": "#crystal", "uv": [ 2, 6, 6, 10 ] },
+                "down": { "texture": "#crystal", "uv": [ 4, 4, 8, 8 ] }
+            }
+        },
+        {
+            "name": "Cube",
+            "from": [ 6.75, 14, 6.75 ], 
+            "to": [ 9.25, 15, 9.25 ], 
+            "faces": {
+                "north": { "texture": "#crystal", "uv": [ 8, 8, 10.5, 10 ] },
+                "east": { "texture": "#crystal", "uv": [ 5, 6, 7.5, 7 ] },
+                "south": { "texture": "#crystal", "uv": [ 6, 7, 9.5, 9 ] },
+                "west": { "texture": "#crystal", "uv": [ 3, 4, 5.5, 6 ] },
+                "up": { "texture": "#crystal", "uv": [ 4, 3, 6.5, 5.5 ] }
+            }
+        },
+        {
+            "name": "Cube",
+            "from": [ 6.75, 1, 6.75 ], 
+            "to": [ 9.25, 2, 9.25 ], 
+            "faces": {
+                "north": { "texture": "#crystal", "uv": [ 8, 7, 10.5, 8 ] },
+                "east": { "texture": "#crystal", "uv": [ 6, 8, 9.5, 9 ] },
+                "south": { "texture": "#crystal", "uv": [ 5, 6, 7.5, 7 ] },
+                "west": { "texture": "#crystal", "uv": [ 7, 9, 11.5, 12 ] },
+                "down": { "texture": "#crystal", "uv": [ 6, 3, 8.5, 5.5 ] }
+            }
+        }
+    ]
+}

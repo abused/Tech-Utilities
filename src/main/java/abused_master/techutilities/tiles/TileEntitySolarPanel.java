@@ -1,15 +1,14 @@
 package abused_master.techutilities.tiles;
 
-import abused_master.abusedlib.tiles.TileEntityEnergyBase;
-import abused_master.abusedlib.utils.energy.EnergyStorage;
 import abused_master.techutilities.blocks.generators.EnumSolarPanelTypes;
 import abused_master.techutilities.registry.ModTiles;
-import net.minecraft.block.entity.BlockEntity;
+import abused_master.techutilities.utils.energy.EnergyStorage;
+import abused_master.techutilities.utils.energy.IEnergyHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-public class TileEntitySolarPanel extends TileEntityEnergyBase {
+public class TileEntitySolarPanel extends TileEntityBase implements IEnergyHandler {
 
     public EnergyStorage storage;
     public EnumSolarPanelTypes type;
@@ -44,16 +43,6 @@ public class TileEntitySolarPanel extends TileEntityEnergyBase {
     }
 
     @Override
-    public EnergyStorage getEnergyStorage() {
-        return storage;
-    }
-
-    @Override
-    public boolean isEnergyReceiver() {
-        return false;
-    }
-
-    @Override
     public void tick() {
         if(world.isDaylight()) {
             if((storage.getEnergyStored() + generationPerTick) < storage.getEnergyCapacity()) {
@@ -67,16 +56,12 @@ public class TileEntitySolarPanel extends TileEntityEnergyBase {
     public void sendEnergy() {
         for (Direction direction : Direction.values()) {
             BlockPos offsetPos = pos.offset(direction);
-            BlockEntity entity = world.getBlockEntity(offsetPos);
-
-            if(entity != null && entity instanceof TileEntityEnergyBase) {
-                TileEntityEnergyBase energyEntity = (TileEntityEnergyBase) entity;
-                EnergyStorage energyStorage = energyEntity.getEnergyStorage();
-                if((energyStorage.getEnergyStored() + generationPerTick) < energyStorage.getEnergyCapacity() && energyEntity.isEnergyReceiver()) {
-                    energyStorage.recieveEnergy(storage.getEnergyStored() >= generationPerTick ? generationPerTick : storage.getEnergyStored());
-                    storage.extractEnergy(storage.getEnergyStored() >= generationPerTick ? generationPerTick : storage.getEnergyStored());
-                }
-            }
+            storage.sendEnergy(world, offsetPos, generationPerTick);
         }
+    }
+
+    @Override
+    public EnergyStorage getEnergyStorage() {
+        return storage;
     }
 }

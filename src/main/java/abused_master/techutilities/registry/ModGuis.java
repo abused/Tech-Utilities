@@ -1,6 +1,8 @@
 package abused_master.techutilities.registry;
 
 import abused_master.techutilities.TechUtilities;
+import abused_master.techutilities.client.gui.container.ContainerEnergyFurnace;
+import net.minecraft.container.ContainerType;
 import net.minecraft.util.Identifier;
 
 public class ModGuis {

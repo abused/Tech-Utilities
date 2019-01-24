@@ -1,6 +1,5 @@
 package abused_master.techutilities.items;
 
-import abused_master.abusedlib.items.ItemBase;
 import abused_master.techutilities.TechUtilities;
 
 public enum EnumResourceItems {

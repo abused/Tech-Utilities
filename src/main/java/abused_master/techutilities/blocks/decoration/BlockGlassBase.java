@@ -1,9 +1,9 @@
 package abused_master.techutilities.blocks.decoration;
 
-import abused_master.abusedlib.blocks.BlockBase;
-import abused_master.abusedlib.blocks.property.BlockFacings;
-import abused_master.abusedlib.blocks.property.PropertyBlockFacings;
 import abused_master.techutilities.TechUtilities;
+import abused_master.techutilities.blocks.BlockBase;
+import abused_master.techutilities.utils.property.BlockFacings;
+import abused_master.techutilities.utils.property.PropertyBlockFacings;
 import net.fabricmc.fabric.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.item.ItemPlacementContext;
@@ -45,7 +45,7 @@ public class BlockGlassBase extends BlockBase {
 
     @Override
     public boolean skipRenderingSide(BlockState blockState_1, BlockState blockState_2, Direction direction_1) {
-        return blockState_1.getBlock() == this ? true : super.skipRenderingSide(blockState_1, blockState_2, direction_1);
+        return false;
     }
 
     @Override

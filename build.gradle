@@ -1,29 +1,95 @@
 plugins {
 	id 'fabric-loom' version '0.2.0-SNAPSHOT'
+	id 'maven-publish'
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-archivesBaseName = "techutilities"
-version = "1.0.0"
+group = "abused_master.techutilities"
+archivesBaseName = "TechUtilities"
+version = "${mod_version}"
 
 minecraft {
 }
 
 repositories {
 	jcenter()
-    maven { url = "https://jitpack.io" }
+    maven { url = "https://jitpack.io/" }
 	maven { url = "https://oss.sonatype.org/content/repositories/releases/" }
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:19w02a"
-	mappings "net.fabricmc:yarn:19w02a.24"
-	modCompile "net.fabricmc:fabric-loader:0.3.2.95"
+	minecraft "com.mojang:minecraft:${mc_version}"
+	mappings "net.fabricmc:yarn:${yarn_mappings}"
+	modCompile "net.fabricmc:fabric-loader:${loader_version}"
+	modCompile "net.fabricmc:fabric:${fabric_version}"
 
-	modCompile "net.fabricmc:fabric:0.1.4.72"
-	modCompile "com.github.abused:AbusedLib:1.14-Fabric-SNAPSHOT"
-
-	compile 'com.github.Carleslc:Simple-YAML:1.2'
+    modCompile "com.google.code.findbugs:jsr305:${findbugs_version}"
+    modCompile "com.github.Carleslc:Simple-YAML:${simpleyml_version}"
 }
+
+jar {
+	from "LICENSE.md"
+	manifest.mainAttributes(
+			"Implementation-Title": project.name,
+			"Implementation-Version": project.version,
+			"Maven-Artifact": "${project.group}:${project.archivesBaseName}:${project.version}".toLowerCase(Locale.ROOT),
+			"Built-On-Minecraft": "${mc_version}",
+			"Built-On-Java": "${System.getProperty("java.vm.version")} (${System.getProperty("java.vm.vendor")})"
+	)
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+	from sourceSets.main.allSource
+	classifier = 'sources'
+}
+
+artifacts {
+	archives sourcesJar
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			artifact jar
+			artifact sourcesJar
+			pom {
+				name = "TechUtilities"
+				url = "https://github.com/abused/Tech-Utilities"
+				licenses {
+					license {
+						name = "MIT License"
+						url = "https://github.com/abused/Tech-Utilities/blob/master/LICENSE.md"
+					}
+				}
+				scm {
+					url = "https://github.com/abused/Tech-Utilities"
+					connection = "scm:git:git://github.com/abused/Tech-Utilities.git"
+					developerConnection = "scm:git:git@github.com:abused/Tech-Utilities.git"
+				}
+				issueManagement {
+					system = "github"
+					url = "https://github.com/abused/Tech-Utilities/issues"
+				}
+			}
+		}
+	}
+
+	repositories {
+		if (project.hasProperty("maven_user") && project.hasProperty("maven_pass")) {
+			maven {
+				name = "Abused's Maven"
+				url = findProperty("maven_url")
+				credentials {
+					username = findProperty("maven_user")
+					password = findProperty("maven_pass")
+				}
+				authentication {
+					basic(BasicAuthentication)
+				}
+			}
+		}
+	}
+}
+tasks.publish.dependsOn build

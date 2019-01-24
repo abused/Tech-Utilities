@@ -2,8 +2,11 @@ package abused_master.techutilities.blocks.crystals;
 
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.blocks.BlockWithEntityBase;
+import abused_master.techutilities.tiles.TileEntityEnergyCollector;
 import abused_master.techutilities.tiles.TileEntityEnergyCrystal;
-import net.minecraft.block.*;
+import net.minecraft.block.BlockRenderLayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -11,10 +14,10 @@ import net.minecraft.world.BlockView;
 
 import javax.annotation.Nullable;
 
-public class BlockEnergyCrystal extends BlockWithEntityBase {
+public class BlockEnergyCollector extends BlockWithEntityBase {
 
-    public BlockEnergyCrystal() {
-        super("crystal_energy", Material.STONE, 1.0f, TechUtilities.modItemGroup);
+    public BlockEnergyCollector() {
+        super("crystal_energy_collector", Material.STONE, 1.0f, TechUtilities.modItemGroup);
     }
 
     @Override
@@ -39,7 +42,7 @@ public class BlockEnergyCrystal extends BlockWithEntityBase {
 
     @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockView var1) {
-        return new TileEntityEnergyCrystal();
+    public BlockEntity createBlockEntity(BlockView blockView) {
+        return new TileEntityEnergyCollector();
     }
 }

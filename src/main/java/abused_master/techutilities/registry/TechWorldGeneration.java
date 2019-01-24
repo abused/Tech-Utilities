@@ -1,6 +1,5 @@
 package abused_master.techutilities.registry;
 
-import abused_master.abusedlib.registry.RegistryHelper;
 import abused_master.techutilities.blocks.BlockResources;
 
 public class TechWorldGeneration {

@@ -1,9 +1,9 @@
 package abused_master.techutilities.tiles;
 
-import abused_master.abusedlib.client.render.hud.IHudSupport;
-import abused_master.abusedlib.tiles.TileEntityEnergyBase;
-import abused_master.abusedlib.utils.energy.EnergyStorage;
 import abused_master.techutilities.registry.ModTiles;
+import abused_master.techutilities.utils.energy.EnergyStorage;
+import abused_master.techutilities.utils.energy.IEnergyReceiver;
+import abused_master.techutilities.utils.render.hud.IHudSupport;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -19,9 +19,9 @@ import net.minecraft.util.math.Direction;
 import java.util.*;
 
 //TODO MAKE UPGRADES FOR QUARRY
-public class TileEntityQuarry extends TileEntityEnergyBase implements IHudSupport {
+public class TileEntityQuarry extends TileEntityBase implements IHudSupport, IEnergyReceiver {
 
-    public EnergyStorage storage = new EnergyStorage(100000, 0);
+    public EnergyStorage storage = new EnergyStorage(100000);
     private boolean running = false;
     public BlockPos miningPos = null, firstCorner = null, secondCorner = null;
     public int energyUsagePerBlock = 500, miningSpeed = 0;
@@ -45,11 +45,11 @@ public class TileEntityQuarry extends TileEntityEnergyBase implements IHudSuppor
         this.speedMultiplier = nbt.getInt("speedMultiplier");
         this.hasQuarryRecorder = nbt.getBoolean("hasQuarryRecorder");
         if (nbt.containsKey("firstCorner")) {
-            this.firstCorner = new BlockPos(nbt.getIntArray("firstCorner")[0], nbt.getIntArray("firstCorner")[1], nbt.getIntArray("firstCorner")[2]);
+            this.firstCorner = BlockPos.fromLong(nbt.getLong("firstCorner"));
         }
 
         if (nbt.containsKey("secondCorner")) {
-            this.secondCorner = new BlockPos(nbt.getIntArray("secondCorner")[0], nbt.getIntArray("secondCorner")[1], nbt.getIntArray("secondCorner")[2]);
+            this.secondCorner = BlockPos.fromLong(nbt.getLong("secondCorner"));
         }
     }
 
@@ -63,11 +63,11 @@ public class TileEntityQuarry extends TileEntityEnergyBase implements IHudSuppor
         nbt.putInt("speedMultiplier", this.speedMultiplier);
         nbt.putBoolean("hasQuarryRecorder", this.hasQuarryRecorder);
         if(firstCorner != null) {
-            nbt.putIntArray("firstCorner", new int[] {firstCorner.getX(), firstCorner.getY(), firstCorner.getZ()});
+            nbt.putLong("firstCorner", firstCorner.asLong());
         }
 
         if(secondCorner != null) {
-            nbt.putIntArray("secondCorner", new int[] {secondCorner.getX(), secondCorner.getY(), secondCorner.getZ()});
+            nbt.putLong("secondCorner", secondCorner.asLong());
         }
 
         return nbt;
@@ -264,12 +264,21 @@ public class TileEntityQuarry extends TileEntityEnergyBase implements IHudSuppor
     }
 
     @Override
-    public EnergyStorage getEnergyStorage() {
-        return storage;
+    public boolean receiveEnergy(int amount) {
+        if(canReceive(amount)) {
+            storage.recieveEnergy(amount);
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean canReceive(int amount) {
+        return (storage.getEnergyCapacity() - storage.getEnergyStored()) >= amount;
     }
 
     @Override
-    public boolean isEnergyReceiver() {
-        return true;
+    public EnergyStorage getEnergyStorage() {
+        return storage;
     }
 }

@@ -1,6 +1,5 @@
 package abused_master.techutilities.blocks;
 
-import abused_master.abusedlib.blocks.BlockBase;
 import abused_master.techutilities.TechUtilities;
 import net.minecraft.block.Material;
 

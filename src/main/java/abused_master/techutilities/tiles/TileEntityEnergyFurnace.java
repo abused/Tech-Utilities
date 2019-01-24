@@ -1,32 +1,31 @@
 package abused_master.techutilities.tiles;
 
-import abused_master.abusedlib.tiles.TileEntityEnergyBase;
-import abused_master.abusedlib.utils.energy.EnergyStorage;
 import abused_master.techutilities.registry.ModTiles;
+import abused_master.techutilities.utils.CacheMapHolder;
+import abused_master.techutilities.utils.energy.EnergyStorage;
+import abused_master.techutilities.utils.energy.IEnergyReceiver;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.smelting.SmeltingRecipe;
-import net.minecraft.text.StringTextComponent;
-import net.minecraft.text.TextComponent;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.InventoryUtil;
 import net.minecraft.util.math.Direction;
 
-public class TileEntityEnergyFurnace extends TileEntityEnergyBase implements SidedInventory {
+import javax.annotation.Nullable;
 
-    private DefaultedList<ItemStack> inventory;
+//TODO ADD UPGRADES
+public class TileEntityEnergyFurnace extends TileEntityBase implements SidedInventory, IEnergyReceiver {
+
     public EnergyStorage storage = new EnergyStorage(50000);
+    public DefaultedList<ItemStack> inventory = DefaultedList.create(2, ItemStack.EMPTY);
     private int upgradeTier = 1;
     private int smeltTime = 0;
-    private int energyUsagePerSmelt = 400;
+    private int baseEnergyUsage = 400;
 
     public TileEntityEnergyFurnace() {
         super(ModTiles.ENERGY_FURNACE);
-        inventory = DefaultedList.create(2, ItemStack.EMPTY);
     }
 
     @Override
@@ -34,8 +33,8 @@ public class TileEntityEnergyFurnace extends TileEntityEnergyBase implements Sid
         super.fromTag(nbt);
         this.upgradeTier = nbt.getInt("upgradeTier");
         this.smeltTime = nbt.getInt("smeltTime");
-        this.energyUsagePerSmelt = nbt.getInt("energyUsagePerSmelt");
         this.storage.readFromNBT(nbt);
+
         inventory = DefaultedList.create(2, ItemStack.EMPTY);
         InventoryUtil.deserialize(nbt, this.inventory);
     }
@@ -45,7 +44,6 @@ public class TileEntityEnergyFurnace extends TileEntityEnergyBase implements Sid
         super.toTag(nbt);
         nbt.putInt("upgradeTier", upgradeTier);
         nbt.putInt("smeltTime", this.smeltTime);
-        nbt.putInt("energyUsagePerSmelt", this.energyUsagePerSmelt);
         this.storage.writeEnergyToNBT(nbt);
         InventoryUtil.serialize(nbt, this.inventory);
         return nbt;
@@ -58,38 +56,28 @@ public class TileEntityEnergyFurnace extends TileEntityEnergyBase implements Sid
             if(smeltTime >= this.getTotalSmeltTime()) {
                 smeltTime = 0;
                 this.smeltItem();
-                storage.extractEnergy(energyUsagePerSmelt);
                 BlockState state = world.getBlockState(pos);
                 world.updateListeners(pos, state, state, 3);
             }
-        }else {
-            if (smeltTime > 0) {
-                smeltTime = 0;
-                BlockState state = world.getBlockState(pos);
-                world.updateListeners(pos, state, state, 3);
-            }
+        }else if (!canRun() && smeltTime > 0) {
+            smeltTime = 0;
         }
     }
 
-    public SmeltingRecipe getRecipeFromInput() {
-        Recipe recipe = null;
-
-        for (Recipe recipe1 : world.getRecipeManager().values()) {
-            if(recipe1 instanceof SmeltingRecipe && recipe1.getPreviewInputs().get(0).matches(inventory.get(0))) {
-                recipe = recipe1;
-                break;
-            }
+    public ItemStack getOutputStack() {
+        if(!inventory.get(0).isEmpty()) {
+            return CacheMapHolder.INSTANCE.getOutputStack(inventory.get(0));
         }
 
-        return (SmeltingRecipe) recipe;
+        return ItemStack.EMPTY;
     }
 
     public boolean canRun() {
-        SmeltingRecipe recipe = getRecipeFromInput();
-        if(recipe == null || inventory.get(0).isEmpty()|| recipe.getOutput().isEmpty() || inventory.get(1).getAmount() > 64 || storage.getEnergyStored() < energyUsagePerSmelt) {
+        ItemStack output = getOutputStack();
+        if(inventory.get(0).isEmpty() || output.isEmpty() || inventory.get(1).getAmount() > 64 || storage.getEnergyStored() < getEnergyUsage()) {
             return false;
         }else if(!inventory.get(1).isEmpty()) {
-            if (!ItemStack.areEqual(recipe.getOutput(), inventory.get(1))) {
+            if (output.getItem() != inventory.get(1).getItem()) {
                 return false;
             }
         }
@@ -98,16 +86,21 @@ public class TileEntityEnergyFurnace extends TileEntityEnergyBase implements Sid
     }
 
     public void smeltItem() {
-        SmeltingRecipe recipe = getRecipeFromInput();
-        ItemStack output = recipe.getOutput();
+        ItemStack output = getOutputStack();
+        if(!output.isEmpty()) {
+            if (inventory.get(1).isEmpty()) {
+                inventory.set(1, output);
+            } else {
+                inventory.get(1).addAmount(1);
+            }
 
-        if(inventory.get(1).isEmpty()) {
-            inventory.set(1, output);
-        }else {
-            inventory.get(1).addAmount(1);
+            inventory.get(0).subtractAmount(1);
+            storage.extractEnergy(getEnergyUsage());
         }
+    }
 
-        inventory.get(0).subtractAmount(1);
+    public int getEnergyUsage() {
+        return baseEnergyUsage * upgradeTier;
     }
 
     public int getSmeltTime() {
@@ -124,7 +117,7 @@ public class TileEntityEnergyFurnace extends TileEntityEnergyBase implements Sid
     }
 
     @Override
-    public boolean canInsertInvStack(int i, ItemStack itemStack, Direction direction) {
+    public boolean canInsertInvStack(int i, ItemStack itemStack, @Nullable Direction direction) {
         return i != 1;
     }
 
@@ -155,7 +148,7 @@ public class TileEntityEnergyFurnace extends TileEntityEnergyBase implements Sid
 
     @Override
     public ItemStack removeInvStack(int i) {
-        return inventory.get(i);
+        return InventoryUtil.removeStack(this.inventory, i);
     }
 
     @Override
@@ -174,12 +167,21 @@ public class TileEntityEnergyFurnace extends TileEntityEnergyBase implements Sid
     }
 
     @Override
-    public EnergyStorage getEnergyStorage() {
-        return storage;
+    public boolean receiveEnergy(int amount) {
+        if(canReceive(amount)) {
+            storage.recieveEnergy(amount);
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean canReceive(int amount) {
+        return (storage.getEnergyCapacity() - storage.getEnergyStored()) >= amount;
     }
 
     @Override
-    public boolean isEnergyReceiver() {
-        return true;
+    public EnergyStorage getEnergyStorage() {
+        return storage;
     }
 }

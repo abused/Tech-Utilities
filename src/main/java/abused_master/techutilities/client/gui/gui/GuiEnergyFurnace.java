@@ -7,6 +7,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.ContainerGui;
+import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
@@ -14,17 +15,18 @@ public class GuiEnergyFurnace extends ContainerGui {
 
     public Identifier RFFurnace = new Identifier(TechUtilities.MODID, "textures/gui/energy_furnace_gui.png");
     public TileEntityEnergyFurnace tile;
+    public int guiLeft, guiTop;
 
     public GuiEnergyFurnace(TileEntityEnergyFurnace tile, ContainerEnergyFurnace containerRFFurnace) {
-        super(containerRFFurnace);
-        this.width = 176;
-        this.height = 166;
+        super(containerRFFurnace, containerRFFurnace.playerInventory, new StringTextComponent("RF Furnace"));
         this.tile = tile;
     }
 
     @Override
     protected void onInitialized() {
         super.onInitialized();
+        this.guiLeft = (this.width - this.containerWidth) / 2;
+        this.guiTop = (this.height - this.containerHeight) / 2;
     }
 
     @Override
@@ -44,8 +46,6 @@ public class GuiEnergyFurnace extends ContainerGui {
     public void drawBackground(float v, int i, int i1) {
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         client.getTextureManager().bindTexture(RFFurnace);
-        int guiLeft = (this.width - this.containerWidth) / 2;
-        int guiTop = (this.height - this.containerHeight) / 2;
         drawTexturedRect(guiLeft, guiTop, 0, 0, containerWidth, containerHeight);
 
         renderEnergy(guiLeft, guiTop);
