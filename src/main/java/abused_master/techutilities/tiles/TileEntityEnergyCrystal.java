@@ -79,7 +79,7 @@ public class TileEntityEnergyCrystal extends TileEntityBase implements IEnergyRe
                 BlockEntity blockEntity = world.getBlockEntity(pos1);
                 if(blockEntity == null) {
                     tilePositions.remove(pos1);
-                    break;
+                    continue;
                 }
 
                 IEnergyReceiver energyReceiver = (IEnergyReceiver) blockEntity;
