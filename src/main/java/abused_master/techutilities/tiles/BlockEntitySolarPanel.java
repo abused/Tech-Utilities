@@ -1,25 +1,25 @@
 package abused_master.techutilities.tiles;
 
 import abused_master.techutilities.blocks.generators.EnumSolarPanelTypes;
-import abused_master.techutilities.registry.ModTiles;
+import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-public class TileEntitySolarPanel extends TileEntityBase implements IEnergyHandler {
+public class BlockEntitySolarPanel extends BlockEntityBase implements IEnergyHandler {
 
     public EnergyStorage storage;
     public EnumSolarPanelTypes type;
     public int generationPerTick;
 
-    public TileEntitySolarPanel() {
-        super(ModTiles.SOLAR_PANEL);
+    public BlockEntitySolarPanel() {
+        super(ModBlockEntities.SOLAR_PANEL);
     }
 
-    public TileEntitySolarPanel(EnumSolarPanelTypes type) {
-        super(ModTiles.SOLAR_PANEL);
+    public BlockEntitySolarPanel(EnumSolarPanelTypes type) {
+        super(ModBlockEntities.SOLAR_PANEL);
         this.type = type;
         this.storage = new EnergyStorage(type.getEnergyStorage());
         this.generationPerTick = type.getGenerationPerTick();

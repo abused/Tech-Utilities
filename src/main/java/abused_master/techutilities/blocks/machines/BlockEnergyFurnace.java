@@ -2,8 +2,8 @@ package abused_master.techutilities.blocks.machines;
 
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.blocks.BlockWithEntityBase;
-import abused_master.techutilities.registry.ModGuis;
-import abused_master.techutilities.tiles.TileEntityEnergyFurnace;
+import abused_master.techutilities.registry.ModBlockEntities;
+import abused_master.techutilities.tiles.BlockEntityEnergyFurnace;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -38,7 +38,7 @@ public class BlockEnergyFurnace extends BlockWithEntityBase {
     @Override
     public boolean activate(BlockState blockState, World world, BlockPos blockPos, PlayerEntity player, Hand hand, BlockHitResult blockHitResult) {
         if (!world.isClient) {
-            ContainerProviderRegistry.INSTANCE.openContainer(ModGuis.ENERGY_FURNACE_CONTAINER, player, buf -> buf.writeBlockPos(blockPos));
+            ContainerProviderRegistry.INSTANCE.openContainer(ModBlockEntities.ENERGY_FURNACE_CONTAINER, player, buf -> buf.writeBlockPos(blockPos));
         }
 
         return true;
@@ -67,6 +67,6 @@ public class BlockEnergyFurnace extends BlockWithEntityBase {
 
     @Override
     public BlockEntity createBlockEntity(BlockView blockView) {
-        return new TileEntityEnergyFurnace();
+        return new BlockEntityEnergyFurnace();
     }
 }

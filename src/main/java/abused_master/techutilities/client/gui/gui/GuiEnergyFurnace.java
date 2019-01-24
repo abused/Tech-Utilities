@@ -2,7 +2,7 @@ package abused_master.techutilities.client.gui.gui;
 
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.client.gui.container.ContainerEnergyFurnace;
-import abused_master.techutilities.tiles.TileEntityEnergyFurnace;
+import abused_master.techutilities.tiles.BlockEntityEnergyFurnace;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -14,10 +14,10 @@ import net.minecraft.util.Identifier;
 public class GuiEnergyFurnace extends ContainerGui {
 
     public Identifier RFFurnace = new Identifier(TechUtilities.MODID, "textures/gui/energy_furnace_gui.png");
-    public TileEntityEnergyFurnace tile;
+    public BlockEntityEnergyFurnace tile;
     public int guiLeft, guiTop;
 
-    public GuiEnergyFurnace(TileEntityEnergyFurnace tile, ContainerEnergyFurnace containerRFFurnace) {
+    public GuiEnergyFurnace(BlockEntityEnergyFurnace tile, ContainerEnergyFurnace containerRFFurnace) {
         super(containerRFFurnace, containerRFFurnace.playerInventory, new StringTextComponent("RF Furnace"));
         this.tile = tile;
     }

@@ -2,8 +2,7 @@ package abused_master.techutilities.blocks.crystals;
 
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.blocks.BlockWithEntityBase;
-import abused_master.techutilities.tiles.TileEntityEnergyCollector;
-import abused_master.techutilities.tiles.TileEntityEnergyCrystal;
+import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCollector;
 import net.minecraft.block.BlockRenderLayer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
@@ -43,6 +42,6 @@ public class BlockEnergyCollector extends BlockWithEntityBase {
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockView blockView) {
-        return new TileEntityEnergyCollector();
+        return new BlockEntityEnergyCollector();
     }
 }

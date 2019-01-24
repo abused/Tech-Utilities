@@ -1,6 +1,6 @@
 package abused_master.techutilities.client.render;
 
-import abused_master.techutilities.tiles.TileEntityQuarry;
+import abused_master.techutilities.tiles.BlockEntityQuarry;
 import abused_master.techutilities.utils.render.RenderHelper;
 import abused_master.techutilities.utils.render.hud.HudRender;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -11,10 +11,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 
-public class QuarryRenderer extends BlockEntityRenderer<TileEntityQuarry> {
+public class QuarryRenderer extends BlockEntityRenderer<BlockEntityQuarry> {
 
     @Override
-    public void render(TileEntityQuarry tile, double x, double y, double z, float float_1, int int_1) {
+    public void render(BlockEntityQuarry tile, double x, double y, double z, float float_1, int int_1) {
         super.render(tile, x, y, z, float_1, int_1);
         HudRender.renderHud(tile, x, y, z);
 
@@ -87,7 +87,7 @@ public class QuarryRenderer extends BlockEntityRenderer<TileEntityQuarry> {
     }
 
     @Override
-    public boolean method_3563(TileEntityQuarry blockEntity_1) {
+    public boolean method_3563(BlockEntityQuarry blockEntity_1) {
         return true;
     }
 }

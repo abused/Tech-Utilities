@@ -19,7 +19,7 @@ import net.minecraft.util.math.Direction;
 import java.util.*;
 
 //TODO MAKE UPGRADES FOR QUARRY
-public class TileEntityQuarry extends TileEntityBase implements IHudSupport, IEnergyReceiver {
+public class BlockEntityQuarry extends BlockEntityBase implements IHudSupport, IEnergyReceiver {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     private boolean running = false;
@@ -31,7 +31,7 @@ public class TileEntityQuarry extends TileEntityBase implements IHudSupport, IEn
     public boolean silkTouch = false;
     public int fortuneLevel = 0, speedMultiplier = 1;
 
-    public TileEntityQuarry() {
+    public BlockEntityQuarry() {
         super(ModTiles.QUARRY);
     }
 

@@ -1,6 +1,7 @@
-package abused_master.techutilities.tiles;
+package abused_master.techutilities.tiles.crystal;
 
 import abused_master.techutilities.registry.ModTiles;
+import abused_master.techutilities.tiles.BlockEntityBase;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
 import net.minecraft.block.entity.BlockEntity;
@@ -10,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileEntityEnergyCrystal extends TileEntityBase implements IEnergyReceiver {
+public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergyReceiver {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     public List<BlockPos> tilePositions = new ArrayList<>();
@@ -18,7 +19,7 @@ public class TileEntityEnergyCrystal extends TileEntityBase implements IEnergyRe
     public int sendPerTick = 250;
     public boolean loopingThroughTiles = false;
 
-    public TileEntityEnergyCrystal() {
+    public BlockEntityEnergyCrystal() {
         super(ModTiles.ENERGY_CRYSTAL);
     }
 
@@ -94,7 +95,7 @@ public class TileEntityEnergyCrystal extends TileEntityBase implements IEnergyRe
         Iterable<BlockPos> posIterable = BlockPos.iterateBoxPositions(new BlockPos(pos.getX() - 12, pos.getY() - 12, pos.getZ() - 12), new BlockPos(pos.getX() + 12, pos.getY() + 12, pos.getZ() + 12));
         for (BlockPos pos1 : posIterable) {
             BlockEntity blockEntity = world.getBlockEntity(pos1);
-            if(world.isAir(pos1) || blockEntity == null || blockEntity instanceof TileEntityEnergyCollector || blockEntity instanceof TileEntityEnergyCrystal) {
+            if(world.isAir(pos1) || blockEntity == null || blockEntity instanceof BlockEntityEnergyCollector || blockEntity instanceof BlockEntityEnergyCrystal) {
                 continue;
             }
 

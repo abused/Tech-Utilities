@@ -1,6 +1,6 @@
 package abused_master.techutilities.tiles;
 
-import abused_master.techutilities.registry.ModTiles;
+import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.utils.CacheMapHolder;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
@@ -16,7 +16,7 @@ import net.minecraft.util.math.Direction;
 import javax.annotation.Nullable;
 
 //TODO ADD UPGRADES
-public class TileEntityEnergyFurnace extends TileEntityBase implements SidedInventory, IEnergyReceiver {
+public class BlockEntityEnergyFurnace extends BlockEntityBase implements SidedInventory, IEnergyReceiver {
 
     public EnergyStorage storage = new EnergyStorage(50000);
     public DefaultedList<ItemStack> inventory = DefaultedList.create(2, ItemStack.EMPTY);
@@ -24,8 +24,8 @@ public class TileEntityEnergyFurnace extends TileEntityBase implements SidedInve
     private int smeltTime = 0;
     private int baseEnergyUsage = 400;
 
-    public TileEntityEnergyFurnace() {
-        super(ModTiles.ENERGY_FURNACE);
+    public BlockEntityEnergyFurnace() {
+        super(ModBlockEntities.ENERGY_FURNACE);
     }
 
     @Override

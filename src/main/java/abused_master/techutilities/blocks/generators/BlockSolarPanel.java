@@ -2,7 +2,7 @@ package abused_master.techutilities.blocks.generators;
 
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.blocks.BlockWithEntityBase;
-import abused_master.techutilities.tiles.TileEntitySolarPanel;
+import abused_master.techutilities.tiles.BlockEntitySolarPanel;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,7 +27,7 @@ public class BlockSolarPanel extends BlockWithEntityBase {
 
     @Override
     public boolean activate(BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockHitResult blockHitResult) {
-        TileEntitySolarPanel panel = (TileEntitySolarPanel) world.getBlockEntity(blockPos);
+        BlockEntitySolarPanel panel = (BlockEntitySolarPanel) world.getBlockEntity(blockPos);
 
         if(!world.isClient) {
             playerEntity.addChatMessage(new StringTextComponent("Energy: " + panel.storage.getEnergyStored() + " / " + panel.storage.getEnergyCapacity() + " PE"), true);
@@ -59,6 +59,6 @@ public class BlockSolarPanel extends BlockWithEntityBase {
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockView var1) {
-        return new TileEntitySolarPanel(solarPanelType);
+        return new BlockEntitySolarPanel(solarPanelType);
     }
 }

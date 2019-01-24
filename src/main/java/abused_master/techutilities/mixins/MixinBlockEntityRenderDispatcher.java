@@ -2,8 +2,8 @@ package abused_master.techutilities.mixins;
 
 import abused_master.techutilities.client.render.CrystalRenderer;
 import abused_master.techutilities.client.render.QuarryRenderer;
-import abused_master.techutilities.tiles.TileEntityEnergyCrystal;
-import abused_master.techutilities.tiles.TileEntityQuarry;
+import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCrystal;
+import abused_master.techutilities.tiles.BlockEntityQuarry;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
@@ -26,8 +26,8 @@ public class MixinBlockEntityRenderDispatcher {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     public void init(CallbackInfo ci) {
-        this.renderers.put(TileEntityQuarry.class, new QuarryRenderer());
-        this.renderers.put(TileEntityEnergyCrystal.class, new CrystalRenderer());
+        this.renderers.put(BlockEntityQuarry.class, new QuarryRenderer());
+        this.renderers.put(BlockEntityEnergyCrystal.class, new CrystalRenderer());
 
         Iterator var1 = this.renderers.values().iterator();
 

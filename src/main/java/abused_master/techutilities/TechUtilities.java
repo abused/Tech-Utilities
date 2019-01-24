@@ -1,11 +1,11 @@
 package abused_master.techutilities;
 
+import abused_master.techutilities.tiles.BlockEntityEnergyFurnace;
 import abused_master.techutilities.utils.Config;
 import abused_master.techutilities.blocks.BlockResources;
 import abused_master.techutilities.client.gui.gui.GuiEnergyFurnace;
 import abused_master.techutilities.client.gui.container.ContainerEnergyFurnace;
 import abused_master.techutilities.registry.*;
-import abused_master.techutilities.tiles.TileEntityEnergyFurnace;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.gui.GuiProviderRegistry;
@@ -30,16 +30,16 @@ public class TechUtilities implements ModInitializer, ClientModInitializer {
     public void onInitialize() {
         ModBlocks.registerBlocks();
         ModItems.registerItems();
-        ModTiles.registerTile();
-        ContainerProviderRegistry.INSTANCE.registerFactory(ModGuis.ENERGY_FURNACE_CONTAINER, (syncid, identifier, player, buf) -> new ContainerEnergyFurnace(syncid, player.inventory, (TileEntityEnergyFurnace) player.world.getBlockEntity(buf.readBlockPos())));
+        ModBlockEntities.registerBlockEntities();
+        ContainerProviderRegistry.INSTANCE.registerFactory(ModBlockEntities.ENERGY_FURNACE_CONTAINER, (syncid, identifier, player, buf) -> new ContainerEnergyFurnace(syncid, player.inventory, (BlockEntityEnergyFurnace) player.world.getBlockEntity(buf.readBlockPos())));
         TechWorldGeneration.generateOres();
     }
 
     @Override
     public void onInitializeClient() {
-        GuiProviderRegistry.INSTANCE.registerFactory(ModGuis.ENERGY_FURNACE_CONTAINER, ((syncid, identifier, player, buf) -> {
+        GuiProviderRegistry.INSTANCE.registerFactory(ModBlockEntities.ENERGY_FURNACE_CONTAINER, ((syncid, identifier, player, buf) -> {
             BlockPos pos = buf.readBlockPos();
-            TileEntityEnergyFurnace furnace = (TileEntityEnergyFurnace) player.world.getBlockEntity(pos);
+            BlockEntityEnergyFurnace furnace = (BlockEntityEnergyFurnace) player.world.getBlockEntity(pos);
             return new GuiEnergyFurnace(furnace, new ContainerEnergyFurnace(syncid, player.inventory, furnace));
         }));
     }

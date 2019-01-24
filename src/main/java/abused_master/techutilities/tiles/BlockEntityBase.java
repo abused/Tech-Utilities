@@ -7,9 +7,9 @@ import net.minecraft.client.network.packet.BlockEntityUpdateClientPacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Tickable;
 
-public abstract class TileEntityBase extends BlockEntity implements Tickable, ClientSerializable {
+public abstract class BlockEntityBase extends BlockEntity implements Tickable, ClientSerializable {
 
-    public TileEntityBase(BlockEntityType<?> blockEntityType_1) {
+    public BlockEntityBase(BlockEntityType<?> blockEntityType_1) {
         super(blockEntityType_1);
     }
 

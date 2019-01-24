@@ -4,7 +4,7 @@ import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.blocks.BlockWithEntityBase;
 import abused_master.techutilities.items.ItemQuarryRecorder;
 import abused_master.techutilities.registry.ModItems;
-import abused_master.techutilities.tiles.TileEntityQuarry;
+import abused_master.techutilities.tiles.BlockEntityQuarry;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
@@ -28,7 +28,7 @@ public class BlockQuarry extends BlockWithEntityBase {
 
     @Override
     public boolean activate(BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockHitResult blockHitResult) {
-        TileEntityQuarry quarry = (TileEntityQuarry) world.getBlockEntity(blockPos);
+        BlockEntityQuarry quarry = (BlockEntityQuarry) world.getBlockEntity(blockPos);
         ItemStack stack = playerEntity.getStackInHand(hand);
 
         if(!(stack.getItem() instanceof ItemQuarryRecorder)) {
@@ -105,7 +105,7 @@ public class BlockQuarry extends BlockWithEntityBase {
 
     @Override
     public void onBroken(IWorld world, BlockPos blockPos, BlockState blockState) {
-        TileEntityQuarry quarry = (TileEntityQuarry) world.getBlockEntity(blockPos);
+        BlockEntityQuarry quarry = (BlockEntityQuarry) world.getBlockEntity(blockPos);
 
         if(quarry.hasQuarryRecorder) {
             world.spawnEntity(new ItemEntity(world.getWorld(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(ModItems.RECORDER)));
@@ -114,6 +114,6 @@ public class BlockQuarry extends BlockWithEntityBase {
 
     @Override
     public BlockEntity createBlockEntity(BlockView blockView) {
-        return new TileEntityQuarry();
+        return new BlockEntityQuarry();
     }
 }
