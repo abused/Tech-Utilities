@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 public class BlockEntityEnergyCollector extends BlockEntityBase implements IEnergyReceiver {
 
     public EnergyStorage storage = new EnergyStorage(10000);
-    private BlockPos crystalPos;
+    private BlockPos crystalPos = null;
     private int sendPerTick = 500;
 
     public BlockEntityEnergyCollector() {

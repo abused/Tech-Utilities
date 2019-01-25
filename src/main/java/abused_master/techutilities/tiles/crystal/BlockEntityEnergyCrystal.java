@@ -15,12 +15,11 @@ import java.util.List;
 public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergyReceiver, IEnergyProvider {
 
     public EnergyStorage storage = new EnergyStorage(100000);
-    public List<BlockPos> tilePositions;
+    public final List<BlockPos> tilePositions = new ArrayList<>();
     public int sendPerTick = 250;
 
     public BlockEntityEnergyCrystal() {
         super(ModBlockEntities.ENERGY_CRYSTAL);
-        tilePositions = new ArrayList<>();
     }
 
     @Override
@@ -28,7 +27,6 @@ public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergy
         super.fromTag(nbt);
         storage.readFromNBT(nbt);
 
-        /*
         if(nbt.containsKey("tilePositions")) {
             CompoundTag positionsTag = nbt.getCompound("tilePositions");
             for (int i = 0; i < positionsTag.getSize(); i++) {
@@ -38,7 +36,6 @@ public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergy
                 }
             }
         }
-        */
     }
 
     @Override
@@ -46,7 +43,6 @@ public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergy
         super.toTag(nbt);
         storage.writeEnergyToNBT(nbt);
 
-        /*
         if(tilePositions.size() > 0) {
             CompoundTag positionsTag = new CompoundTag();
             for (BlockPos pos1 : tilePositions) {
@@ -55,7 +51,6 @@ public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergy
 
             nbt.put("tilePositions", positionsTag);
         }
-        */
 
         return nbt;
     }
@@ -68,13 +63,13 @@ public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergy
     }
 
     public void sendEnergy() {
-        for (BlockPos pos1 : tilePositions) {
-            if(pos1 == null || world.getBlockState(pos1) == null || !(world.getBlockState(pos1) instanceof IEnergyReceiver)) {
-                tilePositions.remove(pos1);
+        for (BlockPos blockPos : tilePositions) {
+            if(blockPos == null || world.getBlockState(blockPos) == null || !(world.getBlockState(blockPos) instanceof IEnergyReceiver)) {
+                tilePositions.remove(blockPos);
                 return;
             }
 
-            sendEnergy(world, pos1, sendPerTick);
+            sendEnergy(world, blockPos, sendPerTick);
         }
     }
 

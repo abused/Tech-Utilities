@@ -1,7 +1,6 @@
 package abused_master.techutilities.items;
 
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.tiles.crystal.BlockEntityAutoCrystal;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCollector;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCrystal;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
@@ -44,7 +43,7 @@ public class ItemLinker extends ItemBase {
             if(blockEntity != null) {
                 if (blockEntity instanceof IEnergyReceiver) {
                     if(blockEntity instanceof BlockEntityEnergyCrystal) {
-                        //BlockEntityEnergyCrystal crystalBlockEntity = (BlockEntityEnergyCrystal) world.getBlockEntity(pos);
+                        BlockEntityEnergyCrystal crystalBlockEntity = (BlockEntityEnergyCrystal) blockEntity;
                         if(tag.containsKey("collectorPos")) {
                             BlockPos collectorPos = BlockPos.fromLong(tag.getLong("collectorPos"));
                             BlockEntityEnergyCollector energyCollector = (BlockEntityEnergyCollector) world.getBlockEntity(collectorPos);
@@ -60,10 +59,9 @@ public class ItemLinker extends ItemBase {
                             }
                         }else if(tag.containsKey("blockPos")) {
                             BlockPos blockPos = BlockPos.fromLong(tag.getLong("blockPos"));
-                            if(world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof IEnergyReceiver && !((BlockEntityEnergyCrystal) world.getBlockEntity(pos)).tilePositions.contains(blockPos)) {
-                                ((BlockEntityEnergyCrystal) world.getBlockEntity(pos)).tilePositions.add(blockPos);
+                            if(world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof IEnergyReceiver && !crystalBlockEntity.tilePositions.contains(blockPos)) {
+                                crystalBlockEntity.tilePositions.add(blockPos);
                                 if(!world.isClient) {
-                                    System.out.println(((BlockEntityEnergyCrystal) world.getBlockEntity(pos)).tilePositions.size());
                                     player.addChatMessage(new StringTextComponent("Linked BlockEntity position!"), true);
                                 }
                             }
