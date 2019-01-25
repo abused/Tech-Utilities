@@ -14,6 +14,7 @@ import net.minecraft.text.StringTextComponent;
 import net.minecraft.text.TextComponent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TagHelper;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -33,75 +34,62 @@ public class ItemLinker extends ItemBase {
         PlayerEntity player = usageContext.getPlayer();
         ItemStack stack = usageContext.getItemStack();
 
-        CompoundTag tag = stack.getTag();
-        if (player.isSneaking()) {
-            if (tag == null) {
-                tag = new CompoundTag();
-            }
+        if(!world.isClient) {
+            CompoundTag tag = stack.getTag();
+            if (player.isSneaking()) {
+                if (tag == null) {
+                    tag = new CompoundTag();
+                }
 
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if(blockEntity != null) {
-                if (blockEntity instanceof IEnergyReceiver) {
-                    if(blockEntity instanceof BlockEntityEnergyCrystal) {
-                        BlockEntityEnergyCrystal crystalBlockEntity = (BlockEntityEnergyCrystal) blockEntity;
-                        if(tag.containsKey("collectorPos")) {
-                            BlockPos collectorPos = BlockPos.fromLong(tag.getLong("collectorPos"));
-                            BlockEntityEnergyCollector energyCollector = (BlockEntityEnergyCollector) world.getBlockEntity(collectorPos);
-                            if(energyCollector != null) {
-                                energyCollector.setCrystalPos(pos);
-                                if(!world.isClient) {
+                BlockEntity blockEntity = world.getBlockEntity(pos);
+                if (blockEntity != null) {
+                    if (blockEntity instanceof IEnergyReceiver) {
+                        if (blockEntity instanceof BlockEntityEnergyCrystal) {
+                            BlockEntityEnergyCrystal crystalBlockEntity = (BlockEntityEnergyCrystal) blockEntity;
+                            if (tag.containsKey("collectorPos")) {
+                                BlockPos collectorPos = TagHelper.deserializeBlockPos(tag.getCompound("collectorPos"));
+                                BlockEntityEnergyCollector energyCollector = (BlockEntityEnergyCollector) world.getBlockEntity(collectorPos);
+                                if (energyCollector != null) {
+                                    energyCollector.setCrystalPos(pos);
                                     player.addChatMessage(new StringTextComponent("Linked collector position!"), true);
-                                }
-                            }else {
-                                if(!world.isClient) {
+                                } else {
                                     player.addChatMessage(new StringTextComponent("Invalid collector position!"), true);
                                 }
-                            }
-                        }else if(tag.containsKey("blockPos")) {
-                            BlockPos blockPos = BlockPos.fromLong(tag.getLong("blockPos"));
-                            if(world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof IEnergyReceiver && !crystalBlockEntity.tilePositions.contains(blockPos)) {
-                                crystalBlockEntity.tilePositions.add(blockPos);
-                                if(!world.isClient) {
+                            } else if (tag.containsKey("blockPos")) {
+                                BlockPos blockPos = TagHelper.deserializeBlockPos(tag.getCompound("blockPos"));
+                                if (world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof IEnergyReceiver && !crystalBlockEntity.tilePositions.contains(blockPos)) {
+                                    crystalBlockEntity.tilePositions.add(blockPos);
+                                    System.out.println(crystalBlockEntity.tilePositions.size());
                                     player.addChatMessage(new StringTextComponent("Linked BlockEntity position!"), true);
                                 }
-                            }
-                        }else {
-                            if(!world.isClient) {
+                            } else {
                                 player.addChatMessage(new StringTextComponent("No block position has been linked!"), true);
                             }
-                        }
-                    }else {
-                        if(blockEntity instanceof BlockEntityEnergyCollector) {
-                            if(tag.containsKey("blockPos")) {
-                                tag.remove("blockPos");
-                            }
-                            tag.putLong("collectorPos", pos.asLong());
-                            if(!world.isClient) {
+                        } else {
+                            if (blockEntity instanceof BlockEntityEnergyCollector) {
+                                if (tag.containsKey("blockPos")) {
+                                    tag.remove("blockPos");
+                                }
+                                tag.put("collectorPos", TagHelper.serializeBlockPos(pos));
                                 player.addChatMessage(new StringTextComponent("Saved collector position!"), true);
-                            }
-                        }else {
-                            if(tag.containsKey("collectorPos")) {
-                                tag.remove("collectorPos");
-                            }
-                            tag.putLong("blockPos", pos.asLong());
-                            if(!world.isClient) {
+                            } else {
+                                if (tag.containsKey("collectorPos")) {
+                                    tag.remove("collectorPos");
+                                }
+                                tag.put("blockPos", TagHelper.serializeBlockPos(pos));
                                 player.addChatMessage(new StringTextComponent("Saved block position!"), true);
                             }
                         }
-                    }
-                }else {
-                    if(!world.isClient) {
+                    } else {
                         player.addChatMessage(new StringTextComponent("The selected entity cannot be linked!"), true);
                     }
-                }
-            }else {
-                if(!world.isClient) {
+                } else {
                     player.addChatMessage(new StringTextComponent("The selected block is not a BlockEntity!"), true);
                 }
-            }
 
-            stack.setTag(tag);
-            return ActionResult.SUCCESS;
+                stack.setTag(tag);
+                return ActionResult.SUCCESS;
+            }
         }
 
 
@@ -129,10 +117,10 @@ public class ItemLinker extends ItemBase {
         CompoundTag tag = itemStack.getTag();
         if(tag != null) {
             if(tag.containsKey("collectorPos")) {
-                BlockPos pos = BlockPos.fromLong(tag.getLong("collectorPos"));
+                BlockPos pos = TagHelper.deserializeBlockPos(tag.getCompound("collectorPos"));
                 list.add(new StringTextComponent("Collector Pos, x: " + pos.getX() + " y: " + pos.getY() + " z: " + pos.getZ()));
             }else if(tag.containsKey("blockPos")) {
-                BlockPos pos = BlockPos.fromLong(tag.getLong("blockPos"));
+                BlockPos pos = TagHelper.deserializeBlockPos(tag.getCompound("blockPos"));
                 list.add(new StringTextComponent("BlockEntity Pos, x: " + pos.getX() + " y: " + pos.getY() + " z: " + pos.getZ()));
             }
         }else {

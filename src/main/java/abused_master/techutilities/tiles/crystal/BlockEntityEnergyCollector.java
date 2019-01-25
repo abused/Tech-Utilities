@@ -5,6 +5,7 @@ import abused_master.techutilities.tiles.BlockEntityBase;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.TagHelper;
 import net.minecraft.util.math.BlockPos;
 
 public class BlockEntityEnergyCollector extends BlockEntityBase implements IEnergyReceiver {
@@ -22,7 +23,7 @@ public class BlockEntityEnergyCollector extends BlockEntityBase implements IEner
         super.fromTag(nbt);
         this.storage.readFromNBT(nbt);
         if(nbt.containsKey("crystalPos")) {
-            this.crystalPos = BlockPos.fromLong(nbt.getLong("crystalPos"));
+            this.crystalPos = TagHelper.deserializeBlockPos(nbt.getCompound("crystalPos"));
         }
     }
 
@@ -31,7 +32,7 @@ public class BlockEntityEnergyCollector extends BlockEntityBase implements IEner
         super.toTag(nbt);
         storage.writeEnergyToNBT(nbt);
         if(crystalPos != null) {
-            nbt.putLong("crystalPos", crystalPos.asLong());
+            nbt.put("crystalPos", TagHelper.serializeBlockPos(crystalPos));
         }
         return nbt;
     }
