@@ -107,7 +107,7 @@ public class BlockQuarry extends BlockWithEntityBase {
     public void onBroken(IWorld world, BlockPos blockPos, BlockState blockState) {
         BlockEntityQuarry quarry = (BlockEntityQuarry) world.getBlockEntity(blockPos);
 
-        if(quarry.hasQuarryRecorder) {
+        if(quarry != null && quarry.hasQuarryRecorder) {
             world.spawnEntity(new ItemEntity(world.getWorld(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(ModItems.RECORDER)));
         }
     }

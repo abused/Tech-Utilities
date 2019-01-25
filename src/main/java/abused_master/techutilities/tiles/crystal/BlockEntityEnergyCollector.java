@@ -1,6 +1,6 @@
 package abused_master.techutilities.tiles.crystal;
 
-import abused_master.techutilities.registry.ModTiles;
+import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.tiles.BlockEntityBase;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
@@ -14,7 +14,7 @@ public class BlockEntityEnergyCollector extends BlockEntityBase implements IEner
     private int sendPerTick = 500;
 
     public BlockEntityEnergyCollector() {
-        super(ModTiles.ENERGY_CRYSTAL_COLLECTOR);
+        super(ModBlockEntities.ENERGY_CRYSTAL_COLLECTOR);
     }
 
     @Override

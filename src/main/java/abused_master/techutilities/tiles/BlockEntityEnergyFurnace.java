@@ -108,7 +108,7 @@ public class BlockEntityEnergyFurnace extends BlockEntityBase implements SidedIn
     }
 
     public int getTotalSmeltTime() {
-        return 120 / this.upgradeTier;
+        return 2 / this.upgradeTier;
     }
 
     @Override

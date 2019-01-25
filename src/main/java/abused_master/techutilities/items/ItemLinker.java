@@ -1,8 +1,10 @@
 package abused_master.techutilities.items;
 
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.tiles.TileEntityEnergyCollector;
-import abused_master.techutilities.tiles.TileEntityEnergyCrystal;
+import abused_master.techutilities.tiles.crystal.BlockEntityAutoCrystal;
+import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCollector;
+import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCrystal;
+import abused_master.techutilities.utils.energy.IEnergyReceiver;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.item.TooltipOptions;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,40 +35,70 @@ public class ItemLinker extends ItemBase {
         ItemStack stack = usageContext.getItemStack();
 
         CompoundTag tag = stack.getTag();
-        if (!player.isSneaking()) {
+        if (player.isSneaking()) {
             if (tag == null) {
                 tag = new CompoundTag();
             }
 
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if(blockEntity != null) {
-                if(blockEntity instanceof TileEntityEnergyCrystal) {
-                    if(tag.containsKey("collectorPos")) {
-                        BlockPos collectorPos = BlockPos.fromLong(tag.getLong("collectorPos"));
-                        TileEntityEnergyCollector energyCollector = (TileEntityEnergyCollector) world.getBlockEntity(collectorPos);
-                        if(energyCollector != null) {
-                            energyCollector.setCrystalPos(pos);
-                            if(!world.isClient) {
-                                player.addChatMessage(new StringTextComponent("Linked collector position!"), true);
+                if (blockEntity instanceof IEnergyReceiver) {
+                    if(blockEntity instanceof BlockEntityEnergyCrystal) {
+                        //BlockEntityEnergyCrystal crystalBlockEntity = (BlockEntityEnergyCrystal) world.getBlockEntity(pos);
+                        if(tag.containsKey("collectorPos")) {
+                            BlockPos collectorPos = BlockPos.fromLong(tag.getLong("collectorPos"));
+                            BlockEntityEnergyCollector energyCollector = (BlockEntityEnergyCollector) world.getBlockEntity(collectorPos);
+                            if(energyCollector != null) {
+                                energyCollector.setCrystalPos(pos);
+                                if(!world.isClient) {
+                                    player.addChatMessage(new StringTextComponent("Linked collector position!"), true);
+                                }
+                            }else {
+                                if(!world.isClient) {
+                                    player.addChatMessage(new StringTextComponent("Invalid collector position!"), true);
+                                }
+                            }
+                        }else if(tag.containsKey("blockPos")) {
+                            BlockPos blockPos = BlockPos.fromLong(tag.getLong("blockPos"));
+                            if(world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof IEnergyReceiver && !((BlockEntityEnergyCrystal) world.getBlockEntity(pos)).tilePositions.contains(blockPos)) {
+                                ((BlockEntityEnergyCrystal) world.getBlockEntity(pos)).tilePositions.add(blockPos);
+                                if(!world.isClient) {
+                                    System.out.println(((BlockEntityEnergyCrystal) world.getBlockEntity(pos)).tilePositions.size());
+                                    player.addChatMessage(new StringTextComponent("Linked BlockEntity position!"), true);
+                                }
                             }
                         }else {
                             if(!world.isClient) {
-                                player.addChatMessage(new StringTextComponent("Invalid collector position!"), true);
+                                player.addChatMessage(new StringTextComponent("No block position has been linked!"), true);
                             }
                         }
                     }else {
-                        if(!world.isClient) {
-                            player.addChatMessage(new StringTextComponent("No collector position has been set!"), true);
+                        if(blockEntity instanceof BlockEntityEnergyCollector) {
+                            if(tag.containsKey("blockPos")) {
+                                tag.remove("blockPos");
+                            }
+                            tag.putLong("collectorPos", pos.asLong());
+                            if(!world.isClient) {
+                                player.addChatMessage(new StringTextComponent("Saved collector position!"), true);
+                            }
+                        }else {
+                            if(tag.containsKey("collectorPos")) {
+                                tag.remove("collectorPos");
+                            }
+                            tag.putLong("blockPos", pos.asLong());
+                            if(!world.isClient) {
+                                player.addChatMessage(new StringTextComponent("Saved block position!"), true);
+                            }
                         }
                     }
-                }else if(blockEntity instanceof TileEntityEnergyCollector) {
-                    if(tag.containsKey("collectorPos")) {
-                        tag.remove("collectorPos");
-                    }
-                    tag.putLong("collectorPos", pos.asLong());
+                }else {
                     if(!world.isClient) {
-                        player.addChatMessage(new StringTextComponent("Saved collector position!"), true);
+                        player.addChatMessage(new StringTextComponent("The selected entity cannot be linked!"), true);
                     }
+                }
+            }else {
+                if(!world.isClient) {
+                    player.addChatMessage(new StringTextComponent("The selected block is not a BlockEntity!"), true);
                 }
             }
 
@@ -94,7 +126,6 @@ public class ItemLinker extends ItemBase {
         stack.setTag(null);
     }
 
-
     @Override
     public void buildTooltip(ItemStack itemStack, World world, List<TextComponent> list, TooltipOptions tooltipOptions) {
         CompoundTag tag = itemStack.getTag();
@@ -102,9 +133,12 @@ public class ItemLinker extends ItemBase {
             if(tag.containsKey("collectorPos")) {
                 BlockPos pos = BlockPos.fromLong(tag.getLong("collectorPos"));
                 list.add(new StringTextComponent("Collector Pos, x: " + pos.getX() + " y: " + pos.getY() + " z: " + pos.getZ()));
+            }else if(tag.containsKey("blockPos")) {
+                BlockPos pos = BlockPos.fromLong(tag.getLong("blockPos"));
+                list.add(new StringTextComponent("BlockEntity Pos, x: " + pos.getX() + " y: " + pos.getY() + " z: " + pos.getZ()));
             }
         }else {
-            list.add(new StringTextComponent("Collector position has not been set."));
+            list.add(new StringTextComponent("No block positions have been saved."));
         }
     }
 }

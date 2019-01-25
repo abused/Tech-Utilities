@@ -1,6 +1,6 @@
 package abused_master.techutilities.tiles;
 
-import abused_master.techutilities.registry.ModTiles;
+import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
 import abused_master.techutilities.utils.render.hud.IHudSupport;
@@ -32,7 +32,7 @@ public class BlockEntityQuarry extends BlockEntityBase implements IHudSupport, I
     public int fortuneLevel = 0, speedMultiplier = 1;
 
     public BlockEntityQuarry() {
-        super(ModTiles.QUARRY);
+        super(ModBlockEntities.QUARRY);
     }
 
     @Override

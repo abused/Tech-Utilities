@@ -72,7 +72,6 @@ public class RegistryHelper {
     /**
      * World Gen Ore Registry
      */
-
     public static void generateOreInStone(Block block, int veinSize, int spawnRate, int maxHeight) {
         for (Biome biome : Biome.BIOMES) {
             biome.addFeature(GenerationStep.Feature.UNDERGROUND_ORES, Biome.configureFeature(net.minecraft.world.gen.feature.Feature.ORE, new OreFeatureConfig(OreFeatureConfig.Target.NATURAL_STONE, block.getDefaultState(), veinSize), Decorator.COUNT_RANGE, new RangeDecoratorConfig(spawnRate, 0, 0, maxHeight)));

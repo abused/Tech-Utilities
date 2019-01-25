@@ -1,7 +1,9 @@
 package abused_master.techutilities.mixins;
 
+import abused_master.techutilities.client.render.CrystalCollectorRenderer;
 import abused_master.techutilities.client.render.CrystalRenderer;
 import abused_master.techutilities.client.render.QuarryRenderer;
+import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCollector;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCrystal;
 import abused_master.techutilities.tiles.BlockEntityQuarry;
 import net.minecraft.block.entity.BlockEntity;
@@ -28,6 +30,7 @@ public class MixinBlockEntityRenderDispatcher {
     public void init(CallbackInfo ci) {
         this.renderers.put(BlockEntityQuarry.class, new QuarryRenderer());
         this.renderers.put(BlockEntityEnergyCrystal.class, new CrystalRenderer());
+        this.renderers.put(BlockEntityEnergyCollector.class, new CrystalCollectorRenderer());
 
         Iterator var1 = this.renderers.values().iterator();
 
