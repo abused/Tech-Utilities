@@ -5,18 +5,22 @@ import abused_master.techutilities.tiles.BlockEntityBase;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyProvider;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
+import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.util.TagHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Iterator;
 
 public class BlockEntityAutoCrystal extends BlockEntityBase implements IEnergyProvider, IEnergyReceiver {
 
     public EnergyStorage storage = new EnergyStorage(50000);
-    public List<BlockPos> tilePositions = new ArrayList<>();
+    public HashSet<BlockPos> tilePositions = new HashSet<>();
     public int areaLookupTimer = 0;
     public int sendPerTick = 250;
     public boolean loopingThroughTiles = false;
@@ -31,12 +35,10 @@ public class BlockEntityAutoCrystal extends BlockEntityBase implements IEnergyPr
         storage.readFromNBT(nbt);
 
         if(nbt.containsKey("tilePositions")) {
-            CompoundTag positionsTag = nbt.getCompound("tilePositions");
-            for (int i = 0; i < positionsTag.getSize(); i++) {
-                BlockPos pos1 = BlockPos.fromLong(positionsTag.getLong("be" + i));
-                if(pos1 != null && !tilePositions.contains(pos1)) {
-                    tilePositions.add(pos1);
-                }
+            tilePositions.clear();
+            ListTag tags = nbt.getList("tilePositions", NbtType.COMPOUND);
+            for (Tag tag : tags) {
+                tilePositions.add(TagHelper.deserializeBlockPos((CompoundTag) tag));
             }
         }
 
@@ -49,12 +51,12 @@ public class BlockEntityAutoCrystal extends BlockEntityBase implements IEnergyPr
         storage.writeEnergyToNBT(nbt);
 
         if(tilePositions.size() > 0) {
-            CompoundTag positionsTag = new CompoundTag();
+            ListTag tags = new ListTag();
             for (BlockPos pos1 : tilePositions) {
-                positionsTag.putLong("be" + tilePositions.indexOf(pos1), pos1.asLong());
+                tags.add(TagHelper.serializeBlockPos(pos1));
             }
 
-            nbt.put("tilePositions", positionsTag);
+            nbt.put("tilePositions", tags);
         }
 
         nbt.putInt("areaLookupTimer", this.areaLookupTimer);
@@ -78,13 +80,14 @@ public class BlockEntityAutoCrystal extends BlockEntityBase implements IEnergyPr
     }
 
     public void sendEnergy() {
-        for (BlockPos pos1 : tilePositions) {
-            if (world.getBlockEntity(pos1) == null) {
-                tilePositions.remove(pos1);
+        for (Iterator<BlockPos> it = tilePositions.iterator(); it.hasNext();) {
+            BlockPos blockPos = it.next();
+            if(blockPos == null || !(world.getBlockEntity(blockPos) instanceof IEnergyReceiver)) {
+                it.remove();
                 continue;
             }
 
-            sendEnergy(world, pos1, sendPerTick);
+            sendEnergy(world, blockPos, sendPerTick);
         }
     }
 
@@ -106,13 +109,17 @@ public class BlockEntityAutoCrystal extends BlockEntityBase implements IEnergyPr
 
     @Override
     public boolean sendEnergy(World world, BlockPos pos, int amount) {
-        return storage.sendEnergy(world, pos, amount);
+        boolean sent = storage.sendEnergy(world, pos, amount);
+        this.markDirty();
+        return sent;
     }
 
     @Override
     public boolean receiveEnergy(int amount) {
         if(canReceive(amount)) {
             storage.recieveEnergy(amount);
+            this.markDirty();
+            world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
             return true;
         }
 

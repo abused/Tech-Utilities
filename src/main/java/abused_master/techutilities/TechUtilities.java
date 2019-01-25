@@ -33,6 +33,7 @@ public class TechUtilities implements ModInitializer, ClientModInitializer {
         ModBlockEntities.registerBlockEntities();
         ContainerProviderRegistry.INSTANCE.registerFactory(ModBlockEntities.ENERGY_FURNACE_CONTAINER, (syncid, identifier, player, buf) -> new ContainerEnergyFurnace(syncid, player.inventory, (BlockEntityEnergyFurnace) player.world.getBlockEntity(buf.readBlockPos())));
         TechWorldGeneration.generateOres();
+        ModRecipes.registerRecipes();
     }
 
     @Override

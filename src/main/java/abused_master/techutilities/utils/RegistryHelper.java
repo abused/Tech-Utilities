@@ -1,4 +1,4 @@
-package abused_master.techutilities.registry;
+package abused_master.techutilities.utils;
 
 import abused_master.techutilities.blocks.BlockBase;
 import abused_master.techutilities.items.ItemBase;

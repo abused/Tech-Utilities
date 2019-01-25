@@ -44,6 +44,9 @@ public class BlockEntityEnergyCollector extends BlockEntityBase implements IEner
             if(energyCrystal.receiveEnergy(sendPerTick)) {
                 storage.extractEnergy(sendPerTick);
             }
+        }else if(crystalPos != null && world.getBlockEntity(crystalPos) == null) {
+            crystalPos = null;
+            world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
         }
     }
 
@@ -59,6 +62,8 @@ public class BlockEntityEnergyCollector extends BlockEntityBase implements IEner
     public boolean receiveEnergy(int amount) {
         if(canReceive(amount)) {
             storage.recieveEnergy(amount);
+            markDirty();
+            world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
             return true;
         }
 

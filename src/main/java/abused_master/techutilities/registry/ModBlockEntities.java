@@ -5,6 +5,7 @@ import abused_master.techutilities.tiles.*;
 import abused_master.techutilities.tiles.crystal.BlockEntityAutoCrystal;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCollector;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCrystal;
+import abused_master.techutilities.utils.RegistryHelper;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
 

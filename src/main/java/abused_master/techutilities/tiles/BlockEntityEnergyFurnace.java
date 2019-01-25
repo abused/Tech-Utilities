@@ -108,7 +108,7 @@ public class BlockEntityEnergyFurnace extends BlockEntityBase implements SidedIn
     }
 
     public int getTotalSmeltTime() {
-        return 2 / this.upgradeTier;
+        return 120 / this.upgradeTier;
     }
 
     @Override
@@ -170,6 +170,8 @@ public class BlockEntityEnergyFurnace extends BlockEntityBase implements SidedIn
     public boolean receiveEnergy(int amount) {
         if(canReceive(amount)) {
             storage.recieveEnergy(amount);
+            this.markDirty();
+            world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
             return true;
         }
 

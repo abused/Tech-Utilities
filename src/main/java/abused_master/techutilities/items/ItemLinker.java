@@ -51,6 +51,8 @@ public class ItemLinker extends ItemBase {
                                 BlockEntityEnergyCollector energyCollector = (BlockEntityEnergyCollector) world.getBlockEntity(collectorPos);
                                 if (energyCollector != null) {
                                     energyCollector.setCrystalPos(pos);
+                                    crystalBlockEntity.markDirty();
+                                    world.updateListeners(collectorPos, world.getBlockState(collectorPos), world.getBlockState(collectorPos), 3);
                                     player.addChatMessage(new StringTextComponent("Linked collector position!"), true);
                                 } else {
                                     player.addChatMessage(new StringTextComponent("Invalid collector position!"), true);
@@ -59,7 +61,8 @@ public class ItemLinker extends ItemBase {
                                 BlockPos blockPos = TagHelper.deserializeBlockPos(tag.getCompound("blockPos"));
                                 if (world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof IEnergyReceiver && !crystalBlockEntity.tilePositions.contains(blockPos)) {
                                     crystalBlockEntity.tilePositions.add(blockPos);
-                                    System.out.println(crystalBlockEntity.tilePositions.size());
+                                    crystalBlockEntity.markDirty();
+                                    world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
                                     player.addChatMessage(new StringTextComponent("Linked BlockEntity position!"), true);
                                 }
                             } else {

@@ -57,6 +57,7 @@ public class BlockEntitySolarPanel extends BlockEntityBase implements IEnergyHan
         for (Direction direction : Direction.values()) {
             BlockPos offsetPos = pos.offset(direction);
             storage.sendEnergy(world, offsetPos, generationPerTick);
+            this.markDirty();
         }
     }
 

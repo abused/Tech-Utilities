@@ -267,6 +267,8 @@ public class BlockEntityQuarry extends BlockEntityBase implements IHudSupport, I
     public boolean receiveEnergy(int amount) {
         if(canReceive(amount)) {
             storage.recieveEnergy(amount);
+            this.markDirty();
+            world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
             return true;
         }
 

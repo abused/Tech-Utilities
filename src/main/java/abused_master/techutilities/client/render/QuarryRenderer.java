@@ -48,7 +48,6 @@ public class QuarryRenderer extends BlockEntityRenderer<BlockEntityQuarry> {
             GlStateManager.alphaFunc(516, 0.003921569F);
             MinecraftClient.getInstance().getItemRenderer().renderItemWithTransformation(new ItemStack(Items.DIAMOND_PICKAXE), ModelTransformation.Type.GROUND);
             GlStateManager.popMatrix();
-
         }
 
         if (tile.listFourCorners() != null) {

@@ -5,6 +5,7 @@ import abused_master.techutilities.tiles.BlockEntityBase;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyProvider;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
+import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -32,7 +33,7 @@ public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergy
 
         if(nbt.containsKey("tilePositions")) {
             tilePositions.clear();
-            ListTag tags = nbt.getList("tilePositions", 9);
+            ListTag tags = nbt.getList("tilePositions", NbtType.COMPOUND);
             for (Tag tag : tags) {
                 tilePositions.add(TagHelper.deserializeBlockPos((CompoundTag) tag));
             }
@@ -66,9 +67,9 @@ public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergy
     public void sendEnergy() {
         for (Iterator<BlockPos> it = tilePositions.iterator(); it.hasNext();) {
             BlockPos blockPos = it.next();
-            if(blockPos == null || world.getBlockState(blockPos) == null || !(world.getBlockState(blockPos) instanceof IEnergyReceiver)) {
-                tilePositions.remove(blockPos);
-                return;
+            if(blockPos == null || !(world.getBlockEntity(blockPos) instanceof IEnergyReceiver)) {
+                it.remove();
+                continue;
             }
 
             sendEnergy(world, blockPos, sendPerTick);
@@ -96,6 +97,8 @@ public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergy
 
     @Override
     public boolean sendEnergy(World world, BlockPos pos, int amount) {
-        return storage.sendEnergy(world, pos, amount);
+        boolean sent = storage.sendEnergy(world, pos, amount);
+        markDirty();
+        return sent;
     }
 }

@@ -8,6 +8,7 @@ import abused_master.techutilities.blocks.decoration.BlockGlassBase;
 import abused_master.techutilities.blocks.generators.EnumSolarPanelTypes;
 import abused_master.techutilities.blocks.machines.BlockEnergyFurnace;
 import abused_master.techutilities.blocks.machines.BlockQuarry;
+import abused_master.techutilities.utils.RegistryHelper;
 
 public class ModBlocks {
 
