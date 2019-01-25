@@ -59,6 +59,8 @@ public class BlockSolarPanel extends BlockWithEntityBase {
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockView var1) {
-        return new BlockEntitySolarPanel(solarPanelType);
+        BlockEntitySolarPanel solarPanel = new BlockEntitySolarPanel();
+        solarPanel.setType(solarPanelType);
+        return solarPanel;
     }
 }

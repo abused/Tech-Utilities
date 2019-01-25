@@ -18,18 +18,10 @@ public class BlockEntitySolarPanel extends BlockEntityBase implements IEnergyHan
         super(ModBlockEntities.SOLAR_PANEL);
     }
 
-    public BlockEntitySolarPanel(EnumSolarPanelTypes type) {
-        super(ModBlockEntities.SOLAR_PANEL);
-        this.type = type;
-        this.storage = new EnergyStorage(type.getEnergyStorage());
-        this.generationPerTick = type.getGenerationPerTick();
-    }
-
     @Override
     public void fromTag(CompoundTag nbt) {
         super.fromTag(nbt);
-        this.type = EnumSolarPanelTypes.values()[nbt.getInt("type")];
-        this.generationPerTick = nbt.getInt("generationPerTick");
+        this.setType(EnumSolarPanelTypes.values()[nbt.getInt("type")]);
         this.storage.readFromNBT(nbt);
     }
 
@@ -37,7 +29,6 @@ public class BlockEntitySolarPanel extends BlockEntityBase implements IEnergyHan
     public CompoundTag toTag(CompoundTag nbt) {
         super.toTag(nbt);
         nbt.putInt("type", this.type.ordinal());
-        nbt.putInt("generationPerTick", this.generationPerTick);
         this.storage.writeEnergyToNBT(nbt);
         return nbt;
     }
@@ -51,6 +42,17 @@ public class BlockEntitySolarPanel extends BlockEntityBase implements IEnergyHan
         }
 
         sendEnergy();
+    }
+
+    public void setType(EnumSolarPanelTypes type) {
+        this.type = type;
+        if(storage != null && storage.getEnergyStored() > 0) {
+            this.storage = new EnergyStorage(type.getEnergyStorage(), storage.getEnergyStored());
+        }else {
+            this.storage = new EnergyStorage(type.getEnergyStorage());
+        }
+        this.generationPerTick = type.getGenerationPerTick();
+        markDirty();
     }
 
     public void sendEnergy() {
