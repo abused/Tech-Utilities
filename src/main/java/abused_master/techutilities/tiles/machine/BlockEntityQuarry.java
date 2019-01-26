@@ -1,6 +1,7 @@
-package abused_master.techutilities.tiles;
+package abused_master.techutilities.tiles.machine;
 
 import abused_master.techutilities.registry.ModBlockEntities;
+import abused_master.techutilities.tiles.BlockEntityEnergy;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
 import abused_master.techutilities.utils.render.hud.IHudSupport;
@@ -19,7 +20,7 @@ import net.minecraft.util.math.Direction;
 import java.util.*;
 
 //TODO MAKE UPGRADES FOR QUARRY
-public class BlockEntityQuarry extends BlockEntityBase implements IHudSupport, IEnergyReceiver {
+public class BlockEntityQuarry extends BlockEntityEnergy implements IHudSupport, IEnergyReceiver {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     private boolean running = false;
@@ -265,18 +266,7 @@ public class BlockEntityQuarry extends BlockEntityBase implements IHudSupport, I
 
     @Override
     public boolean receiveEnergy(int amount) {
-        if(canReceive(amount)) {
-            storage.recieveEnergy(amount);
-            this.markDirty();
-            world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean canReceive(int amount) {
-        return (storage.getEnergyCapacity() - storage.getEnergyStored()) >= amount;
+        return handleEnergyReceive(storage, amount);
     }
 
     @Override

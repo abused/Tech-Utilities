@@ -1,6 +1,6 @@
 package abused_master.techutilities;
 
-import abused_master.techutilities.tiles.BlockEntityEnergyFurnace;
+import abused_master.techutilities.tiles.machine.BlockEntityEnergyFurnace;
 import abused_master.techutilities.utils.Config;
 import abused_master.techutilities.blocks.BlockResources;
 import abused_master.techutilities.client.gui.gui.GuiEnergyFurnace;

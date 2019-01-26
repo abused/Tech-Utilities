@@ -2,6 +2,7 @@ package abused_master.techutilities.tiles.crystal;
 
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.tiles.BlockEntityBase;
+import abused_master.techutilities.tiles.BlockEntityEnergy;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyProvider;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
@@ -16,7 +17,7 @@ import net.minecraft.world.World;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergyReceiver, IEnergyProvider {
+public class BlockEntityEnergyCrystal extends BlockEntityEnergy implements IEnergyReceiver, IEnergyProvider {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     public final HashSet<BlockPos> tilePositions = new HashSet<>();
@@ -69,6 +70,8 @@ public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergy
             BlockPos blockPos = it.next();
             if(blockPos == null || !(world.getBlockEntity(blockPos) instanceof IEnergyReceiver)) {
                 it.remove();
+                this.markDirty();
+                world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
                 continue;
             }
 
@@ -78,16 +81,7 @@ public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergy
 
     @Override
     public boolean receiveEnergy(int amount) {
-        if(canReceive(amount)) {
-            storage.recieveEnergy(amount);
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean canReceive(int amount) {
-        return (storage.getEnergyCapacity() - storage.getEnergyStored()) >= amount;
+        return this.handleEnergyReceive(storage, amount);
     }
 
     @Override

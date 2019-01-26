@@ -4,7 +4,7 @@ import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.blocks.BlockWithEntityBase;
 import abused_master.techutilities.items.ItemQuarryRecorder;
 import abused_master.techutilities.registry.ModItems;
-import abused_master.techutilities.tiles.BlockEntityQuarry;
+import abused_master.techutilities.tiles.machine.BlockEntityQuarry;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;

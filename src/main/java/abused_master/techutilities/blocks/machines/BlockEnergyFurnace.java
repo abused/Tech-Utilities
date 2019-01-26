@@ -3,7 +3,7 @@ package abused_master.techutilities.blocks.machines;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.blocks.BlockWithEntityBase;
 import abused_master.techutilities.registry.ModBlockEntities;
-import abused_master.techutilities.tiles.BlockEntityEnergyFurnace;
+import abused_master.techutilities.tiles.machine.BlockEntityEnergyFurnace;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

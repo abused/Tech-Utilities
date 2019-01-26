@@ -1,6 +1,7 @@
 {
   "itemGroup.techutilities.techutilities" : "Tech Utilities",
   "item.techutilities.quarry_recorder" : "Quarry Recorder",
+  "item.techutilities.linker" : "Linker Tool",
   "item.techutilities.copper_dust" : "Copper Dust",
   "item.techutilities.copper_ingot" : "Copper Ingot",
   "item.techutilities.lead_dust" : "Lead Dust",

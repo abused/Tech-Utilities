@@ -13,6 +13,7 @@ public class CrystalRenderer extends BlockEntityRenderer<BlockEntityEnergyCrysta
     @Override
     public void render(BlockEntityEnergyCrystal tile, double x, double y, double z, float float_1, int int_1) {
         super.render(tile, x, y, z, float_1, int_1);
+        /*
         GlStateManager.pushMatrix();
         GlStateManager.translated(x + 0.5, y, z + 0.5);
         long angle = (System.currentTimeMillis() / 10) % 360;
@@ -23,6 +24,7 @@ public class CrystalRenderer extends BlockEntityRenderer<BlockEntityEnergyCrysta
         MinecraftClient.getInstance().getBlockRenderManager().renderDynamic(getWorld().getBlockState(tile.getPos()), 1);
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
+        */
 
         if(tile.tilePositions.size() > 0) {
             for (BlockPos pos : tile.tilePositions) {

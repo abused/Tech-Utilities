@@ -2,7 +2,7 @@ package abused_master.techutilities.blocks.generators;
 
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.blocks.BlockWithEntityBase;
-import abused_master.techutilities.tiles.BlockEntitySolarPanel;
+import abused_master.techutilities.tiles.generator.BlockEntitySolarPanel;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;

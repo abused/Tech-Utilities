@@ -1,11 +1,13 @@
 package abused_master.techutilities.mixins;
 
+import abused_master.techutilities.client.render.AutoCrystalRenderer;
 import abused_master.techutilities.client.render.CrystalCollectorRenderer;
 import abused_master.techutilities.client.render.CrystalRenderer;
 import abused_master.techutilities.client.render.QuarryRenderer;
+import abused_master.techutilities.tiles.crystal.BlockEntityAutoCrystal;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCollector;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCrystal;
-import abused_master.techutilities.tiles.BlockEntityQuarry;
+import abused_master.techutilities.tiles.machine.BlockEntityQuarry;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
@@ -31,6 +33,7 @@ public class MixinBlockEntityRenderDispatcher {
         this.renderers.put(BlockEntityQuarry.class, new QuarryRenderer());
         this.renderers.put(BlockEntityEnergyCrystal.class, new CrystalRenderer());
         this.renderers.put(BlockEntityEnergyCollector.class, new CrystalCollectorRenderer());
+        this.renderers.put(BlockEntityAutoCrystal.class, new AutoCrystalRenderer());
 
         Iterator var1 = this.renderers.values().iterator();
 

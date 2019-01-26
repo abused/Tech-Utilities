@@ -2,7 +2,7 @@ package abused_master.techutilities.client.gui.gui;
 
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.client.gui.container.ContainerEnergyFurnace;
-import abused_master.techutilities.tiles.BlockEntityEnergyFurnace;
+import abused_master.techutilities.tiles.machine.BlockEntityEnergyFurnace;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

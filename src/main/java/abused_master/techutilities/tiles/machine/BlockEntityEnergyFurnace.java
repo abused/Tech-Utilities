@@ -1,6 +1,7 @@
-package abused_master.techutilities.tiles;
+package abused_master.techutilities.tiles.machine;
 
 import abused_master.techutilities.registry.ModBlockEntities;
+import abused_master.techutilities.tiles.BlockEntityEnergy;
 import abused_master.techutilities.utils.CacheMapHolder;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
@@ -16,7 +17,7 @@ import net.minecraft.util.math.Direction;
 import javax.annotation.Nullable;
 
 //TODO ADD UPGRADES
-public class BlockEntityEnergyFurnace extends BlockEntityBase implements SidedInventory, IEnergyReceiver {
+public class BlockEntityEnergyFurnace extends BlockEntityEnergy implements SidedInventory, IEnergyReceiver {
 
     public EnergyStorage storage = new EnergyStorage(50000);
     public DefaultedList<ItemStack> inventory = DefaultedList.create(2, ItemStack.EMPTY);
@@ -168,18 +169,7 @@ public class BlockEntityEnergyFurnace extends BlockEntityBase implements SidedIn
 
     @Override
     public boolean receiveEnergy(int amount) {
-        if(canReceive(amount)) {
-            storage.recieveEnergy(amount);
-            this.markDirty();
-            world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean canReceive(int amount) {
-        return (storage.getEnergyCapacity() - storage.getEnergyStored()) >= amount;
+        return handleEnergyReceive(storage, amount);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package abused_master.techutilities.client.render;
 
-import abused_master.techutilities.tiles.BlockEntityQuarry;
+import abused_master.techutilities.tiles.machine.BlockEntityQuarry;
 import abused_master.techutilities.utils.render.RenderHelper;
 import abused_master.techutilities.utils.render.hud.HudRender;
 import com.mojang.blaze3d.platform.GlStateManager;

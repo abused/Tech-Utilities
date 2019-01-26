@@ -1,10 +1,12 @@
 package abused_master.techutilities.registry;
 
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.tiles.*;
 import abused_master.techutilities.tiles.crystal.BlockEntityAutoCrystal;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCollector;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCrystal;
+import abused_master.techutilities.tiles.generator.BlockEntitySolarPanel;
+import abused_master.techutilities.tiles.machine.BlockEntityEnergyFurnace;
+import abused_master.techutilities.tiles.machine.BlockEntityQuarry;
 import abused_master.techutilities.utils.RegistryHelper;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;

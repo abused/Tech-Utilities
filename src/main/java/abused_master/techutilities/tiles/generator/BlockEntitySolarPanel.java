@@ -1,14 +1,14 @@
-package abused_master.techutilities.tiles;
+package abused_master.techutilities.tiles.generator;
 
 import abused_master.techutilities.blocks.generators.EnumSolarPanelTypes;
 import abused_master.techutilities.registry.ModBlockEntities;
+import abused_master.techutilities.tiles.BlockEntityEnergy;
 import abused_master.techutilities.utils.energy.EnergyStorage;
-import abused_master.techutilities.utils.energy.IEnergyHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-public class BlockEntitySolarPanel extends BlockEntityBase implements IEnergyHandler {
+public class BlockEntitySolarPanel extends BlockEntityEnergy {
 
     public EnergyStorage storage;
     public EnumSolarPanelTypes type;
