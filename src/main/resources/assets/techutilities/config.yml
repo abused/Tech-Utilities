@@ -1,6 +1,6 @@
 #Tech Utilities Mod Config
 
-# Disable or enable generation of the ores in the mod
+#Disable or enable generation of the ores in the mod
 generateCopper: true
 generateTin: true
 generateLead: true

@@ -1,11 +1,10 @@
 package abused_master.techutilities.tiles.machine;
 
 import abused_master.techutilities.registry.ModBlockEntities;
+import abused_master.techutilities.registry.PulverizerRecipes;
 import abused_master.techutilities.tiles.BlockEntityEnergy;
-import abused_master.techutilities.utils.CacheMapHolder;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
@@ -16,27 +15,26 @@ import net.minecraft.util.math.Direction;
 
 import javax.annotation.Nullable;
 
-//TODO ADD UPGRADES
-public class BlockEntityEnergyFurnace extends BlockEntityEnergy implements SidedInventory, IEnergyReceiver {
+public class BlockEntityPulverizer extends BlockEntityEnergy implements IEnergyReceiver, SidedInventory {
 
     public EnergyStorage storage = new EnergyStorage(50000);
-    public DefaultedList<ItemStack> inventory = DefaultedList.create(2, ItemStack.EMPTY);
+    public DefaultedList<ItemStack> inventory = DefaultedList.create(3, ItemStack.EMPTY);
     private int upgradeTier = 1;
-    private int smeltTime = 0;
+    private int pulverizeTime = 0;
     private int baseEnergyUsage = 400;
 
-    public BlockEntityEnergyFurnace() {
-        super(ModBlockEntities.ENERGY_FURNACE);
+    public BlockEntityPulverizer() {
+        super(ModBlockEntities.PULVERIZER);
     }
 
     @Override
     public void fromTag(CompoundTag nbt) {
         super.fromTag(nbt);
         this.upgradeTier = nbt.getInt("upgradeTier");
-        this.smeltTime = nbt.getInt("smeltTime");
+        this.pulverizeTime = nbt.getInt("pulverizeTime");
         this.storage.readFromNBT(nbt);
 
-        inventory = DefaultedList.create(2, ItemStack.EMPTY);
+        inventory = DefaultedList.create(3, ItemStack.EMPTY);
         InventoryUtil.deserialize(nbt, this.inventory);
     }
 
@@ -44,7 +42,7 @@ public class BlockEntityEnergyFurnace extends BlockEntityEnergy implements Sided
     public CompoundTag toTag(CompoundTag nbt) {
         super.toTag(nbt);
         nbt.putInt("upgradeTier", upgradeTier);
-        nbt.putInt("smeltTime", this.smeltTime);
+        nbt.putInt("pulverizeTime", this.pulverizeTime);
         this.storage.writeEnergyToNBT(nbt);
         InventoryUtil.serialize(nbt, this.inventory);
         return nbt;
@@ -53,31 +51,27 @@ public class BlockEntityEnergyFurnace extends BlockEntityEnergy implements Sided
     @Override
     public void tick() {
         if(canRun()) {
-            smeltTime++;
-            if(smeltTime >= this.getTotalSmeltTime()) {
-                smeltTime = 0;
-                this.smeltItem();
+            pulverizeTime++;
+            if(pulverizeTime >= getTotalPulverizeTime()) {
+                pulverizeTime = 0;
+                pulverizeItem();
                 world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
             }
-        }else if (!canRun() && smeltTime > 0) {
-            smeltTime = 0;
+        }else if(!canRun() && pulverizeTime > 0) {
+            pulverizeTime = 0;
         }
-    }
-
-    public ItemStack getOutputStack() {
-        if(!inventory.get(0).isEmpty()) {
-            return CacheMapHolder.INSTANCE.getOutputStack(inventory.get(0));
-        }
-
-        return ItemStack.EMPTY;
     }
 
     public boolean canRun() {
-        ItemStack output = getOutputStack();
-        if(inventory.get(0).isEmpty() || output.isEmpty() || inventory.get(1).getAmount() > 64 || storage.getEnergyStored() < getEnergyUsage()) {
+        PulverizerRecipes.PulverizerRecipe recipe = PulverizerRecipes.INSTANCE.getOutputRecipe(inventory.get(0));
+        if(inventory.get(0).isEmpty() || recipe == null || storage.getEnergyStored() < getEnergyUsage()) {
             return false;
         }else if(!inventory.get(1).isEmpty()) {
-            if (output.getItem() != inventory.get(1).getItem()) {
+            if(recipe.getOutput().getItem() != inventory.get(1).getItem() || (inventory.get(1).getAmount() + recipe.getOutputAmount()) > 64) {
+                return false;
+            }
+        }else if(!inventory.get(2).isEmpty() && !recipe.getOutput().isEmpty()) {
+            if(recipe.getRandomDrop().getItem() != inventory.get(2).getItem() || (inventory.get(2).getAmount() + recipe.getRandomDropAmoumt()) > 64) {
                 return false;
             }
         }
@@ -85,40 +79,51 @@ public class BlockEntityEnergyFurnace extends BlockEntityEnergy implements Sided
         return true;
     }
 
-    public void smeltItem() {
-        ItemStack output = getOutputStack();
-        if(!output.isEmpty()) {
-            if (inventory.get(1).isEmpty()) {
-                inventory.set(1, output);
-            } else {
-                inventory.get(1).addAmount(1);
-            }
-
-            inventory.get(0).subtractAmount(1);
-            storage.extractEnergy(getEnergyUsage());
+    public void pulverizeItem() {
+        PulverizerRecipes.PulverizerRecipe recipe = PulverizerRecipes.INSTANCE.getOutputRecipe(inventory.get(0));
+        if(inventory.get(1).isEmpty()) {
+            inventory.set(1, recipe.getOutput());
+            inventory.get(1).addAmount(recipe.getOutputAmount() - 1);
+        }else {
+            inventory.get(1).addAmount(recipe.getOutputAmount());
         }
+
+        if(!recipe.getRandomDrop().isEmpty()) {
+            float chance = world.getRandom().nextFloat() * 100;
+            if(chance <= recipe.getPercentageDrop()) {
+                if (inventory.get(2).isEmpty()) {
+                    inventory.set(2, recipe.getRandomDrop());
+                    inventory.get(2).addAmount(recipe.getRandomDropAmoumt() - 1);
+                } else {
+                    inventory.get(2).addAmount(recipe.getRandomDropAmoumt());
+                }
+            }
+        }
+
+        inventory.get(0).subtractAmount(1);
+        storage.extractEnergy(getEnergyUsage());
     }
 
     public int getEnergyUsage() {
         return baseEnergyUsage * upgradeTier;
     }
 
-    public int getSmeltTime() {
-        return smeltTime;
+    public int getPulverizeTime() {
+        return pulverizeTime;
     }
 
-    public int getTotalSmeltTime() {
+    public int getTotalPulverizeTime() {
         return 120 / this.upgradeTier;
     }
 
     @Override
     public int[] getInvAvailableSlots(Direction direction) {
-        return new int[] {0, 1};
+        return new int[] {0, 1, 2};
     }
 
     @Override
     public boolean canInsertInvStack(int i, ItemStack itemStack, @Nullable Direction direction) {
-        return i != 1;
+        return i != 1 && i != 2;
     }
 
     @Override
