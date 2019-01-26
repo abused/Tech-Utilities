@@ -64,7 +64,7 @@ public class BlockEntityPulverizer extends BlockEntityEnergy implements IEnergyR
 
     public boolean canRun() {
         PulverizerRecipes.PulverizerRecipe recipe = PulverizerRecipes.INSTANCE.getOutputRecipe(inventory.get(0));
-        if(inventory.get(0).isEmpty() || recipe == null || storage.getEnergyStored() < getEnergyUsage()) {
+        if(inventory.get(0).isEmpty() || recipe == null || recipe.getOutput().isEmpty() || storage.getEnergyStored() < getEnergyUsage()) {
             return false;
         }else if(!inventory.get(1).isEmpty()) {
             if(recipe.getOutput().getItem() != inventory.get(1).getItem() || (inventory.get(1).getAmount() + recipe.getOutputAmount()) > 64) {
@@ -82,8 +82,7 @@ public class BlockEntityPulverizer extends BlockEntityEnergy implements IEnergyR
     public void pulverizeItem() {
         PulverizerRecipes.PulverizerRecipe recipe = PulverizerRecipes.INSTANCE.getOutputRecipe(inventory.get(0));
         if(inventory.get(1).isEmpty()) {
-            inventory.set(1, recipe.getOutput());
-            inventory.get(1).addAmount(recipe.getOutputAmount() - 1);
+            inventory.set(1, new ItemStack(recipe.getOutput().getItem(), recipe.getOutputAmount()));
         }else {
             inventory.get(1).addAmount(recipe.getOutputAmount());
         }
@@ -92,8 +91,7 @@ public class BlockEntityPulverizer extends BlockEntityEnergy implements IEnergyR
             float chance = world.getRandom().nextFloat() * 100;
             if(chance <= recipe.getPercentageDrop()) {
                 if (inventory.get(2).isEmpty()) {
-                    inventory.set(2, recipe.getRandomDrop());
-                    inventory.get(2).addAmount(recipe.getRandomDropAmoumt() - 1);
+                    inventory.set(2, new ItemStack(recipe.getRandomDrop().getItem(), recipe.getRandomDropAmoumt()));
                 } else {
                     inventory.get(2).addAmount(recipe.getRandomDropAmoumt());
                 }

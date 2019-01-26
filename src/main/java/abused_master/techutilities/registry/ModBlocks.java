@@ -7,12 +7,15 @@ import abused_master.techutilities.blocks.crystals.BlockEnergyCrystal;
 import abused_master.techutilities.blocks.decoration.BlockGlassBase;
 import abused_master.techutilities.blocks.generators.EnumSolarPanelTypes;
 import abused_master.techutilities.blocks.machines.BlockEnergyFurnace;
+import abused_master.techutilities.blocks.machines.BlockPulverizer;
 import abused_master.techutilities.blocks.machines.BlockQuarry;
+import abused_master.techutilities.tiles.machine.BlockEntityPulverizer;
 import abused_master.techutilities.utils.RegistryHelper;
 
 public class ModBlocks {
 
     public static BlockEnergyFurnace RF_FURNACE = new BlockEnergyFurnace();
+    public static BlockPulverizer PULVERIZER = new BlockPulverizer();
     public static BlockQuarry QUARRY = new BlockQuarry();
     public static BlockEnergyCrystal ENERGY_CRYSTAL = new BlockEnergyCrystal();
     public static BlockEnergyCollector ENERGY_CRYSTAL_COLLECTOR = new BlockEnergyCollector();
@@ -23,6 +26,7 @@ public class ModBlocks {
 
     public static void registerBlocks() {
         RegistryHelper.registerBlock(TechUtilities.MODID, RF_FURNACE);
+        RegistryHelper.registerBlock(TechUtilities.MODID, PULVERIZER);
         RegistryHelper.registerBlock(TechUtilities.MODID, QUARRY);
         RegistryHelper.registerBlock(TechUtilities.MODID, ENERGY_CRYSTAL);
         RegistryHelper.registerBlock(TechUtilities.MODID, ENERGY_CRYSTAL_COLLECTOR);

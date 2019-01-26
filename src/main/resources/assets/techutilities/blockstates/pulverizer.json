@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "techutilities:block/pulverizer" },
+        "facing=south": { "model": "techutilities:block/pulverizer", "y": 180 },
+        "facing=west":  { "model": "techutilities:block/pulverizer", "y": 270 },
+        "facing=east":  { "model": "techutilities:block/pulverizer", "y": 90 }
+    }
+}
