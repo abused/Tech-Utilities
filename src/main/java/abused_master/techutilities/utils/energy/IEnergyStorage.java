@@ -1,5 +1,6 @@
 package abused_master.techutilities.utils.energy;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -12,4 +13,6 @@ public interface IEnergyStorage {
     int getEnergyCapacity();
     void setEnergyCapacity(int maxCapacity);
     void setEnergyStored(int energy);
+    CompoundTag writeEnergyToNBT(CompoundTag nbt);
+    EnergyStorage readFromNBT(CompoundTag nbt);
 }

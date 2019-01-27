@@ -72,12 +72,14 @@ public class EnergyStorage implements IEnergyStorage {
         this.energyStored = energy;
     }
 
+    @Override
     public CompoundTag writeEnergyToNBT(CompoundTag nbt) {
         nbt.putInt("capacity", capacity);
         nbt.putInt("energyStored", energyStored);
         return nbt;
     }
 
+    @Override
     public EnergyStorage readFromNBT(CompoundTag nbt) {
         capacity = nbt.getInt("capacity");
         energyStored = nbt.getInt("energyStored");
