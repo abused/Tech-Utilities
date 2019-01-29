@@ -91,6 +91,7 @@ public class FluidTank implements IFluidTank {
 
         if (fluidPack == null) {
             fluidPack = new FluidPack(fillFluid, Math.min(capacity, fillFluid.getAmount()));
+            onContentsChanged();
             return fluidPack.getAmount();
         }
 
@@ -105,11 +106,13 @@ public class FluidTank implements IFluidTank {
         } else {
             fluidPack.setAmount(capacity);
         }
+        onContentsChanged();
         return filled;
     }
 
     public boolean drain(int amount) {
         if (fluidPack == null || amount <= 0) {
+            onContentsChanged();
             return false;
         }
 
@@ -119,10 +122,14 @@ public class FluidTank implements IFluidTank {
         }
 
         fluidPack.subtractAmount(drained);
+        onContentsChanged();
         if (fluidPack.getAmount() <= 0) {
             fluidPack = null;
         }
 
         return true;
+    }
+
+    public void onContentsChanged() {
     }
 }

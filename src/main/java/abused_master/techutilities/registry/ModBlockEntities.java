@@ -7,6 +7,7 @@ import abused_master.techutilities.client.gui.gui.GuiEnergyFurnace;
 import abused_master.techutilities.client.gui.gui.GuiPulverizer;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCollector;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCrystal;
+import abused_master.techutilities.tiles.generator.BlockEntityLavaGenerator;
 import abused_master.techutilities.tiles.generator.BlockEntitySolarPanel;
 import abused_master.techutilities.tiles.machine.BlockEntityEnergyFurnace;
 import abused_master.techutilities.tiles.machine.BlockEntityPulverizer;
@@ -26,6 +27,7 @@ public class ModBlockEntities {
     public static BlockEntityType<BlockEntityEnergyCrystal> ENERGY_CRYSTAL;
     public static BlockEntityType<BlockEntityEnergyCollector> ENERGY_CRYSTAL_COLLECTOR;
     public static BlockEntityType<BlockEntityPulverizer> PULVERIZER;
+    public static BlockEntityType<BlockEntityLavaGenerator> LAVA_GENERATOR;
 
     //Container Identifiers
     public static final Identifier ENERGY_FURNACE_CONTAINER = new Identifier(TechUtilities.MODID, "energy_furnace_container");
@@ -38,6 +40,7 @@ public class ModBlockEntities {
         ENERGY_CRYSTAL = RegistryHelper.registerTile(TechUtilities.MODID, "energy_crystal", BlockEntityEnergyCrystal.class);
         ENERGY_CRYSTAL_COLLECTOR = RegistryHelper.registerTile(TechUtilities.MODID, "energy_crystal_collector", BlockEntityEnergyCollector.class);
         PULVERIZER = RegistryHelper.registerTile(TechUtilities.MODID, "pulverizer", BlockEntityPulverizer.class);
+        LAVA_GENERATOR = RegistryHelper.registerTile(TechUtilities.MODID, "lava_generator", BlockEntityLavaGenerator.class);
     }
 
     public static void registerGUIs() {

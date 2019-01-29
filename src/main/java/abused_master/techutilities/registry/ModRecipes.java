@@ -18,7 +18,6 @@ public class ModRecipes {
         RecipeGenerator.createFurnace(new ItemStack(EnumResourceItems.PLATINUM_INGOT.getItemIngot()), null, Ingredient.ofStacks(new ItemStack(BlockResources.EnumResourceOres.PLATINUM_ORE.getBlockOres())), 1, 200);
 
         //Crafting
-        /**
         RecipeGenerator.createShaped(new ItemStack(BlockResources.EnumResourceBlocks.COPPER_BLOCK.getBlockOres()), null, new RecipeGenerator.ShapedParser("XXX", "XXX", "XXX", 'X', EnumResourceItems.COPPER_INGOT.getItemIngot()));
         RecipeGenerator.createShaped(new ItemStack(BlockResources.EnumResourceBlocks.TIN_BLOCK.getBlockOres()), null, new RecipeGenerator.ShapedParser("XXX", "XXX", "XXX", 'X', EnumResourceItems.TIN_INGOT.getItemIngot()));
         RecipeGenerator.createShaped(new ItemStack(BlockResources.EnumResourceBlocks.LEAD_BLOCK.getBlockOres()), null, new RecipeGenerator.ShapedParser("XXX", "XXX", "XXX", 'X', EnumResourceItems.LEAD_INGOT.getItemIngot()));
@@ -27,6 +26,5 @@ public class ModRecipes {
         RecipeGenerator.createShaped(new ItemStack(BlockResources.EnumResourceBlocks.PLATINUM_BLOCK.getBlockOres()), null, new RecipeGenerator.ShapedParser("XXX", "XXX", "XXX", 'X', EnumResourceItems.PLATINUM_INGOT.getItemIngot()));
         RecipeGenerator.createShaped(new ItemStack(BlockResources.EnumResourceBlocks.INVAR_BLOCK.getBlockOres()), null, new RecipeGenerator.ShapedParser("XXX", "XXX", "XXX", 'X', EnumResourceItems.INVAR_INGOT.getItemIngot()));
         RecipeGenerator.createShaped(new ItemStack(BlockResources.EnumResourceBlocks.ELECTRUM_BLOCK.getBlockOres()), null, new RecipeGenerator.ShapedParser("XXX", "XXX", "XXX", 'X', EnumResourceItems.ELECTRUM_INGOT.getItemIngot()));
-    */
     }
 }

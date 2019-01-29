@@ -33,7 +33,7 @@ public class RecipeGenerator {
 
         JsonObject keys = new JsonObject();
         ingredients.forEach((k, v) -> keys.add(String.valueOf(k), v.toJson()));
-        recipe.add("keys", keys);
+        recipe.add("key", keys);
 
         Identifier registryName = appendResult(recipe, output);
         recipes.add(new Output(registryName.getPath(), recipe));
