@@ -29,12 +29,12 @@ public class FluidHelper {
         }
 
         if(fluid != null) {
-            if(fluidHandler.getFluidTank().getFluidPack() == null) {
-                fluidHandler.getFluidTank().setFluidPack(new FluidPack(fluid, 1000));
+            if(fluidHandler.getFluidTank().getFluidStack() == null) {
+                fluidHandler.getFluidTank().setFluidStack(new FluidStack(fluid, 1000));
                 return true;
-            }else if(fluidHandler.getFluidTank().getFluidPack().getFluid() == fluid) {
+            }else if(fluidHandler.getFluidTank().getFluidStack().getFluid() == fluid) {
                 if((fluidHandler.getFluidTank().getFluidAmount() + 1000) <= fluidHandler.getFluidTank().getFluidCapacity()) {
-                    fluidHandler.getFluidTank().fillFluid(new FluidPack(fluid, 1000));
+                    fluidHandler.getFluidTank().fillFluid(new FluidStack(fluid, 1000));
                     return true;
                 }else {
                     return false;

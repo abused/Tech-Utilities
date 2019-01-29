@@ -1,6 +1,6 @@
 package abused_master.techutilities.utils.render;
 
-import abused_master.techutilities.utils.fluid.FluidPack;
+import abused_master.techutilities.utils.fluid.FluidStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
@@ -100,34 +101,29 @@ public class RenderHelper {
         }
     }
 
-    public static void renderFluid(FluidPack fluid, BlockPos pos, double x, double y, double z, double x1, double y1, double z1, double x2, double y2, double z2) {
+    public static void renderFluid(FluidStack fluid, BlockPos pos, double x, double y, double z, double x1, double y1, double z1, double x2, double y2, double z2) {
         renderFluid(fluid, pos, x, y, z, x1, y1, z1, x2, y2, z2, 0xFFFFFFFF);
     }
 
-    public static void renderFluid(FluidPack fluid, BlockPos pos, double x, double y, double z, double x1, double y1, double z1, double x2, double y2, double z2, int color) {
+    public static void renderFluid(FluidStack fluid, BlockPos pos, double x, double y, double z, double x1, double y1, double z1, double x2, double y2, double z2, int color) {
         MinecraftClient mc = MinecraftClient.getInstance();
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBufferBuilder();
-        int brightness = mc.world.getLightLevel(pos, fluid.getFluid().getDefaultState().method_15761());
-        buffer.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR_UV_LMAP);
-        mc.getTextureManager().bindTexture(SpriteAtlasTexture.BLOCK_ATLAS_TEX);
-        Sprite still = mc.getSpriteAtlas().getSprite(Registry.FLUID.getId(fluid.getFluid()));
+        int brightness = mc.world.getLightLevel(LightType.BLOCK_LIGHT, pos);
 
-        setupRenderState(x, y, z);
+        Sprite sprite = mc.getSpriteAtlas().getSprite(Registry.FLUID.getId(fluid.getFluid()));
+        buffer.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR_UV_LMAP);
+
+        setupRenderState();
         GlStateManager.translated(x, y, z);
-        addTexturedQuad(buffer, still, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.DOWN, color, brightness);
-        addTexturedQuad(buffer, still, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.NORTH, color, brightness);
-        addTexturedQuad(buffer, still, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.EAST, color, brightness);
-        addTexturedQuad(buffer, still, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.SOUTH, color, brightness);
-        addTexturedQuad(buffer, still, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.WEST, color, brightness);
-        addTexturedQuad(buffer, still, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.UP, color, brightness);
+        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.DOWN, color, brightness);
+        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.NORTH, color, brightness);
+        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.EAST, color, brightness);
+        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.SOUTH, color, brightness);
+        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.WEST, color, brightness);
+        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.UP, color, brightness);
         tessellator.draw();
         cleanupRenderState();
-    }
-
-    @Deprecated
-    public static void setupRenderState(double x, double y, double z) {
-        setupRenderState();
     }
 
     public static void setupRenderState() {

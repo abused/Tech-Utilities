@@ -1,16 +1,19 @@
 package abused_master.techutilities.utils.fluid;
 
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.CompoundTag;
 
 public interface IFluidTank {
 
     boolean extractFluid(int amount);
-    boolean fillFluid(FluidPack fluid);
+    boolean fillFluid(FluidStack stack);
     int getFluidAmount();
     int getFluidCapacity();
-    FluidPack getFluidPack();
+    FluidStack getFluidStack();
     void setCapacity(int capacity);
-    void setFluidPack(FluidPack fluidPack);
+    void setFluidStack(FluidStack stack);
+    BlockEntity getBlockEntity();
+    void setBlockEntity(BlockEntity blockEntity);
     FluidTank readFromNBT(CompoundTag nbt);
     CompoundTag writeToNBT(CompoundTag nbt);
 }

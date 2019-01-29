@@ -13,13 +13,18 @@ public class LavaGeneratorRenderer extends BlockEntityRenderer<BlockEntityLavaGe
         super.render(tile, x, y, z, float_1, int_1);
         HudRender.renderHud(tile, x, y, z);
 
-        if (tile.tank.getFluidPack() != null && tile.tank.getFluidAmount() > 0) {
+        if (tile.tank.getFluidStack() != null && tile.tank.getFluidAmount() > 0) {
             GlStateManager.pushMatrix();
             GlStateManager.enableBlend();
             RenderHelper.translateAgainstPlayer(tile.getPos(), false);
-            RenderHelper.renderFluid(tile.tank.getFluidPack(), tile.getPos(), 0.06, 0.08, 0.06, 0.01, 0.0, 0.01, 0.87, tile.tank.getFluidAmount() / tile.tank.getFluidCapacity() * 0.84, 0.87);
+            RenderHelper.renderFluid(tile.tank.getFluidStack(), tile.getPos(), 0.06, 0.08, 0.06, 0.01, 0.0, 0.01, 0.87, tile.tank.getFluidAmount() / tile.tank.getFluidCapacity() * 0.84, 0.87);
             GlStateManager.disableBlend();
             GlStateManager.popMatrix();
         }
+    }
+
+    @Override
+    public boolean method_3563(BlockEntityLavaGenerator blockEntity_1) {
+        return true;
     }
 }

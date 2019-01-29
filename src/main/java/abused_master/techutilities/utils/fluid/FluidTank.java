@@ -1,54 +1,77 @@
 package abused_master.techutilities.utils.fluid;
 
-import net.minecraft.fluid.Fluid;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.CompoundTag;
 
 public class FluidTank implements IFluidTank {
 
     private int capacity;
-    private FluidPack fluidPack;
+    private FluidStack fluidStack;
+    private BlockEntity blockEntity;
 
     public FluidTank(int capacity) {
-        this.capacity = capacity;
-        this.fluidPack = null;
+        this(null, capacity, null);
     }
 
-    public FluidTank(FluidPack fluid, int capacity) {
-        this.capacity = capacity;
-        this.fluidPack = fluid;
+    public FluidTank(FluidStack stack, int capacity) {
+        this(stack, capacity, null);
     }
 
-    public FluidTank(Fluid fluid, int amount, int capacity) {
-        this(new FluidPack(fluid, amount), capacity);
+    public FluidTank(FluidStack stack, int capacity, BlockEntity blockEntity) {
+        this.fluidStack = stack;
+        this.capacity = capacity;
+        this.blockEntity = blockEntity;
     }
 
     @Override
     public boolean extractFluid(int amount) {
-        return drain(amount);
+        if(fluidStack == null || fluidStack.getAmount() == 0 || amount > fluidStack.getAmount()) {
+            return false;
+        }
+
+        fluidStack.subtractAmount(amount);
+        updateEntity();
+        if (fluidStack.getAmount() <= 0) {
+            fluidStack = null;
+        }
+
+        return true;
     }
 
     @Override
-    public boolean fillFluid(FluidPack fluid) {
-        return fill(fluid) > 0;
+    public boolean fillFluid(FluidStack stack) {
+        if(stack == null || stack.getAmount() <= 0) {
+            return false;
+        }
+
+        if(fluidStack == null) {
+            fluidStack = stack;
+            updateEntity();
+
+            return true;
+        }else if (fluidStack.areFluidsEqual(stack) && (stack.getAmount() + fluidStack.getAmount()) <= capacity) {
+            fluidStack.addAmount(stack.getAmount());
+            updateEntity();
+
+            return true;
+        }
+
+        return false;
     }
 
     @Override
     public int getFluidAmount() {
-        if (fluidPack == null) {
-            return 0;
-        }
-
-        return fluidPack.getAmount();
+        return fluidStack == null ? 0 : fluidStack.getAmount();
     }
 
     @Override
     public int getFluidCapacity() {
-        return capacity;
+        return this.capacity;
     }
 
     @Override
-    public FluidPack getFluidPack() {
-        return fluidPack;
+    public FluidStack getFluidStack() {
+        return this.fluidStack;
     }
 
     @Override
@@ -57,17 +80,26 @@ public class FluidTank implements IFluidTank {
     }
 
     @Override
-    public void setFluidPack(FluidPack fluidPack) {
-        this.fluidPack = fluidPack;
+    public void setFluidStack(FluidStack stack) {
+        this.fluidStack = stack;
+    }
+
+    @Override
+    public BlockEntity getBlockEntity() {
+        return blockEntity;
+    }
+
+    @Override
+    public void setBlockEntity(BlockEntity blockEntity) {
+        this.blockEntity = blockEntity;
     }
 
     @Override
     public FluidTank readFromNBT(CompoundTag nbt) {
-        if (!nbt.containsKey("null")) {
-            FluidPack fluid = FluidPack.loadFluidFromTag(nbt);
-            setFluidPack(fluid);
-        } else {
-            setFluidPack(null);
+        if(!nbt.containsKey("empty")) {
+            this.fluidStack = FluidStack.fluidFromTag(nbt);
+        }else {
+            this.fluidStack = null;
         }
 
         return this;
@@ -75,61 +107,19 @@ public class FluidTank implements IFluidTank {
 
     @Override
     public CompoundTag writeToNBT(CompoundTag nbt) {
-        if (fluidPack != null) {
-            fluidPack.writeToTag(nbt);
+        if (fluidStack != null) {
+            fluidStack.toTag(nbt);
         } else {
-            nbt.putString("null", "");
+            nbt.putString("empty", "");
         }
 
         return nbt;
     }
 
-    public int fill(FluidPack fillFluid) {
-        if (fillFluid == null || fillFluid.getAmount() <= 0) {
-            return 0;
+    public void updateEntity() {
+        if(blockEntity != null) {
+            blockEntity.markDirty();
+            blockEntity.getWorld().updateListeners(blockEntity.getPos(), blockEntity.getWorld().getBlockState(blockEntity.getPos()), blockEntity.getWorld().getBlockState(blockEntity.getPos()), 3);
         }
-
-        if (fluidPack == null) {
-            fluidPack = new FluidPack(fillFluid, Math.min(capacity, fillFluid.getAmount()));
-            onContentsChanged();
-            return fluidPack.getAmount();
-        }
-
-        if (!fluidPack.isFluidEqual(fillFluid)) {
-            return 0;
-        }
-        int filled = capacity - fluidPack.getAmount();
-
-        if (fillFluid.getAmount() < filled) {
-            fluidPack.addAmount(fillFluid.getAmount());
-            filled = fillFluid.getAmount();
-        } else {
-            fluidPack.setAmount(capacity);
-        }
-        onContentsChanged();
-        return filled;
-    }
-
-    public boolean drain(int amount) {
-        if (fluidPack == null || amount <= 0) {
-            onContentsChanged();
-            return false;
-        }
-
-        int drained = amount;
-        if (fluidPack.getAmount() < drained) {
-            drained = fluidPack.getAmount();
-        }
-
-        fluidPack.subtractAmount(drained);
-        onContentsChanged();
-        if (fluidPack.getAmount() <= 0) {
-            fluidPack = null;
-        }
-
-        return true;
-    }
-
-    public void onContentsChanged() {
     }
 }

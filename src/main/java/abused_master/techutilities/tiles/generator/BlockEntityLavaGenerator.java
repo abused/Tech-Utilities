@@ -4,11 +4,10 @@ import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.tiles.BlockEntityEnergy;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyProvider;
-import abused_master.techutilities.utils.fluid.FluidPack;
+import abused_master.techutilities.utils.fluid.FluidStack;
 import abused_master.techutilities.utils.fluid.FluidTank;
 import abused_master.techutilities.utils.fluid.IFluidHandler;
 import abused_master.techutilities.utils.render.hud.IHudSupport;
-import net.minecraft.block.BlockState;
 import net.minecraft.fluid.LavaFluid;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
@@ -23,15 +22,7 @@ public class BlockEntityLavaGenerator extends BlockEntityEnergy implements IEner
     public EnergyStorage storage = new EnergyStorage(100000);
     public int sendPerTick = 500;
     public int generatePer10 = 100;
-    public FluidTank tank = new FluidTank(8000) {
-        @Override
-        public void onContentsChanged() {
-            BlockEntityLavaGenerator blockEntity = BlockEntityLavaGenerator.this;
-            BlockState state = blockEntity.world.getBlockState(blockEntity.pos);
-            blockEntity.world.updateListeners(blockEntity.pos, state, state, 8);
-            blockEntity.markDirty();
-        }
-    };
+    public FluidTank tank = new FluidTank(8000);
 
     public BlockEntityLavaGenerator() {
         super(ModBlockEntities.LAVA_GENERATOR);
@@ -42,12 +33,15 @@ public class BlockEntityLavaGenerator extends BlockEntityEnergy implements IEner
         super.fromTag(nbt);
         storage.readFromNBT(nbt);
 
-        if (nbt.containsKey("FluidData")) {
-            this.tank.setFluidPack(FluidPack.loadFluidFromTag(nbt.getCompound("FluidData")));
-        }
+        if(this.tank != null) {
+            this.tank.setBlockEntity(this);
+            if(this.tank.getFluidStack() != null) {
+                this.tank.readFromNBT(nbt);
+            }
 
-        if (this.tank != null && this.tank.getFluidPack() != null) {
-            this.tank.readFromNBT(nbt);
+            if (nbt.containsKey("FluidData")) {
+                this.tank.setFluidStack(FluidStack.fluidFromTag(nbt.getCompound("FluidData")));
+            }
         }
     }
 
@@ -56,18 +50,19 @@ public class BlockEntityLavaGenerator extends BlockEntityEnergy implements IEner
         super.toTag(nbt);
         storage.writeEnergyToNBT(nbt);
 
-        if (this.tank != null && this.tank.getFluidPack() != null) {
+        if (this.tank != null && this.tank.getFluidStack() != null) {
             CompoundTag tankTag = new CompoundTag();
-            this.tank.getFluidPack().writeToTag(tankTag);
+            this.tank.getFluidStack().toTag(tankTag);
             nbt.put("FluidData", tankTag);
             this.tank.writeToNBT(nbt);
         }
+
         return nbt;
     }
 
     @Override
     public void tick() {
-        if (tank.getFluidAmount() >= 10 && tank.getFluidPack().getFluid() instanceof LavaFluid && (storage.getEnergyStored() + generatePer10) <= storage.getEnergyCapacity()) {
+        if (tank.getFluidAmount() >= 10 && tank.getFluidStack().getFluid() instanceof LavaFluid && (storage.getEnergyStored() + generatePer10) <= storage.getEnergyCapacity()) {
             if(!world.isReceivingRedstonePower(pos)) {
                 storage.recieveEnergy(generatePer10);
                 tank.extractFluid(10);

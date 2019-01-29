@@ -27,7 +27,8 @@ public class BlockLavaGenerator extends BlockWithEntityBase {
     @Override
     public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult) {
         BlockEntityLavaGenerator lavaGenerator = (BlockEntityLavaGenerator) world.getBlockEntity(pos);
-        return FluidHelper.fillFluidHandler(player.getMainHandStack(), lavaGenerator, player);
+        FluidHelper.fillFluidHandler(player.getMainHandStack(), lavaGenerator, player);
+        return true;
     }
 
     @Override

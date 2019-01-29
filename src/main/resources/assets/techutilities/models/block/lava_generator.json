@@ -1,7 +1,7 @@
 {
     "parent": "block/cube_all",
     "textures": {
-	    "particle": "techutilities:blocks/furnace_front",
+	    "particle": "techutilities:blocks/machine_top",
         "lava_generator_top": "techutilities:blocks/lava_generator_top",
         "machine_top": "techutilities:blocks/machine_top",
         "lava_generator_base": "techutilities:blocks/lava_generator_base"
