@@ -90,17 +90,6 @@ public class RenderHelper {
         GlStateManager.popMatrix();
     }
 
-    public static void translateAgainstPlayer(BlockPos pos, boolean offset) {
-        float x = (float) (pos.getX() - BlockEntityRenderDispatcher.renderOffsetX);
-        float y = (float) (pos.getY() - BlockEntityRenderDispatcher.renderOffsetY);
-        float z = (float) (pos.getZ() - BlockEntityRenderDispatcher.renderOffsetZ);
-        if (offset) {
-            GlStateManager.translatef(x + 0.5f, y + 0.5f, z + 0.5f);
-        } else {
-            GlStateManager.translatef(x, y, z);
-        }
-    }
-
     public static void renderFluid(FluidStack fluid, BlockPos pos, double x, double y, double z, double x1, double y1, double z1, double x2, double y2, double z2) {
         renderFluid(fluid, pos, x, y, z, x1, y1, z1, x2, y2, z2, 0xFFFFFFFF);
     }
@@ -124,18 +113,6 @@ public class RenderHelper {
         addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.UP, color, brightness);
         tessellator.draw();
         cleanupRenderState();
-    }
-
-    public static void setupRenderState() {
-        GlStateManager.pushMatrix();
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        if (MinecraftClient.isAmbientOcclusionEnabled()) {
-            GL11.glShadeModel(GL11.GL_SMOOTH);
-        } else {
-            GL11.glShadeModel(GL11.GL_FLAT);
-        }
     }
 
     public static void addTexturedQuad(BufferBuilder buffer, Sprite sprite, double x, double y, double z, double width, double height, double length, Direction face, int color, int brightness) {
@@ -265,6 +242,29 @@ public class RenderHelper {
                 buffer.vertex(x2, y2, z2).color(red, green, blue, alpha).texture(maxU, minV).texture(light1, light2).next();
                 buffer.vertex(x2, y, z2).color(red, green, blue, alpha).texture(maxU, maxV).texture(light1, light2).next();
                 break;
+        }
+    }
+
+    public static void translateAgainstPlayer(BlockPos pos, boolean offset) {
+        float x = (float) (pos.getX() - BlockEntityRenderDispatcher.renderOffsetX);
+        float y = (float) (pos.getY() - BlockEntityRenderDispatcher.renderOffsetY);
+        float z = (float) (pos.getZ() - BlockEntityRenderDispatcher.renderOffsetZ);
+        if (offset) {
+            GlStateManager.translatef(x + 0.5f, y + 0.5f, z + 0.5f);
+        } else {
+            GlStateManager.translatef(x, y, z);
+        }
+    }
+
+    public static void setupRenderState() {
+        GlStateManager.pushMatrix();
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        if (MinecraftClient.isAmbientOcclusionEnabled()) {
+            GL11.glShadeModel(GL11.GL_SMOOTH);
+        } else {
+            GL11.glShadeModel(GL11.GL_FLAT);
         }
     }
 
