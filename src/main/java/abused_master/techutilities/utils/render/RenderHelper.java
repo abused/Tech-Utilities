@@ -2,10 +2,12 @@ package abused_master.techutilities.utils.render;
 
 import abused_master.techutilities.utils.fluid.FluidStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.texture.*;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -91,10 +93,6 @@ public class RenderHelper {
     }
 
     public static void renderFluid(FluidStack fluid, BlockPos pos, double x, double y, double z, double x1, double y1, double z1, double x2, double y2, double z2) {
-        renderFluid(fluid, pos, x, y, z, x1, y1, z1, x2, y2, z2, 0xFFFFFFFF);
-    }
-
-    public static void renderFluid(FluidStack fluid, BlockPos pos, double x, double y, double z, double x1, double y1, double z1, double x2, double y2, double z2, int color) {
         MinecraftClient mc = MinecraftClient.getInstance();
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBufferBuilder();
@@ -102,35 +100,32 @@ public class RenderHelper {
 
         Sprite sprite = mc.getSpriteAtlas().getSprite(Registry.FLUID.getId(fluid.getFluid()));
         buffer.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR_UV_LMAP);
+        Identifier spriteIdentifier = mc.getBakedModelManager().getBlockStateMaps().getModel(fluid.getFluid().getDefaultState().getBlockState()).getSprite().getId();
+        mc.getTextureManager().bindTexture(new Identifier(spriteIdentifier.getNamespace(), "textures/" + spriteIdentifier.getPath() + ".png"));
 
         setupRenderState();
         GlStateManager.translated(x, y, z);
-        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.DOWN, color, brightness);
-        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.NORTH, color, brightness);
-        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.EAST, color, brightness);
-        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.SOUTH, color, brightness);
-        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.WEST, color, brightness);
-        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.UP, color, brightness);
+        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.DOWN, brightness);
+        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.NORTH, brightness);
+        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.EAST, brightness);
+        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.SOUTH, brightness);
+        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.WEST, brightness);
+        addTexturedQuad(buffer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1, Direction.UP, brightness);
         tessellator.draw();
         cleanupRenderState();
     }
 
-    public static void addTexturedQuad(BufferBuilder buffer, Sprite sprite, double x, double y, double z, double width, double height, double length, Direction face, int color, int brightness) {
+    public static void addTexturedQuad(BufferBuilder buffer, Sprite sprite, double x, double y, double z, double width, double height, double length, Direction face, int brightness) {
         if (sprite == null) {
             return;
         }
 
         final int firstLightValue = brightness >> 0x10 & 0xFFFF;
         final int secondLightValue = brightness & 0xFFFF;
-        final int alpha = color >> 24 & 0xFF;
-        final int red = color >> 16 & 0xFF;
-        final int green = color >> 8 & 0xFF;
-        final int blue = color & 0xFF;
-
-        addTextureQuad(buffer, sprite, x, y, z, width, height, length, face, red, green, blue, alpha, firstLightValue, secondLightValue);
+        addTextureQuad(buffer, sprite, x, y, z, width, height, length, face, firstLightValue, secondLightValue);
     }
 
-    public static void addTextureQuad(BufferBuilder buffer, Sprite sprite, double x, double y, double z, double width, double height, double length, Direction face, int red, int green, int blue, int alpha, int light1, int light2) {
+    public static void addTextureQuad(BufferBuilder buffer, Sprite sprite, double x, double y, double z, double width, double height, double length, Direction face, int light1, int light2) {
         double minU;
         double maxU;
         double minV;
@@ -202,45 +197,45 @@ public class RenderHelper {
         switch (face) {
 
             case DOWN:
-                buffer.vertex(x, y, z).color(red, green, blue, alpha).texture(minU, minV).texture(light1, light2).next();
-                buffer.vertex(x2, y, z).color(red, green, blue, alpha).texture(maxU, minV).texture(light1, light2).next();
-                buffer.vertex(x2, y, z2).color(red, green, blue, alpha).texture(maxU, maxV).texture(light1, light2).next();
-                buffer.vertex(x, y, z2).color(red, green, blue, alpha).texture(minU, maxV).texture(light1, light2).next();
+                buffer.vertex(x, y, z).texture(minU, minV).texture(light1, light2).next();
+                buffer.vertex(x2, y, z).texture(maxU, minV).texture(light1, light2).next();
+                buffer.vertex(x2, y, z2).texture(maxU, maxV).texture(light1, light2).next();
+                buffer.vertex(x, y, z2).texture(minU, maxV).texture(light1, light2).next();
                 break;
 
             case UP:
-                buffer.vertex(x, y2, z).color(red, green, blue, alpha).texture(minU, minV).texture(light1, light2).next();
-                buffer.vertex(x, y2, z2).color(red, green, blue, alpha).texture(minU, maxV).texture(light1, light2).next();
-                buffer.vertex(x2, y2, z2).color(red, green, blue, alpha).texture(maxU, maxV).texture(light1, light2).next();
-                buffer.vertex(x2, y2, z).color(red, green, blue, alpha).texture(maxU, minV).texture(light1, light2).next();
+                buffer.vertex(x, y2, z).texture(minU, minV).texture(light1, light2).next();
+                buffer.vertex(x, y2, z2).texture(minU, maxV).texture(light1, light2).next();
+                buffer.vertex(x2, y2, z2).texture(maxU, maxV).texture(light1, light2).next();
+                buffer.vertex(x2, y2, z).texture(maxU, minV).texture(light1, light2).next();
                 break;
 
             case NORTH:
-                buffer.vertex(x, y, z).color(red, green, blue, alpha).texture(minU, maxV).texture(light1, light2).next();
-                buffer.vertex(x, y2, z).color(red, green, blue, alpha).texture(minU, minV).texture(light1, light2).next();
-                buffer.vertex(x2, y2, z).color(red, green, blue, alpha).texture(maxU, minV).texture(light1, light2).next();
-                buffer.vertex(x2, y, z).color(red, green, blue, alpha).texture(maxU, maxV).texture(light1, light2).next();
+                buffer.vertex(x, y, z).texture(minU, maxV).texture(light1, light2).next();
+                buffer.vertex(x, y2, z).texture(minU, minV).texture(light1, light2).next();
+                buffer.vertex(x2, y2, z).texture(maxU, minV).texture(light1, light2).next();
+                buffer.vertex(x2, y, z).texture(maxU, maxV).texture(light1, light2).next();
                 break;
 
             case SOUTH:
-                buffer.vertex(x, y, z2).color(red, green, blue, alpha).texture(maxU, maxV).texture(light1, light2).next();
-                buffer.vertex(x2, y, z2).color(red, green, blue, alpha).texture(minU, maxV).texture(light1, light2).next();
-                buffer.vertex(x2, y2, z2).color(red, green, blue, alpha).texture(minU, minV).texture(light1, light2).next();
-                buffer.vertex(x, y2, z2).color(red, green, blue, alpha).texture(maxU, minV).texture(light1, light2).next();
+                buffer.vertex(x, y, z2).texture(maxU, maxV).texture(light1, light2).next();
+                buffer.vertex(x2, y, z2).texture(minU, maxV).texture(light1, light2).next();
+                buffer.vertex(x2, y2, z2).texture(minU, minV).texture(light1, light2).next();
+                buffer.vertex(x, y2, z2).texture(maxU, minV).texture(light1, light2).next();
                 break;
 
             case WEST:
-                buffer.vertex(x, y, z).color(red, green, blue, alpha).texture(maxU, maxV).texture(light1, light2).next();
-                buffer.vertex(x, y, z2).color(red, green, blue, alpha).texture(minU, maxV).texture(light1, light2).next();
-                buffer.vertex(x, y2, z2).color(red, green, blue, alpha).texture(minU, minV).texture(light1, light2).next();
-                buffer.vertex(x, y2, z).color(red, green, blue, alpha).texture(maxU, minV).texture(light1, light2).next();
+                buffer.vertex(x, y, z).texture(maxU, maxV).texture(light1, light2).next();
+                buffer.vertex(x, y, z2).texture(minU, maxV).texture(light1, light2).next();
+                buffer.vertex(x, y2, z2).texture(minU, minV).texture(light1, light2).next();
+                buffer.vertex(x, y2, z).texture(maxU, minV).texture(light1, light2).next();
                 break;
 
             case EAST:
-                buffer.vertex(x2, y, z).color(red, green, blue, alpha).texture(minU, maxV).texture(light1, light2).next();
-                buffer.vertex(x2, y2, z).color(red, green, blue, alpha).texture(minU, minV).texture(light1, light2).next();
-                buffer.vertex(x2, y2, z2).color(red, green, blue, alpha).texture(maxU, minV).texture(light1, light2).next();
-                buffer.vertex(x2, y, z2).color(red, green, blue, alpha).texture(maxU, maxV).texture(light1, light2).next();
+                buffer.vertex(x2, y, z).texture(minU, maxV).texture(light1, light2).next();
+                buffer.vertex(x2, y2, z).texture(minU, minV).texture(light1, light2).next();
+                buffer.vertex(x2, y2, z2).texture(maxU, minV).texture(light1, light2).next();
+                buffer.vertex(x2, y, z2).texture(maxU, maxV).texture(light1, light2).next();
                 break;
         }
     }
