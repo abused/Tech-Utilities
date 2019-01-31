@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier;
 @Environment(EnvType.CLIENT)
 public class GuiPulverizer extends ContainerGui {
 
-    public Identifier Pulverizer = new Identifier(TechUtilities.MODID, "textures/gui/pulverizer_gui.png");
+    public Identifier pulverizerGui = new Identifier(TechUtilities.MODID, "textures/gui/pulverizer_gui.png");
     public BlockEntityPulverizer tile;
     public int guiLeft, guiTop;
 
@@ -45,7 +45,7 @@ public class GuiPulverizer extends ContainerGui {
     @Override
     public void drawBackground(float v, int i, int i1) {
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        client.getTextureManager().bindTexture(Pulverizer);
+        client.getTextureManager().bindTexture(pulverizerGui);
         drawTexturedRect(guiLeft, guiTop, 0, 0, containerWidth, containerHeight);
 
         renderEnergy(guiLeft, guiTop);

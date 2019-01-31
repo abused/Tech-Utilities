@@ -97,7 +97,7 @@ public class BlockEntityQuarry extends BlockEntityEnergy implements IHudSupport,
     public void mineBlocks(Inventory inventory) {
         Iterable<BlockPos> blocksInQuarry = BlockPos.iterateBoxPositions(secondCorner, firstCorner);
 
-        for (BlockPos currentMiningPos : listBlocksInQuarry(blocksInQuarry)) {
+        for (BlockPos currentMiningPos : listBlocksInIterable(blocksInQuarry)) {
             if (world.isAir(currentMiningPos) || world.getBlockState(currentMiningPos).getBlock() == Blocks.BEDROCK || world.getBlockState(currentMiningPos).getBlock() instanceof FluidBlock || world.getBlockEntity(currentMiningPos) != null) {
                 continue;
             }
@@ -130,7 +130,7 @@ public class BlockEntityQuarry extends BlockEntityEnergy implements IHudSupport,
         }
     }
 
-    public List<BlockPos> listBlocksInQuarry(Iterable<BlockPos> iterable) {
+    public List<BlockPos> listBlocksInIterable(Iterable<BlockPos> iterable) {
         List<BlockPos> list = new ArrayList<>();
 
         for (BlockPos pos : iterable) {

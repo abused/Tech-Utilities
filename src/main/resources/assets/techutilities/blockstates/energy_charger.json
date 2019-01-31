@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "techutilities:block/energy_charger" },
+        "facing=south": { "model": "techutilities:block/energy_charger", "y": 180 },
+        "facing=west":  { "model": "techutilities:block/energy_charger", "y": 270 },
+        "facing=east":  { "model": "techutilities:block/energy_charger", "y": 90 }
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "techutilities:block/mob_grinder" },
+        "facing=south": { "model": "techutilities:block/mob_grinder", "y": 180 },
+        "facing=west":  { "model": "techutilities:block/mob_grinder", "y": 270 },
+        "facing=east":  { "model": "techutilities:block/mob_grinder", "y": 90 }
+    }
+}

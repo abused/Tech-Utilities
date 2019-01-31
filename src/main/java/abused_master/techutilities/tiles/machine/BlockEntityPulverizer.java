@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 
 public class BlockEntityPulverizer extends BlockEntityEnergy implements IEnergyReceiver, SidedInventory {
 
-    public EnergyStorage storage = new EnergyStorage(50000);
+    public EnergyStorage storage = new EnergyStorage(100000);
     public DefaultedList<ItemStack> inventory = DefaultedList.create(3, ItemStack.EMPTY);
     private int upgradeTier = 1;
     private int pulverizeTime = 0;
