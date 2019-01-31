@@ -5,6 +5,8 @@ import abused_master.techutilities.client.gui.container.*;
 import abused_master.techutilities.client.gui.gui.*;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCollector;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCrystal;
+import abused_master.techutilities.tiles.crystal.BlockEntityItemReceiver;
+import abused_master.techutilities.tiles.crystal.BlockEntityItemTransfer;
 import abused_master.techutilities.tiles.generator.BlockEntityLavaGenerator;
 import abused_master.techutilities.tiles.generator.BlockEntitySolarPanel;
 import abused_master.techutilities.tiles.machine.*;
@@ -29,6 +31,8 @@ public class ModBlockEntities {
     public static BlockEntityType<BlockEntityFarmer> FARMER;
     public static BlockEntityType<BlockEntityMobGrinder> MOB_GRINDER;
     public static BlockEntityType<BlockEntityVacuum> VACUUM;
+    public static BlockEntityType<BlockEntityItemReceiver> ITEM_RECEIVER;
+    public static BlockEntityType<BlockEntityItemTransfer> ITEM_TRANSFER;
 
     //Container Identifiers
     public static final Identifier ENERGY_FURNACE_CONTAINER = new Identifier(TechUtilities.MODID, "energy_furnace_container");
@@ -50,6 +54,8 @@ public class ModBlockEntities {
         FARMER = RegistryHelper.registerTile(TechUtilities.MODID, "farmer", BlockEntityFarmer.class);
         MOB_GRINDER = RegistryHelper.registerTile(TechUtilities.MODID, "mob_grinder", BlockEntityMobGrinder.class);
         VACUUM = RegistryHelper.registerTile(TechUtilities.MODID, "vacuum", BlockEntityVacuum.class);
+        ITEM_RECEIVER = RegistryHelper.registerTile(TechUtilities.MODID, "item_receiver", BlockEntityItemReceiver.class);
+        ITEM_TRANSFER = RegistryHelper.registerTile(TechUtilities.MODID, "item_transfer", BlockEntityItemTransfer.class);
     }
 
     public static void registerGUIs() {

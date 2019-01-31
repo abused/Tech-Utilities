@@ -5,18 +5,21 @@ import abused_master.techutilities.tiles.BlockEntityEnergy;
 import abused_master.techutilities.utils.CacheMapHolder;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
+import abused_master.techutilities.utils.linker.ILinkerHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.InventoryUtil;
+import net.minecraft.util.TagHelper;
 import net.minecraft.util.math.Direction;
 
 import javax.annotation.Nullable;
 
 //TODO ADD UPGRADES
-public class BlockEntityEnergyFurnace extends BlockEntityEnergy implements SidedInventory, IEnergyReceiver {
+public class BlockEntityEnergyFurnace extends BlockEntityEnergy implements SidedInventory, IEnergyReceiver, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     public DefaultedList<ItemStack> inventory = DefaultedList.create(2, ItemStack.EMPTY);
@@ -173,5 +176,16 @@ public class BlockEntityEnergyFurnace extends BlockEntityEnergy implements Sided
     @Override
     public EnergyStorage getEnergyStorage() {
         return storage;
+    }
+
+    @Override
+    public void link(PlayerEntity player, CompoundTag tag) {
+        if(!world.isClient) {
+            if (tag.containsKey("collectorPos")) {
+                tag.remove("collectorPos");
+            }
+            tag.put("blockPos", TagHelper.serializeBlockPos(pos));
+            player.addChatMessage(new StringTextComponent("Saved block position!"), true);
+        }
     }
 }

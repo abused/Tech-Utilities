@@ -5,11 +5,14 @@ import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.tiles.BlockEntityEnergy;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
+import abused_master.techutilities.utils.linker.ILinkerHandler;
 import abused_master.techutilities.utils.render.hud.IHudSupport;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.StringTextComponent;
+import net.minecraft.util.TagHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BoundingBox;
 import net.minecraft.util.math.Direction;
@@ -17,7 +20,7 @@ import net.minecraft.util.math.Direction;
 import java.util.Collections;
 import java.util.List;
 
-public class BlockEntityMobGrinder extends BlockEntityEnergy implements IEnergyReceiver, IHudSupport {
+public class BlockEntityMobGrinder extends BlockEntityEnergy implements IEnergyReceiver, IHudSupport, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     public BoundingBox mobKillBox = null;
@@ -124,5 +127,16 @@ public class BlockEntityMobGrinder extends BlockEntityEnergy implements IEnergyR
     @Override
     public BlockPos getBlockPos() {
         return getPos();
+    }
+
+    @Override
+    public void link(PlayerEntity player, CompoundTag tag) {
+        if(!world.isClient) {
+            if (tag.containsKey("collectorPos")) {
+                tag.remove("collectorPos");
+            }
+            tag.put("blockPos", TagHelper.serializeBlockPos(pos));
+            player.addChatMessage(new StringTextComponent("Saved block position!"), true);
+        }
     }
 }

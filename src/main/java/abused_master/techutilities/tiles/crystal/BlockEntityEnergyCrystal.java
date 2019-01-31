@@ -5,10 +5,13 @@ import abused_master.techutilities.tiles.BlockEntityEnergy;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyProvider;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
+import abused_master.techutilities.utils.linker.ILinkerHandler;
 import net.fabricmc.fabric.api.util.NbtType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.TagHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -16,7 +19,7 @@ import net.minecraft.world.World;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class BlockEntityEnergyCrystal extends BlockEntityEnergy implements IEnergyReceiver, IEnergyProvider {
+public class BlockEntityEnergyCrystal extends BlockEntityEnergy implements IEnergyReceiver, IEnergyProvider, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     public final HashSet<BlockPos> tilePositions = new HashSet<>();
@@ -93,5 +96,33 @@ public class BlockEntityEnergyCrystal extends BlockEntityEnergy implements IEner
         boolean sent = storage.sendEnergy(world, pos, amount);
         markDirty();
         return sent;
+    }
+
+    @Override
+    public void link(PlayerEntity player, CompoundTag tag) {
+        if(!world.isClient) {
+            if (tag.containsKey("collectorPos")) {
+                BlockPos collectorPos = TagHelper.deserializeBlockPos(tag.getCompound("collectorPos"));
+                BlockEntityEnergyCollector energyCollector = (BlockEntityEnergyCollector) world.getBlockEntity(collectorPos);
+                if (energyCollector != null) {
+                    energyCollector.setCrystalPos(pos);
+                    energyCollector.markDirty();
+                    world.updateListeners(collectorPos, world.getBlockState(collectorPos), world.getBlockState(collectorPos), 3);
+                    player.addChatMessage(new StringTextComponent("Linked collector position!"), true);
+                } else {
+                    player.addChatMessage(new StringTextComponent("Invalid collector position!"), true);
+                }
+            } else if (tag.containsKey("blockPos")) {
+                BlockPos blockPos = TagHelper.deserializeBlockPos(tag.getCompound("blockPos"));
+                if (world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof IEnergyReceiver && !tilePositions.contains(blockPos)) {
+                    tilePositions.add(blockPos);
+                    markDirty();
+                    world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+                    player.addChatMessage(new StringTextComponent("Linked BlockEntity position!"), true);
+                }
+            } else {
+                player.addChatMessage(new StringTextComponent("No block position has been linked!"), true);
+            }
+        }
     }
 }

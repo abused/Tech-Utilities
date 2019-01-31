@@ -5,18 +5,24 @@ import abused_master.techutilities.tiles.BlockEntityEnergy;
 import abused_master.techutilities.utils.InventoryHelper;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
+import abused_master.techutilities.utils.linker.ILinkerHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.*;
+import net.minecraft.item.FoodCropItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.SeedsItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.ItemTags;
+import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.InventoryUtil;
+import net.minecraft.util.TagHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -25,7 +31,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockEntityFarmer extends BlockEntityEnergy implements IEnergyReceiver, SidedInventory {
+public class BlockEntityFarmer extends BlockEntityEnergy implements IEnergyReceiver, SidedInventory, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(50000);
     public DefaultedList<ItemStack> inventory = DefaultedList.create(12, ItemStack.EMPTY);
@@ -280,5 +286,16 @@ public class BlockEntityFarmer extends BlockEntityEnergy implements IEnergyRecei
     @Override
     public void clearInv() {
         inventory.clear();
+    }
+
+    @Override
+    public void link(PlayerEntity player, CompoundTag tag) {
+        if(!world.isClient) {
+            if (tag.containsKey("collectorPos")) {
+                tag.remove("collectorPos");
+            }
+            tag.put("blockPos", TagHelper.serializeBlockPos(pos));
+            player.addChatMessage(new StringTextComponent("Saved block position!"), true);
+        }
     }
 }

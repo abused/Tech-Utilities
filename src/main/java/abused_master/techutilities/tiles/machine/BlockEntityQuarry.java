@@ -5,22 +5,29 @@ import abused_master.techutilities.tiles.BlockEntityEnergy;
 import abused_master.techutilities.utils.InventoryHelper;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
+import abused_master.techutilities.utils.linker.ILinkerHandler;
 import abused_master.techutilities.utils.render.hud.IHudSupport;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.StringTextComponent;
+import net.minecraft.util.TagHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 //TODO MAKE UPGRADES FOR QUARRY
-public class BlockEntityQuarry extends BlockEntityEnergy implements IHudSupport, IEnergyReceiver {
+public class BlockEntityQuarry extends BlockEntityEnergy implements IHudSupport, IEnergyReceiver, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     private boolean running = false;
@@ -228,5 +235,16 @@ public class BlockEntityQuarry extends BlockEntityEnergy implements IHudSupport,
     @Override
     public EnergyStorage getEnergyStorage() {
         return storage;
+    }
+
+    @Override
+    public void link(PlayerEntity player, CompoundTag tag) {
+        if(!world.isClient) {
+            if (tag.containsKey("collectorPos")) {
+                tag.remove("collectorPos");
+            }
+            tag.put("blockPos", TagHelper.serializeBlockPos(pos));
+            player.addChatMessage(new StringTextComponent("Saved block position!"), true);
+        }
     }
 }

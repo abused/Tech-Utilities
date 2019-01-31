@@ -4,11 +4,14 @@ import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.tiles.BlockEntityBase;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
+import abused_master.techutilities.utils.linker.ILinkerHandler;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.TagHelper;
 import net.minecraft.util.math.BlockPos;
 
-public class BlockEntityEnergyCollector extends BlockEntityBase implements IEnergyReceiver {
+public class BlockEntityEnergyCollector extends BlockEntityBase implements IEnergyReceiver, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(10000);
     private BlockPos crystalPos = null;
@@ -77,5 +80,16 @@ public class BlockEntityEnergyCollector extends BlockEntityBase implements IEner
     @Override
     public EnergyStorage getEnergyStorage() {
         return storage;
+    }
+
+    @Override
+    public void link(PlayerEntity player, CompoundTag tag) {
+        if(!world.isClient) {
+            if (tag.containsKey("blockPos")) {
+                tag.remove("blockPos");
+            }
+            tag.put("collectorPos", TagHelper.serializeBlockPos(pos));
+            player.addChatMessage(new StringTextComponent("Saved collector position!"), true);
+        }
     }
 }

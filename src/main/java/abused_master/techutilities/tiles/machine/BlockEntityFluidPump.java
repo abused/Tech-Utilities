@@ -8,11 +8,14 @@ import abused_master.techutilities.utils.energy.IEnergyReceiver;
 import abused_master.techutilities.utils.fluid.FluidStack;
 import abused_master.techutilities.utils.fluid.FluidTank;
 import abused_master.techutilities.utils.fluid.IFluidHandler;
+import abused_master.techutilities.utils.linker.ILinkerHandler;
 import abused_master.techutilities.utils.render.hud.IHudSupport;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.TagHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -20,7 +23,7 @@ import net.minecraft.util.math.Direction;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockEntityFluidPump extends BlockEntityEnergy implements IEnergyReceiver, IFluidHandler, IHudSupport {
+public class BlockEntityFluidPump extends BlockEntityEnergy implements IEnergyReceiver, IFluidHandler, IHudSupport, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(50000);
     public FluidTank tank = new FluidTank(32000);
@@ -192,5 +195,16 @@ public class BlockEntityFluidPump extends BlockEntityEnergy implements IEnergyRe
             toDisplay.add("Not currently working");
         }
         return toDisplay;
+    }
+
+    @Override
+    public void link(PlayerEntity player, CompoundTag tag) {
+        if(!world.isClient) {
+            if (tag.containsKey("collectorPos")) {
+                tag.remove("collectorPos");
+            }
+            tag.put("blockPos", TagHelper.serializeBlockPos(pos));
+            player.addChatMessage(new StringTextComponent("Saved block position!"), true);
+        }
     }
 }
