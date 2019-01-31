@@ -2,6 +2,7 @@ package abused_master.techutilities.tiles.machine;
 
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.tiles.BlockEntityEnergy;
+import abused_master.techutilities.utils.InventoryHelper;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
 import net.minecraft.block.*;
@@ -12,15 +13,12 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.ItemTags;
-import net.minecraft.util.BlockHitResult;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.InventoryUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
@@ -166,42 +164,11 @@ public class BlockEntityFarmer extends BlockEntityEnergy implements IEnergyRecei
                 Inventory nearbyInv = (Inventory) entity;
                 for (int slot : outputSlots) {
                     if(!inventory.get(slot).isEmpty()) {
-                        insertItemIfPossible(nearbyInv, inventory.get(slot), false);
+                        InventoryHelper.insertItemIfPossible(nearbyInv, inventory.get(slot), false);
                     }
                 }
             }
         }
-    }
-
-    public boolean insertItemIfPossible(Inventory inventory, ItemStack stack, boolean simulate) {
-        if(inventory == null) {
-            return false;
-        }
-
-        for (int i = 0; i < inventory.getInvSize(); i++) {
-            if(!inventory.getInvStack(i).isEmpty()) {
-                if(canItemStacksStack(inventory.getInvStack(i), stack) && inventory.getInvStack(i).getAmount() < 64) {
-                    if(!simulate)
-                        inventory.setInvStack(i, new ItemStack(stack.getItem(), stack.getAmount() + inventory.getInvStack(i).getAmount()));
-
-                    return true;
-                }
-            }else {
-                if(!simulate)
-                    inventory.setInvStack(i, stack);
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public boolean canItemStacksStack(ItemStack a, ItemStack b) {
-        if (a.isEmpty() || !a.isEqualIgnoreTags(b) || a.hasTag() != b.hasTag())
-            return false;
-
-        return (!a.hasTag() || a.getTag().equals(b.getTag()));
     }
 
     public boolean canRun() {

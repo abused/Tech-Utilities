@@ -2,15 +2,19 @@ package abused_master.techutilities.tiles.machine;
 
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.tiles.BlockEntityBase;
+import abused_master.techutilities.utils.InventoryHelper;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.InventoryUtil;
+import net.minecraft.util.math.BoundingBox;
 import net.minecraft.util.math.Direction;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class BlockEntityVacuum extends BlockEntityBase implements SidedInventory {
 
@@ -37,7 +41,30 @@ public class BlockEntityVacuum extends BlockEntityBase implements SidedInventory
 
     @Override
     public void tick() {
+        if(!world.isReceivingRedstonePower(pos)) {
+            ItemEntity target = findTarget();
 
+            if(target != null && InventoryHelper.insertItemIfPossible(this, target.getStack(), false)) {
+                target.kill();
+                this.markDirty();
+                world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+            }
+        }
+    }
+
+    public ItemEntity findTarget() {
+        List<ItemEntity> items = world.getVisibleEntities(ItemEntity.class, new BoundingBox(pos.add(-3, -3, -3), pos.add(3, 3, 3)));
+        if(items.isEmpty()) {
+            return null;
+        }
+
+        for (ItemEntity itemEntity : items) {
+            if(!itemEntity.cannotPickup() && !itemEntity.getStack().isEmpty()) {
+                return itemEntity;
+            }
+        }
+
+        return null;
     }
 
     @Override

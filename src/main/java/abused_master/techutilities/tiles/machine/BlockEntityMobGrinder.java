@@ -72,6 +72,8 @@ public class BlockEntityMobGrinder extends BlockEntityEnergy implements IEnergyR
             target.damage(DamageSource.GENERIC, 1);
             storage.extractEnergy(costPerHeart);
         }
+        this.markDirty();
+        this.world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
         killTimer = 0;
     }
 

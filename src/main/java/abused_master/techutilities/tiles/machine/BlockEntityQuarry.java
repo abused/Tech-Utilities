@@ -2,6 +2,7 @@ package abused_master.techutilities.tiles.machine;
 
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.tiles.BlockEntityEnergy;
+import abused_master.techutilities.utils.InventoryHelper;
 import abused_master.techutilities.utils.energy.EnergyStorage;
 import abused_master.techutilities.utils.energy.IEnergyReceiver;
 import abused_master.techutilities.utils.render.hud.IHudSupport;
@@ -9,7 +10,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -80,12 +80,12 @@ public class BlockEntityQuarry extends BlockEntityEnergy implements IHudSupport,
             if (!miningError) {
                 miningSpeed++;
                 if (miningSpeed >= (20 / speedMultiplier)) {
-                    Inventory inventory = getNearbyInventory();
+                    Inventory inventory = InventoryHelper.getNearbyInventory(world, pos);
                     this.mineBlocks(inventory);
                     storage.extractEnergy(energyUsagePerBlock);
                 }
             } else {
-                if (world.getBlockState(miningPos) != null && insertItemIfPossible(getNearbyInventory(), new ItemStack(world.getBlockState(miningPos).getBlock()), true)) {
+                if (world.getBlockState(miningPos) != null && InventoryHelper.insertItemIfPossible(InventoryHelper.getNearbyInventory(world, pos), new ItemStack(world.getBlockState(miningPos).getBlock()), true)) {
                     this.setMiningError(false);
                 }
             }
@@ -112,7 +112,7 @@ public class BlockEntityQuarry extends BlockEntityEnergy implements IHudSupport,
                     world.setBlockState(currentMiningPos, Blocks.AIR.getDefaultState());
 
                     if (silkTouch) {
-                        if (!insertItemIfPossible(inventory, new ItemStack(state.getBlock()), false)) {
+                        if (!InventoryHelper.insertItemIfPossible(inventory, new ItemStack(state.getBlock()), false)) {
                             setMiningError(true);
                         }
                     } else {
@@ -120,7 +120,7 @@ public class BlockEntityQuarry extends BlockEntityEnergy implements IHudSupport,
                             Random random = new Random();
                             ItemStack stackWithFortune = new ItemStack(itemStack.getItem(), fortuneLevel == 0 ? 1 : random.nextInt(fortuneLevel * 2));
 
-                            if (!insertItemIfPossible(inventory, stackWithFortune, false)) {
+                            if (!InventoryHelper.insertItemIfPossible(inventory, stackWithFortune, false)) {
                                 setMiningError(true);
                             }
                         }
@@ -174,50 +174,6 @@ public class BlockEntityQuarry extends BlockEntityEnergy implements IHudSupport,
         }
 
         return true;
-    }
-
-    public boolean insertItemIfPossible(Inventory inventory, ItemStack stack, boolean simulate) {
-        if(inventory == null) {
-            return false;
-        }
-
-        for (int i = 0; i < inventory.getInvSize(); i++) {
-            if(!inventory.getInvStack(i).isEmpty()) {
-                if(canItemStacksStack(inventory.getInvStack(i), stack) && inventory.getInvStack(i).getAmount() < 64) {
-                    if(!simulate)
-                        inventory.setInvStack(i, new ItemStack(stack.getItem(), stack.getAmount() + inventory.getInvStack(i).getAmount()));
-
-                    return true;
-                }
-            }else {
-                if(!simulate)
-                    inventory.setInvStack(i, stack);
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public boolean canItemStacksStack(ItemStack a, ItemStack b) {
-        if (a.isEmpty() || !a.isEqualIgnoreTags(b) || a.hasTag() != b.hasTag())
-            return false;
-
-        return (!a.hasTag() || a.getTag().equals(b.getTag()));
-    }
-
-    public Inventory getNearbyInventory() {
-        for (Direction direction : Direction.values()) {
-            BlockPos offsetPosition = new BlockPos(pos).offset(direction);
-            BlockEntity entity = world.getBlockEntity(offsetPosition);
-            if (entity != null && entity instanceof Inventory) {
-                Inventory inventory = (Inventory) entity;
-                return inventory;
-            }
-        }
-
-        return null;
     }
 
     public void setRunning(boolean running) {
