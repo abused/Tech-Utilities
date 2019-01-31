@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 public class BlockItemTransferCrystal extends BlockWithEntityBase {
 
     public BlockItemTransferCrystal() {
-        super("item_transfer_crystal", Material.STONE, 1.0f, TechUtilities.modItemGroup);
+        super("item_transfer", Material.STONE, 1.0f, TechUtilities.modItemGroup);
     }
 
     @Override

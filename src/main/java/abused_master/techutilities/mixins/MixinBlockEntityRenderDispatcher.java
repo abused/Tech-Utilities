@@ -3,6 +3,7 @@ package abused_master.techutilities.mixins;
 import abused_master.techutilities.client.render.*;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCollector;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCrystal;
+import abused_master.techutilities.tiles.crystal.BlockEntityItemTransfer;
 import abused_master.techutilities.tiles.generator.BlockEntityLavaGenerator;
 import abused_master.techutilities.tiles.machine.BlockEntityFluidPump;
 import abused_master.techutilities.tiles.machine.BlockEntityMobGrinder;
@@ -35,6 +36,7 @@ public class MixinBlockEntityRenderDispatcher {
         this.renderers.put(BlockEntityLavaGenerator.class, new LavaGeneratorRenderer());
         this.renderers.put(BlockEntityFluidPump.class, new FluidPumpRenderer());
         this.renderers.put(BlockEntityMobGrinder.class, new MobGrinderRenderer());
+        this.renderers.put(BlockEntityItemTransfer.class, new ItemTransferRenderer());
 
         Iterator var1 = this.renderers.values().iterator();
 

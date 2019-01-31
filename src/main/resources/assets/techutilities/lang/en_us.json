@@ -53,5 +53,7 @@
   "block.techutilities.farmer" : "Farmer Block",
   "block.techutilities.mob_grinder" : "Mob Grinder",
   "block.techutilities.vacuum" : "Vacuum Block",
-  "block.techutilities.conveyor_belt" : "Conveyor Belt"
+  "block.techutilities.conveyor_belt" : "Conveyor Belt",
+  "block.techutilities.item_receiver" : "Item Transfer Crystal",
+  "block.techutilities.item_transfer" : "Item Receiver Crystal"
 }

@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 public class BlockItemReceiverCrystal extends BlockWithEntityBase {
 
     public BlockItemReceiverCrystal() {
-        super("item_receiver_crystal", Material.STONE, 1.0f, TechUtilities.modItemGroup);
+        super("item_receiver", Material.STONE, 1.0f, TechUtilities.modItemGroup);
     }
 
     @Override

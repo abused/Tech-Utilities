@@ -6,6 +6,7 @@ import abused_master.techutilities.utils.InventoryHelper;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.StringTextComponent;
@@ -44,11 +45,13 @@ public class BlockEntityItemReceiver extends BlockEntityBase implements Inventor
     }
 
     public void sendItems() {
-        Inventory nearbyInventory = InventoryHelper.getNearbyInventory(world, pos);
-        for (int i = 0; i < inventory.size() - 1; i++) {
-            if(!inventory.get(i).isEmpty()) {
-                if(InventoryHelper.insertItemIfPossible(nearbyInventory, new ItemStack(inventory.get(i).getItem(), 1), false)) {
-                    inventory.get(i).subtractAmount(1);
+        SidedInventory nearbyInventory = InventoryHelper.getNearbySidedInventory(world, pos);
+        if(nearbyInventory != null) {
+            for (int i = 0; i < inventory.size() - 1; i++) {
+                if (!inventory.get(i).isEmpty()) {
+                    if (InventoryHelper.insertItemIfPossible(nearbyInventory, new ItemStack(inventory.get(i).getItem(), 1), false)) {
+                        inventory.get(i).subtractAmount(1);
+                    }
                 }
             }
         }

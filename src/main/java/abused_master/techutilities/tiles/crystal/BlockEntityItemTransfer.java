@@ -6,6 +6,7 @@ import abused_master.techutilities.utils.InventoryHelper;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SidedInventory;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.TagHelper;
@@ -52,9 +53,9 @@ public class BlockEntityItemTransfer extends BlockEntityBase implements ILinkerH
 
     public void sendItems() {
         BlockEntityItemReceiver itemReceiver = (BlockEntityItemReceiver) world.getBlockEntity(receiverPosition);
-        Inventory nearbyInventory = InventoryHelper.getNearbyInventory(world, pos);
+        SidedInventory nearbyInventory = InventoryHelper.getNearbySidedInventory(world, pos);
         for (int i = 0; i < nearbyInventory.getInvSize() - 1; i++) {
-            if(!nearbyInventory.getInvStack(i).isEmpty() && itemReceiver.canReceive(nearbyInventory.getInvStack(i))) {
+            if(!nearbyInventory.getInvStack(i).isEmpty() && nearbyInventory.canExtractInvStack(i, nearbyInventory.getInvStack(i), null) && itemReceiver.canReceive(nearbyInventory.getInvStack(i))) {
                 if(InventoryHelper.insertItemIfPossible(itemReceiver, nearbyInventory.getInvStack(i), false)) {
                     nearbyInventory.getInvStack(i).subtractAmount(1);
                     this.markDirty();

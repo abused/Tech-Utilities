@@ -2,6 +2,7 @@ package abused_master.techutilities.utils;
 
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -33,6 +34,30 @@ public class InventoryHelper {
         return false;
     }
 
+    public static boolean insertItemIfPossible(SidedInventory inventory, ItemStack stack, boolean simulate) {
+        if(inventory == null) {
+            return false;
+        }
+
+        for (int i = 0; i < inventory.getInvSize(); i++) {
+            if(!inventory.getInvStack(i).isEmpty()) {
+                if(canItemStacksStack(inventory.getInvStack(i), stack) && inventory.getInvStack(i).getAmount() < 64 && inventory.canInsertInvStack(i, stack, null)) {
+                    if(!simulate)
+                        inventory.setInvStack(i, new ItemStack(stack.getItem(), stack.getAmount() + inventory.getInvStack(i).getAmount()));
+
+                    return true;
+                }
+            }else {
+                if(!simulate && inventory.canInsertInvStack(i, stack, null))
+                    inventory.setInvStack(i, stack);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static boolean canItemStacksStack(ItemStack a, ItemStack b) {
         if (a.isEmpty() || !a.isEqualIgnoreTags(b) || a.hasTag() != b.hasTag())
             return false;
@@ -46,6 +71,19 @@ public class InventoryHelper {
             BlockEntity entity = world.getBlockEntity(offsetPosition);
             if (entity != null && entity instanceof Inventory) {
                 Inventory inventory = (Inventory) entity;
+                return inventory;
+            }
+        }
+
+        return null;
+    }
+
+    public static SidedInventory getNearbySidedInventory(World world, BlockPos pos) {
+        for (Direction direction : Direction.values()) {
+            BlockPos offsetPosition = new BlockPos(pos).offset(direction);
+            BlockEntity entity = world.getBlockEntity(offsetPosition);
+            if (entity != null && entity instanceof SidedInventory) {
+                SidedInventory inventory = (SidedInventory) entity;
                 return inventory;
             }
         }
