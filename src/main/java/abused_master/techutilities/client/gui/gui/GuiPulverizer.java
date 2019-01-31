@@ -6,12 +6,12 @@ import abused_master.techutilities.tiles.machine.BlockEntityPulverizer;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.ContainerGui;
+import net.minecraft.client.gui.ContainerScreen;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
-public class GuiPulverizer extends ContainerGui {
+public class GuiPulverizer extends ContainerScreen {
 
     public Identifier pulverizerGui = new Identifier(TechUtilities.MODID, "textures/gui/pulverizer_gui.png");
     public BlockEntityPulverizer tile;

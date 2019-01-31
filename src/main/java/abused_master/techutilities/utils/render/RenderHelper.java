@@ -2,19 +2,16 @@ package abused_master.techutilities.utils.render;
 
 import abused_master.techutilities.utils.fluid.FluidStack;
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.*;
-import net.minecraft.client.render.block.BiomeColors;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
-import net.minecraft.client.texture.*;
+import net.minecraft.client.texture.Sprite;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.ExtendedBlockView;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
@@ -51,7 +48,7 @@ public class RenderHelper {
 
         GlStateManager.disableLighting();
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.class_1033.SRC_ALPHA, GlStateManager.class_1027.ONE);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
         int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
         float ref = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
         GlStateManager.alphaFunc(GL11.GL_ALWAYS, 0);
@@ -89,7 +86,7 @@ public class RenderHelper {
         GlStateManager.enableTexture();
 
         GlStateManager.alphaFunc(func, ref);
-        GlStateManager.blendFunc(GlStateManager.class_1033.SRC_ALPHA, GlStateManager.class_1027.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.disableBlend();
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();

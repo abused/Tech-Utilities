@@ -6,12 +6,12 @@ import abused_master.techutilities.tiles.machine.BlockEntityEnergyCharger;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.ContainerGui;
+import net.minecraft.client.gui.ContainerScreen;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
-public class GuiEnergyCharger extends ContainerGui {
+public class GuiEnergyCharger extends ContainerScreen {
 
     public Identifier energyChargerGui = new Identifier(TechUtilities.MODID, "textures/gui/energy_charger_gui.png");
     public BlockEntityEnergyCharger tile;

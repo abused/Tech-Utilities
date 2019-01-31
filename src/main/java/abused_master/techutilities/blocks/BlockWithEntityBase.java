@@ -2,12 +2,9 @@ package abused_master.techutilities.blocks;
 
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.container.NameableContainerProvider;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
 
 public abstract class BlockWithEntityBase extends BlockBase implements BlockEntityProvider {
 
@@ -37,12 +34,5 @@ public abstract class BlockWithEntityBase extends BlockBase implements BlockEnti
         super.onBlockAction(blockState_1, world_1, blockPos_1, int_1, int_2);
         BlockEntity blockEntity_1 = world_1.getBlockEntity(blockPos_1);
         return blockEntity_1 == null ? false : blockEntity_1.onBlockAction(int_1, int_2);
-    }
-
-    @Override
-    @Nullable
-    public NameableContainerProvider method_17454(BlockState blockState_1, World world_1, BlockPos blockPos_1) {
-        BlockEntity blockEntity_1 = world_1.getBlockEntity(blockPos_1);
-        return blockEntity_1 instanceof NameableContainerProvider ? (NameableContainerProvider)blockEntity_1 : null;
     }
 }

@@ -29,7 +29,7 @@ public class ItemLinker extends ItemBase {
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext usageContext) {
-        BlockPos pos = usageContext.getPos();
+        BlockPos pos = usageContext.getBlockPos();
         World world = usageContext.getWorld();
         PlayerEntity player = usageContext.getPlayer();
         ItemStack stack = usageContext.getItemStack();

@@ -36,13 +36,13 @@ public class BlockMobGrinder extends BlockWithEntityBase {
     }
 
     @Override
-    public BlockState applyRotation(BlockState blockState_1, Rotation rotation_1) {
-        return blockState_1.with(FACING, rotation_1.method_10503(blockState_1.get(FACING)));
+    public BlockState rotate(BlockState blockState_1, Rotation rotation_1) {
+        return blockState_1.with(FACING, rotation_1.rotate(blockState_1.get(FACING)));
     }
 
     @Override
-    public BlockState applyMirror(BlockState blockState_1, Mirror mirror_1) {
-        return blockState_1.applyRotation(mirror_1.getRotation(blockState_1.get(FACING)));
+    public BlockState mirror(BlockState blockState_1, Mirror mirror_1) {
+        return blockState_1.rotate(mirror_1.getRotation(blockState_1.get(FACING)));
     }
 
     @Override

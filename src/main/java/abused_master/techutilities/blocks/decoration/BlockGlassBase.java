@@ -35,7 +35,7 @@ public class BlockGlassBase extends BlockBase {
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext itemPlacementContext_1) {
-        return super.getPlacementState(itemPlacementContext_1).with(PropertyBlockFacings.FACINGS, handleBlockFacing(itemPlacementContext_1.getPos(), itemPlacementContext_1.getWorld()).toProperty());
+        return super.getPlacementState(itemPlacementContext_1).with(PropertyBlockFacings.FACINGS, handleBlockFacing(itemPlacementContext_1.getBlockPos(), itemPlacementContext_1.getWorld()).toProperty());
     }
 
     @Override

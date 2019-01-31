@@ -42,12 +42,12 @@ public class BlockConveyorBelt extends BlockBase {
 
     @Override
     public VoxelShape getOutlineShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, VerticalEntityPosition verticalEntityPosition_1) {
-        return Block.createCubeShape(1.0D, 0.0D, 1.0D, 15.0D, 1.0D, 15.0D);
+        return Block.createCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 1.0D, 15.0D);
     }
 
     @Override
     public VoxelShape getRayTraceShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1) {
-        return Block.createCubeShape(1.0D, 0.0D, 1.0D, 15.0D, 1.0D, 15.0D);
+        return Block.createCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 1.0D, 15.0D);
     }
 
     @Nullable
@@ -57,13 +57,13 @@ public class BlockConveyorBelt extends BlockBase {
     }
 
     @Override
-    public BlockState applyRotation(BlockState blockState_1, Rotation rotation_1) {
-        return blockState_1.with(FACING, rotation_1.method_10503(blockState_1.get(FACING)));
+    public BlockState rotate(BlockState blockState_1, Rotation rotation_1) {
+        return blockState_1.with(FACING, rotation_1.rotate(blockState_1.get(FACING)));
     }
 
     @Override
-    public BlockState applyMirror(BlockState blockState_1, Mirror mirror_1) {
-        return blockState_1.applyRotation(mirror_1.getRotation(blockState_1.get(FACING)));
+    public BlockState mirror(BlockState blockState_1, Mirror mirror_1) {
+        return blockState_1.rotate(mirror_1.getRotation(blockState_1.get(FACING)));
     }
 
     @Override

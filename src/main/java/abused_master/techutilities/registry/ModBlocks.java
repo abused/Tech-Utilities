@@ -12,7 +12,7 @@ import abused_master.techutilities.utils.RegistryHelper;
 
 public class ModBlocks {
 
-    public static BlockEnergyFurnace RF_FURNACE = new BlockEnergyFurnace();
+    public static BlockEnergyFurnace ENERGY_FURNACE = new BlockEnergyFurnace();
     public static BlockPulverizer PULVERIZER = new BlockPulverizer();
     public static BlockQuarry QUARRY = new BlockQuarry();
     public static BlockEnergyCrystal ENERGY_CRYSTAL = new BlockEnergyCrystal();
@@ -30,7 +30,7 @@ public class ModBlocks {
     public static BlockGlassBase BLACK_GLASS_BLOCK = new BlockGlassBase("black_glass_block");
 
     public static void registerBlocks() {
-        RegistryHelper.registerBlock(TechUtilities.MODID, RF_FURNACE);
+        RegistryHelper.registerBlock(TechUtilities.MODID, ENERGY_FURNACE);
         RegistryHelper.registerBlock(TechUtilities.MODID, PULVERIZER);
         RegistryHelper.registerBlock(TechUtilities.MODID, QUARRY);
         RegistryHelper.registerBlock(TechUtilities.MODID, ENERGY_CRYSTAL);

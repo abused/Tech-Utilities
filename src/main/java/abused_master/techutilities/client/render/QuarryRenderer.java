@@ -25,7 +25,7 @@ public class QuarryRenderer extends BlockEntityRenderer<BlockEntityQuarry> {
             long angle = (System.currentTimeMillis() / 10) % 360;
             GlStateManager.rotatef(angle, 0, 1, 0);
             GlStateManager.alphaFunc(516, 0.003921569F);
-            MinecraftClient.getInstance().getItemRenderer().renderItemWithTransformation(new ItemStack(tile.miningBlock.getBlock()), ModelTransformation.Type.GROUND);
+            MinecraftClient.getInstance().getItemRenderer().renderItem(new ItemStack(tile.miningBlock.getBlock()), ModelTransformation.Type.GROUND);
             GlStateManager.popMatrix();
         }
 
@@ -37,7 +37,7 @@ public class QuarryRenderer extends BlockEntityRenderer<BlockEntityQuarry> {
             GlStateManager.rotatef(angle, 0, 1, 0);
             GlStateManager.translated(0.4, 0.4, 0.4);
             GlStateManager.alphaFunc(516, 0.003921569F);
-            MinecraftClient.getInstance().getItemRenderer().renderItemWithTransformation(new ItemStack(Items.DIAMOND_PICKAXE), ModelTransformation.Type.GROUND);
+            MinecraftClient.getInstance().getItemRenderer().renderItem(new ItemStack(Items.DIAMOND_PICKAXE), ModelTransformation.Type.GROUND);
             GlStateManager.popMatrix();
 
             GlStateManager.pushMatrix();
@@ -46,7 +46,7 @@ public class QuarryRenderer extends BlockEntityRenderer<BlockEntityQuarry> {
             GlStateManager.rotatef(angle, 0, -1, 0);
             GlStateManager.translated(0.4, 0.4, 0.4);
             GlStateManager.alphaFunc(516, 0.003921569F);
-            MinecraftClient.getInstance().getItemRenderer().renderItemWithTransformation(new ItemStack(Items.DIAMOND_PICKAXE), ModelTransformation.Type.GROUND);
+            MinecraftClient.getInstance().getItemRenderer().renderItem(new ItemStack(Items.DIAMOND_PICKAXE), ModelTransformation.Type.GROUND);
             GlStateManager.popMatrix();
         }
 

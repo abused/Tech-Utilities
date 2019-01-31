@@ -15,10 +15,10 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateFactory;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Property;
-import net.minecraft.util.BlockHitResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
@@ -51,13 +51,13 @@ public class BlockPulverizer extends BlockWithEntityBase {
     }
 
     @Override
-    public BlockState applyRotation(BlockState blockState_1, Rotation rotation_1) {
-        return blockState_1.with(FACING, rotation_1.method_10503(blockState_1.get(FACING)));
+    public BlockState rotate(BlockState blockState_1, Rotation rotation_1) {
+        return blockState_1.with(FACING, rotation_1.rotate(blockState_1.get(FACING)));
     }
 
     @Override
-    public BlockState applyMirror(BlockState blockState_1, Mirror mirror_1) {
-        return blockState_1.applyRotation(mirror_1.getRotation(blockState_1.get(FACING)));
+    public BlockState mirror(BlockState blockState_1, Mirror mirror_1) {
+        return blockState_1.rotate(mirror_1.getRotation(blockState_1.get(FACING)));
     }
 
     @Override

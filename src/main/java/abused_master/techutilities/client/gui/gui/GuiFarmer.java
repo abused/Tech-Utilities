@@ -6,12 +6,12 @@ import abused_master.techutilities.tiles.machine.BlockEntityFarmer;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.ContainerGui;
+import net.minecraft.client.gui.ContainerScreen;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
-public class GuiFarmer extends ContainerGui {
+public class GuiFarmer extends ContainerScreen {
 
     public Identifier farmerGui = new Identifier(TechUtilities.MODID, "textures/gui/farmer_gui.png");
     public BlockEntityFarmer tile;
