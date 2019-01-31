@@ -22,6 +22,7 @@ public class ModBlocks {
     public static BlockFluidPump FLUID_PUMP = new BlockFluidPump();
     public static BlockFarmer FARMER = new BlockFarmer();
     public static BlockMobGrinder MOB_GRINDER = new BlockMobGrinder();
+    public static BlockVacuum VACUUM = new BlockVacuum();
 
     //Decoration
     public static BlockGlassBase GLASS_BLOCK = new BlockGlassBase("glass_block");
@@ -38,6 +39,7 @@ public class ModBlocks {
         RegistryHelper.registerBlock(TechUtilities.MODID, FLUID_PUMP);
         RegistryHelper.registerBlock(TechUtilities.MODID, FARMER);
         RegistryHelper.registerBlock(TechUtilities.MODID, MOB_GRINDER);
+        RegistryHelper.registerBlock(TechUtilities.MODID, VACUUM);
 
         RegistryHelper.registerBlock(TechUtilities.MODID, GLASS_BLOCK);
         RegistryHelper.registerBlock(TechUtilities.MODID, BLACK_GLASS_BLOCK);

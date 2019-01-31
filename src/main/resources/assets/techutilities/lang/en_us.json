@@ -50,5 +50,6 @@
   "block.techutilities.energy_charger" : "Energy Charger",
   "block.techutilities.fluid_pump" : "Fluid Pump",
   "block.techutilities.farmer" : "Farmer Block",
-  "block.techutilities.mob_grinder" : "Mob Grinder"
+  "block.techutilities.mob_grinder" : "Mob Grinder",
+  "block.techutilities.vacuum" : "Vacuum Block"
 }

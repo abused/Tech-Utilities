@@ -3,6 +3,7 @@ package abused_master.techutilities.blocks.machines;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.blocks.BlockWithEntityBase;
 import abused_master.techutilities.tiles.machine.BlockEntityMobGrinder;
+import net.fabricmc.fabric.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
@@ -24,7 +25,7 @@ public class BlockMobGrinder extends BlockWithEntityBase {
     public static final DirectionProperty FACING = HorizontalFacingBlock.field_11177;
 
     public BlockMobGrinder() {
-        super("mob_grinder", Material.STONE, 1.0f, TechUtilities.modItemGroup);
+        super("mob_grinder", TechUtilities.modItemGroup, FabricBlockSettings.of(Material.STONE).strength(1.0f, 100.0f).build());
         this.setDefaultState(this.stateFactory.getDefaultState().with(FACING, Direction.NORTH));
     }
 

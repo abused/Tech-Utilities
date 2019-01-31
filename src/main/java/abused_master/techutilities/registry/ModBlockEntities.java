@@ -1,14 +1,8 @@
 package abused_master.techutilities.registry;
 
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.client.gui.container.ContainerEnergyCharger;
-import abused_master.techutilities.client.gui.container.ContainerEnergyFurnace;
-import abused_master.techutilities.client.gui.container.ContainerFarmer;
-import abused_master.techutilities.client.gui.container.ContainerPulverizer;
-import abused_master.techutilities.client.gui.gui.GuiEnergyCharger;
-import abused_master.techutilities.client.gui.gui.GuiEnergyFurnace;
-import abused_master.techutilities.client.gui.gui.GuiFarmer;
-import abused_master.techutilities.client.gui.gui.GuiPulverizer;
+import abused_master.techutilities.client.gui.container.*;
+import abused_master.techutilities.client.gui.gui.*;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCollector;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCrystal;
 import abused_master.techutilities.tiles.generator.BlockEntityLavaGenerator;
@@ -34,12 +28,14 @@ public class ModBlockEntities {
     public static BlockEntityType<BlockEntityFluidPump> FLUID_PUMP;
     public static BlockEntityType<BlockEntityFarmer> FARMER;
     public static BlockEntityType<BlockEntityMobGrinder> MOB_GRINDER;
+    public static BlockEntityType<BlockEntityVacuum> VACUUM;
 
     //Container Identifiers
     public static final Identifier ENERGY_FURNACE_CONTAINER = new Identifier(TechUtilities.MODID, "energy_furnace_container");
     public static final Identifier PULVERIZER_CONTAINER = new Identifier(TechUtilities.MODID, "pulverizer_container");
     public static final Identifier ENERGY_CHARGER_CONTAINER = new Identifier(TechUtilities.MODID, "energy_charger_container");
     public static final Identifier FARMER_CONTAINER = new Identifier(TechUtilities.MODID, "farmer_container");
+    public static final Identifier VACUUM_CONTAINER = new Identifier(TechUtilities.MODID, "vacuum_container");
 
     public static void registerBlockEntities() {
         ENERGY_FURNACE = RegistryHelper.registerTile(TechUtilities.MODID, "energy_furnace", BlockEntityEnergyFurnace.class);
@@ -53,6 +49,7 @@ public class ModBlockEntities {
         FLUID_PUMP = RegistryHelper.registerTile(TechUtilities.MODID, "fluid_pump", BlockEntityFluidPump.class);
         FARMER = RegistryHelper.registerTile(TechUtilities.MODID, "farmer", BlockEntityFarmer.class);
         MOB_GRINDER = RegistryHelper.registerTile(TechUtilities.MODID, "mob_grinder", BlockEntityMobGrinder.class);
+        VACUUM = RegistryHelper.registerTile(TechUtilities.MODID, "vacuum", BlockEntityVacuum.class);
     }
 
     public static void registerGUIs() {
@@ -60,6 +57,7 @@ public class ModBlockEntities {
         ContainerProviderRegistry.INSTANCE.registerFactory(PULVERIZER_CONTAINER, (syncid, identifier, player, buf) -> new ContainerPulverizer(syncid, player.inventory, (BlockEntityPulverizer) player.world.getBlockEntity(buf.readBlockPos())));
         ContainerProviderRegistry.INSTANCE.registerFactory(ENERGY_CHARGER_CONTAINER, (syncid, identifier, player, buf) -> new ContainerEnergyCharger(syncid, player.inventory, (BlockEntityEnergyCharger) player.world.getBlockEntity(buf.readBlockPos())));
         ContainerProviderRegistry.INSTANCE.registerFactory(FARMER_CONTAINER, (syncid, identifier, player, buf) -> new ContainerFarmer(syncid, player.inventory, (BlockEntityFarmer) player.world.getBlockEntity(buf.readBlockPos())));
+        ContainerProviderRegistry.INSTANCE.registerFactory(VACUUM_CONTAINER, (syncid, identifier, player, buf) -> new ContainerVacuum(syncid, player.inventory, (BlockEntityVacuum) player.world.getBlockEntity(buf.readBlockPos())));
     }
 
     public static void registerClientGUIs() {
@@ -85,6 +83,12 @@ public class ModBlockEntities {
             BlockPos pos = buf.readBlockPos();
             BlockEntityFarmer farmer = (BlockEntityFarmer) player.world.getBlockEntity(pos);
             return new GuiFarmer(farmer, new ContainerFarmer(syncid, player.inventory, farmer));
+        }));
+
+        GuiProviderRegistry.INSTANCE.registerFactory(VACUUM_CONTAINER, ((syncid, identifier, player, buf) -> {
+            BlockPos pos = buf.readBlockPos();
+            BlockEntityVacuum vacuum = (BlockEntityVacuum) player.world.getBlockEntity(pos);
+            return new GuiVacuum(vacuum , new ContainerVacuum(syncid, player.inventory, vacuum ));
         }));
     }
 }
