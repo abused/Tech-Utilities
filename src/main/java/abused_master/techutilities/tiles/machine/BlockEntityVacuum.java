@@ -16,6 +16,7 @@ import net.minecraft.util.math.Direction;
 import javax.annotation.Nullable;
 import java.util.List;
 
+//TODO ADD FILTER TO GUI
 public class BlockEntityVacuum extends BlockEntityBase implements SidedInventory {
 
     public DefaultedList<ItemStack> inventory = DefaultedList.create(14, ItemStack.EMPTY);
