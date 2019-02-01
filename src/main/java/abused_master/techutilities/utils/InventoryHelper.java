@@ -19,36 +19,13 @@ public class InventoryHelper {
             if(!inventory.getInvStack(i).isEmpty()) {
                 if(canItemStacksStack(inventory.getInvStack(i), stack) && inventory.getInvStack(i).getAmount() < 64) {
                     if(!simulate)
-                        inventory.setInvStack(i, new ItemStack(stack.getItem(), stack.getAmount() + inventory.getInvStack(i).getAmount()));
+                        stack.addAmount(inventory.getInvStack(i).getAmount());
+                        inventory.setInvStack(i, stack);
 
                     return true;
                 }
             }else {
                 if(!simulate)
-                    inventory.setInvStack(i, stack);
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static boolean insertItemIfPossible(SidedInventory inventory, ItemStack stack, boolean simulate) {
-        if(inventory == null) {
-            return false;
-        }
-
-        for (int i = 0; i < inventory.getInvSize(); i++) {
-            if(!inventory.getInvStack(i).isEmpty()) {
-                if(canItemStacksStack(inventory.getInvStack(i), stack) && inventory.getInvStack(i).getAmount() < 64 && inventory.canInsertInvStack(i, stack, null)) {
-                    if(!simulate)
-                        inventory.setInvStack(i, new ItemStack(stack.getItem(), stack.getAmount() + inventory.getInvStack(i).getAmount()));
-
-                    return true;
-                }
-            }else {
-                if(!simulate && inventory.canInsertInvStack(i, stack, null))
                     inventory.setInvStack(i, stack);
 
                 return true;

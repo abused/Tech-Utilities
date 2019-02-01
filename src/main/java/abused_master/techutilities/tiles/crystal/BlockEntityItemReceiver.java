@@ -6,14 +6,12 @@ import abused_master.techutilities.utils.InventoryHelper;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.InventoryUtil;
 import net.minecraft.util.TagHelper;
-import net.minecraft.util.math.BlockPos;
 
 public class BlockEntityItemReceiver extends BlockEntityBase implements Inventory, ILinkerHandler {
 
@@ -45,12 +43,14 @@ public class BlockEntityItemReceiver extends BlockEntityBase implements Inventor
     }
 
     public void sendItems() {
-        SidedInventory nearbyInventory = InventoryHelper.getNearbySidedInventory(world, pos);
+        Inventory nearbyInventory = InventoryHelper.getNearbyInventory(world, pos);
         if(nearbyInventory != null) {
             for (int i = 0; i < inventory.size() - 1; i++) {
                 if (!inventory.get(i).isEmpty()) {
-                    if (InventoryHelper.insertItemIfPossible(nearbyInventory, new ItemStack(inventory.get(i).getItem(), 1), false)) {
-                        inventory.get(i).subtractAmount(1);
+                    ItemStack copyStack = inventory.get(i);
+                    copyStack.setAmount(1);
+                    if (InventoryHelper.insertItemIfPossible(nearbyInventory, copyStack, false)) {
+                        takeInvStack(i, 1);
                     }
                 }
             }
@@ -96,8 +96,7 @@ public class BlockEntityItemReceiver extends BlockEntityBase implements Inventor
 
     @Override
     public ItemStack takeInvStack(int i, int i1) {
-        inventory.get(i).subtractAmount(i1);
-        return inventory.get(i);
+        return inventory.set(i, new ItemStack(inventory.get(i).getItem(), inventory.get(i).getAmount() - 1));
     }
 
     @Override
@@ -122,16 +121,17 @@ public class BlockEntityItemReceiver extends BlockEntityBase implements Inventor
 
     @Override
     public void link(PlayerEntity player, CompoundTag tag) {
-        if (tag.containsKey("itemPos")) {
-            BlockPos transferPos = TagHelper.deserializeBlockPos(tag.getCompound("itemPos"));
-            BlockEntityItemTransfer itemTransfer = (BlockEntityItemTransfer) world.getBlockEntity(transferPos);
-            if(itemTransfer != null) {
-                itemTransfer.setPos(pos);
-                this.markDirty();
-                world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
-                player.addChatMessage(new StringTextComponent("Linked Item Transferer position!"), true);
-            }else {
-                player.addChatMessage(new StringTextComponent("Invalid crystal position!"), true);
+        if(!world.isClient) {
+            if (tag.containsKey("itemPos")) {
+                BlockEntityItemTransfer itemTransfer = (BlockEntityItemTransfer) world.getBlockEntity(TagHelper.deserializeBlockPos(tag.getCompound("itemPos")));
+                if (itemTransfer != null) {
+                    itemTransfer.setReceiverPosition(pos);
+                    this.markDirty();
+                    world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+                    player.addChatMessage(new StringTextComponent("Linked Item Transferer position!"), true);
+                } else {
+                    player.addChatMessage(new StringTextComponent("Invalid crystal position!"), true);
+                }
             }
         }
     }

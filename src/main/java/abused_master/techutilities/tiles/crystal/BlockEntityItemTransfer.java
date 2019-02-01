@@ -6,7 +6,6 @@ import abused_master.techutilities.utils.InventoryHelper;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.TagHelper;
@@ -46,19 +45,23 @@ public class BlockEntityItemTransfer extends BlockEntityBase implements ILinkerH
             counter++;
             if (counter >= 5) {
                 sendItems();
-                counter = 0;
             }
         }
     }
 
     public void sendItems() {
         BlockEntityItemReceiver itemReceiver = (BlockEntityItemReceiver) world.getBlockEntity(receiverPosition);
-        SidedInventory nearbyInventory = InventoryHelper.getNearbySidedInventory(world, pos);
-        for (int i = 0; i < nearbyInventory.getInvSize() - 1; i++) {
-            if(!nearbyInventory.getInvStack(i).isEmpty() && nearbyInventory.canExtractInvStack(i, nearbyInventory.getInvStack(i), null) && itemReceiver.canReceive(nearbyInventory.getInvStack(i))) {
-                if(InventoryHelper.insertItemIfPossible(itemReceiver, nearbyInventory.getInvStack(i), false)) {
-                    nearbyInventory.getInvStack(i).subtractAmount(1);
-                    this.markDirty();
+        Inventory nearbyInventory = InventoryHelper.getNearbyInventory(world, pos);
+        if(nearbyInventory != null) {
+            for (int i = 0; i < (nearbyInventory.getInvSize() - 1); i++) {
+                if(counter >= 5) {
+                    if (!nearbyInventory.getInvStack(i).isEmpty() && itemReceiver.canReceive(nearbyInventory.getInvStack(i))) {
+                        if (InventoryHelper.insertItemIfPossible(itemReceiver, nearbyInventory.getInvStack(i), false)) {
+                            nearbyInventory.takeInvStack(i, 1);
+                            this.markDirty();
+                        }
+                    }
+                    counter = 0;
                 }
             }
         }
@@ -66,9 +69,16 @@ public class BlockEntityItemTransfer extends BlockEntityBase implements ILinkerH
 
     public boolean canSend() {
         Inventory nearbyInventory = InventoryHelper.getNearbyInventory(world, pos);
+        if(receiverPosition != null && world.getBlockEntity(receiverPosition) == null) {
+            this.receiverPosition = null;
+            markDirty();
+            world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+        }
+
         if(receiverPosition == null || nearbyInventory == null || isInventoryEmpty(nearbyInventory)) {
             return false;
         }
+
 
         return true;
     }

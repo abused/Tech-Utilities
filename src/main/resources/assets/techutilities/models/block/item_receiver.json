@@ -1,6 +1,7 @@
 {
     "parent": "block/cube_all",
     "textures": {
+        "particle": "techutilities:blocks/crystal",
         "crystal": "techutilities:blocks/crystal",
         "base": "techutilities:blocks/base"
     },
