@@ -1,7 +1,6 @@
 package abused_master.techutilities.registry;
 
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.blocks.BlockResources;
 import abused_master.techutilities.blocks.crystals.BlockEnergyCollector;
 import abused_master.techutilities.blocks.crystals.BlockEnergyCrystal;
 import abused_master.techutilities.blocks.crystals.BlockItemReceiverCrystal;
@@ -28,6 +27,7 @@ public class ModBlocks {
     public static BlockConveyorBelt CONVEYOR_BELT = new BlockConveyorBelt();
     public static BlockItemTransferCrystal ITEM_TRANSFER = new BlockItemTransferCrystal();
     public static BlockItemReceiverCrystal ITEM_RECEIVER = new BlockItemReceiverCrystal();
+    public static BlockPhaseCell PHASE_CELL = new BlockPhaseCell();
 
     //Decoration
     public static BlockGlassBase GLASS_BLOCK = new BlockGlassBase("glass_block");
@@ -48,20 +48,13 @@ public class ModBlocks {
         RegistryHelper.registerBlock(TechUtilities.MODID, CONVEYOR_BELT);
         RegistryHelper.registerBlock(TechUtilities.MODID, ITEM_TRANSFER);
         RegistryHelper.registerBlock(TechUtilities.MODID, ITEM_RECEIVER);
+        RegistryHelper.registerBlock(TechUtilities.MODID, PHASE_CELL);
 
         RegistryHelper.registerBlock(TechUtilities.MODID, GLASS_BLOCK);
         RegistryHelper.registerBlock(TechUtilities.MODID, BLACK_GLASS_BLOCK);
 
         for (EnumSolarPanelTypes panel : EnumSolarPanelTypes.values()) {
             RegistryHelper.registerBlock(TechUtilities.MODID, panel.getBlockSolar());
-        }
-
-        for (BlockResources.EnumResourceOres ore : BlockResources.EnumResourceOres.values()) {
-            RegistryHelper.registerBlock(TechUtilities.MODID, ore.getBlockOres());
-        }
-
-        for (BlockResources.EnumResourceBlocks ore : BlockResources.EnumResourceBlocks.values()) {
-            RegistryHelper.registerBlock(TechUtilities.MODID, ore.getBlockOres());
         }
     }
 }

@@ -33,6 +33,7 @@ public class ModBlockEntities {
     public static BlockEntityType<BlockEntityVacuum> VACUUM;
     public static BlockEntityType<BlockEntityItemReceiver> ITEM_RECEIVER;
     public static BlockEntityType<BlockEntityItemTransfer> ITEM_TRANSFER;
+    public static BlockEntityType<BlockEntityPhaseCell> PHASE_CELL;
 
     //Container Identifiers
     public static final Identifier ENERGY_FURNACE_CONTAINER = new Identifier(TechUtilities.MODID, "energy_furnace_container");
@@ -56,6 +57,7 @@ public class ModBlockEntities {
         VACUUM = RegistryHelper.registerTile(TechUtilities.MODID, "vacuum", BlockEntityVacuum.class);
         ITEM_RECEIVER = RegistryHelper.registerTile(TechUtilities.MODID, "item_receiver", BlockEntityItemReceiver.class);
         ITEM_TRANSFER = RegistryHelper.registerTile(TechUtilities.MODID, "item_transfer", BlockEntityItemTransfer.class);
+        PHASE_CELL = RegistryHelper.registerTile(TechUtilities.MODID, "phase_cell", BlockEntityPhaseCell.class);
     }
 
     public static void registerGUIs() {

@@ -25,7 +25,6 @@ public class TechUtilities implements ModInitializer, ClientModInitializer {
         ModItems.registerItems();
         ModBlockEntities.registerBlockEntities();
         ModBlockEntities.registerGUIs();
-        TechWorldGeneration.generateOres();
         ModRecipes.registerRecipes();
     }
 

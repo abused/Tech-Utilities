@@ -7,6 +7,7 @@ import abused_master.techutilities.tiles.crystal.BlockEntityItemTransfer;
 import abused_master.techutilities.tiles.generator.BlockEntityLavaGenerator;
 import abused_master.techutilities.tiles.machine.BlockEntityFluidPump;
 import abused_master.techutilities.tiles.machine.BlockEntityMobGrinder;
+import abused_master.techutilities.tiles.machine.BlockEntityPhaseCell;
 import abused_master.techutilities.tiles.machine.BlockEntityQuarry;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
@@ -37,6 +38,7 @@ public class MixinBlockEntityRenderDispatcher {
         this.renderers.put(BlockEntityFluidPump.class, new FluidPumpRenderer());
         this.renderers.put(BlockEntityMobGrinder.class, new MobGrinderRenderer());
         this.renderers.put(BlockEntityItemTransfer.class, new ItemTransferRenderer());
+        this.renderers.put(BlockEntityPhaseCell.class, new PhaseCellRenderer());
 
         Iterator var1 = this.renderers.values().iterator();
 
