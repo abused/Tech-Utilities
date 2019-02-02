@@ -8,7 +8,7 @@ public enum EnumResourceItems {
     COAL_DUST,
     DIAMOND_DUST,
     IRON_DUST,
-    GOLD_DUST,;
+    GOLD_DUST;
 
     private ItemBase itemResource;
 

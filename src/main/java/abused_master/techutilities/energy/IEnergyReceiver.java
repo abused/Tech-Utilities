@@ -1,4 +1,4 @@
-package abused_master.techutilities.utils.energy;
+package abused_master.techutilities.energy;
 
 public interface IEnergyReceiver extends IEnergyHandler {
 
