@@ -1,7 +1,7 @@
 package abused_master.techutilities.tiles;
 
-import abused_master.techutilities.energy.EnergyStorage;
-import abused_master.techutilities.energy.IEnergyHandler;
+import abused_master.energy.EnergyStorage;
+import abused_master.energy.IEnergyHandler;
 import net.minecraft.block.entity.BlockEntityType;
 
 public abstract class BlockEntityEnergy extends BlockEntityBase implements IEnergyHandler {

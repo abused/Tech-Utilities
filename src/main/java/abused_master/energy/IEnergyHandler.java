@@ -1,4 +1,4 @@
-package abused_master.techutilities.energy;
+package abused_master.energy;
 
 public interface IEnergyHandler {
 

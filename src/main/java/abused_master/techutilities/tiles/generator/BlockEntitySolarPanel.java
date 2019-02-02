@@ -3,7 +3,7 @@ package abused_master.techutilities.tiles.generator;
 import abused_master.techutilities.blocks.generators.EnumSolarPanelTypes;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.tiles.BlockEntityEnergy;
-import abused_master.techutilities.energy.EnergyStorage;
+import abused_master.energy.EnergyStorage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;

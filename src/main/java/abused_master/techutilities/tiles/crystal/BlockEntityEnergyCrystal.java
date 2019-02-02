@@ -2,9 +2,9 @@ package abused_master.techutilities.tiles.crystal;
 
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.tiles.BlockEntityEnergy;
-import abused_master.techutilities.energy.EnergyStorage;
-import abused_master.techutilities.energy.IEnergyProvider;
-import abused_master.techutilities.energy.IEnergyReceiver;
+import abused_master.energy.EnergyStorage;
+import abused_master.energy.IEnergyProvider;
+import abused_master.energy.IEnergyReceiver;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.player.PlayerEntity;

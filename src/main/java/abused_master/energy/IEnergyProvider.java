@@ -1,4 +1,4 @@
-package abused_master.techutilities.energy;
+package abused_master.energy;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

@@ -2,8 +2,8 @@ package abused_master.techutilities.tiles.generator;
 
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.tiles.BlockEntityEnergy;
-import abused_master.techutilities.energy.EnergyStorage;
-import abused_master.techutilities.energy.IEnergyProvider;
+import abused_master.energy.EnergyStorage;
+import abused_master.energy.IEnergyProvider;
 import abused_master.techutilities.utils.fluid.FluidStack;
 import abused_master.techutilities.utils.fluid.FluidTank;
 import abused_master.techutilities.utils.fluid.IFluidHandler;

@@ -1,4 +1,4 @@
-package abused_master.techutilities.energy;
+package abused_master.energy;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
