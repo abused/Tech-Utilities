@@ -1,5 +1,6 @@
 package abused_master.techutilities.items;
 
+import abused_master.abusedlib.items.ItemBase;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
 import net.minecraft.block.entity.BlockEntity;

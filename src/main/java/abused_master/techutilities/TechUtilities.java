@@ -1,7 +1,7 @@
 package abused_master.techutilities;
 
+import abused_master.abusedlib.utils.Config;
 import abused_master.techutilities.registry.*;
-import abused_master.techutilities.utils.Config;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;

@@ -1,5 +1,6 @@
 package abused_master.techutilities.registry;
 
+import abused_master.abusedlib.registry.RegistryHelper;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.client.gui.container.*;
 import abused_master.techutilities.client.gui.gui.*;
@@ -10,8 +11,7 @@ import abused_master.techutilities.tiles.crystal.BlockEntityItemTransfer;
 import abused_master.techutilities.tiles.generator.BlockEntityLavaGenerator;
 import abused_master.techutilities.tiles.generator.BlockEntitySolarPanel;
 import abused_master.techutilities.tiles.machine.*;
-import abused_master.techutilities.utils.RegistryHelper;
-import net.fabricmc.fabric.api.client.gui.GuiProviderRegistry;
+import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
@@ -43,21 +43,21 @@ public class ModBlockEntities {
     public static final Identifier VACUUM_CONTAINER = new Identifier(TechUtilities.MODID, "vacuum_container");
 
     public static void registerBlockEntities() {
-        ENERGY_FURNACE = RegistryHelper.registerTile(TechUtilities.MODID, "energy_furnace", BlockEntityEnergyFurnace.class);
-        QUARRY = RegistryHelper.registerTile(TechUtilities.MODID, "quarry", BlockEntityQuarry.class);
-        SOLAR_PANEL = RegistryHelper.registerTile(TechUtilities.MODID, "solar_panel", BlockEntitySolarPanel.class);
-        ENERGY_CRYSTAL = RegistryHelper.registerTile(TechUtilities.MODID, "energy_crystal", BlockEntityEnergyCrystal.class);
-        ENERGY_CRYSTAL_COLLECTOR = RegistryHelper.registerTile(TechUtilities.MODID, "energy_crystal_collector", BlockEntityEnergyCollector.class);
-        PULVERIZER = RegistryHelper.registerTile(TechUtilities.MODID, "pulverizer", BlockEntityPulverizer.class);
-        LAVA_GENERATOR = RegistryHelper.registerTile(TechUtilities.MODID, "lava_generator", BlockEntityLavaGenerator.class);
-        ENERGY_CHARGER = RegistryHelper.registerTile(TechUtilities.MODID, "energy_charger", BlockEntityEnergyCharger.class);
-        FLUID_PUMP = RegistryHelper.registerTile(TechUtilities.MODID, "fluid_pump", BlockEntityFluidPump.class);
-        FARMER = RegistryHelper.registerTile(TechUtilities.MODID, "farmer", BlockEntityFarmer.class);
-        MOB_GRINDER = RegistryHelper.registerTile(TechUtilities.MODID, "mob_grinder", BlockEntityMobGrinder.class);
-        VACUUM = RegistryHelper.registerTile(TechUtilities.MODID, "vacuum", BlockEntityVacuum.class);
-        ITEM_RECEIVER = RegistryHelper.registerTile(TechUtilities.MODID, "item_receiver", BlockEntityItemReceiver.class);
-        ITEM_TRANSFER = RegistryHelper.registerTile(TechUtilities.MODID, "item_transfer", BlockEntityItemTransfer.class);
-        PHASE_CELL = RegistryHelper.registerTile(TechUtilities.MODID, "phase_cell", BlockEntityPhaseCell.class);
+        ENERGY_FURNACE = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "energy_furnace"), BlockEntityEnergyFurnace.class);
+        QUARRY = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "quarry"), BlockEntityQuarry.class);
+        SOLAR_PANEL = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "solar_panel"), BlockEntitySolarPanel.class);
+        ENERGY_CRYSTAL = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "energy_crystal"), BlockEntityEnergyCrystal.class);
+        ENERGY_CRYSTAL_COLLECTOR = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "energy_crystal_collector"), BlockEntityEnergyCollector.class);
+        PULVERIZER = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "pulverizer"), BlockEntityPulverizer.class);
+        LAVA_GENERATOR = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "lava_generator"), BlockEntityLavaGenerator.class);
+        ENERGY_CHARGER = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "energy_charger"), BlockEntityEnergyCharger.class);
+        FLUID_PUMP = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "fluid_pump"), BlockEntityFluidPump.class);
+        FARMER = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "farmer"), BlockEntityFarmer.class);
+        MOB_GRINDER = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "mob_grinder"), BlockEntityMobGrinder.class);
+        VACUUM = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "vacuum"), BlockEntityVacuum.class);
+        ITEM_RECEIVER = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "item_receiver"), BlockEntityItemReceiver.class);
+        ITEM_TRANSFER = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "item_transfer"), BlockEntityItemTransfer.class);
+        PHASE_CELL = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "phase_cell"), BlockEntityPhaseCell.class);
     }
 
     public static void registerGUIs() {
@@ -69,31 +69,31 @@ public class ModBlockEntities {
     }
 
     public static void registerClientGUIs() {
-        GuiProviderRegistry.INSTANCE.registerFactory(ENERGY_FURNACE_CONTAINER, ((syncid, identifier, player, buf) -> {
+        ScreenProviderRegistry.INSTANCE.registerFactory(ENERGY_FURNACE_CONTAINER, ((syncid, identifier, player, buf) -> {
             BlockPos pos = buf.readBlockPos();
             BlockEntityEnergyFurnace furnace = (BlockEntityEnergyFurnace) player.world.getBlockEntity(pos);
             return new GuiEnergyFurnace(furnace, new ContainerEnergyFurnace(syncid, player.inventory, furnace));
         }));
 
-        GuiProviderRegistry.INSTANCE.registerFactory(PULVERIZER_CONTAINER, ((syncid, identifier, player, buf) -> {
+        ScreenProviderRegistry.INSTANCE.registerFactory(PULVERIZER_CONTAINER, ((syncid, identifier, player, buf) -> {
             BlockPos pos = buf.readBlockPos();
             BlockEntityPulverizer pulverizer = (BlockEntityPulverizer) player.world.getBlockEntity(pos);
             return new GuiPulverizer(pulverizer, new ContainerPulverizer(syncid, player.inventory, pulverizer));
         }));
 
-        GuiProviderRegistry.INSTANCE.registerFactory(ENERGY_CHARGER_CONTAINER, ((syncid, identifier, player, buf) -> {
+        ScreenProviderRegistry.INSTANCE.registerFactory(ENERGY_CHARGER_CONTAINER, ((syncid, identifier, player, buf) -> {
             BlockPos pos = buf.readBlockPos();
             BlockEntityEnergyCharger energyCharger = (BlockEntityEnergyCharger) player.world.getBlockEntity(pos);
             return new GuiEnergyCharger(energyCharger, new ContainerEnergyCharger(syncid, player.inventory, energyCharger));
         }));
 
-        GuiProviderRegistry.INSTANCE.registerFactory(FARMER_CONTAINER, ((syncid, identifier, player, buf) -> {
+        ScreenProviderRegistry.INSTANCE.registerFactory(FARMER_CONTAINER, ((syncid, identifier, player, buf) -> {
             BlockPos pos = buf.readBlockPos();
             BlockEntityFarmer farmer = (BlockEntityFarmer) player.world.getBlockEntity(pos);
             return new GuiFarmer(farmer, new ContainerFarmer(syncid, player.inventory, farmer));
         }));
 
-        GuiProviderRegistry.INSTANCE.registerFactory(VACUUM_CONTAINER, ((syncid, identifier, player, buf) -> {
+        ScreenProviderRegistry.INSTANCE.registerFactory(VACUUM_CONTAINER, ((syncid, identifier, player, buf) -> {
             BlockPos pos = buf.readBlockPos();
             BlockEntityVacuum vacuum = (BlockEntityVacuum) player.world.getBlockEntity(pos);
             return new GuiVacuum(vacuum , new ContainerVacuum(syncid, player.inventory, vacuum ));

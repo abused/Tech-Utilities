@@ -1,8 +1,8 @@
 package abused_master.techutilities.tiles.machine;
 
+import abused_master.abusedlib.tiles.BlockEntityBase;
+import abused_master.abusedlib.utils.InventoryHelper;
 import abused_master.techutilities.registry.ModBlockEntities;
-import abused_master.techutilities.tiles.BlockEntityBase;
-import abused_master.techutilities.utils.InventoryHelper;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SidedInventory;
@@ -119,7 +119,7 @@ public class BlockEntityVacuum extends BlockEntityBase implements SidedInventory
     }
 
     @Override
-    public void clearInv() {
+    public void clear() {
         inventory.clear();
     }
 }

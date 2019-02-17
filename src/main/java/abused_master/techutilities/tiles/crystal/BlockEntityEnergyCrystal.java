@@ -1,10 +1,10 @@
 package abused_master.techutilities.tiles.crystal;
 
+import abused_master.abusedlib.energy.EnergyStorage;
+import abused_master.abusedlib.energy.IEnergyProvider;
+import abused_master.abusedlib.energy.IEnergyReceiver;
+import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
 import abused_master.techutilities.registry.ModBlockEntities;
-import abused_master.techutilities.tiles.BlockEntityEnergy;
-import abused_master.energy.EnergyStorage;
-import abused_master.energy.IEnergyProvider;
-import abused_master.energy.IEnergyReceiver;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class BlockEntityEnergyCrystal extends BlockEntityEnergy implements IEnergyReceiver, IEnergyProvider, ILinkerHandler {
+public class BlockEntityEnergyCrystal extends BlockEntityEnergyBase implements IEnergyReceiver, IEnergyProvider, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     public final HashSet<BlockPos> tilePositions = new HashSet<>();

@@ -1,5 +1,6 @@
 package abused_master.techutilities.items;
 
+import abused_master.abusedlib.items.ItemBase;
 import abused_master.techutilities.TechUtilities;
 import net.minecraft.client.item.TooltipOptions;
 import net.minecraft.entity.player.PlayerEntity;

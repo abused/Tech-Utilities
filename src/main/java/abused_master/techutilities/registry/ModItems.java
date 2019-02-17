@@ -5,7 +5,6 @@ import abused_master.techutilities.items.EnumResourceItems;
 import abused_master.techutilities.items.ItemLinker;
 import abused_master.techutilities.items.ItemQuarryRecorder;
 import abused_master.techutilities.items.tools.ItemEnergizedSword;
-import abused_master.techutilities.utils.RegistryHelper;
 
 public class ModItems {
 

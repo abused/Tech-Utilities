@@ -1,9 +1,9 @@
 package abused_master.techutilities.blocks.generators;
 
+import abused_master.abusedlib.blocks.BlockWithEntityBase;
+import abused_master.abusedlib.fluid.FluidHelper;
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.blocks.BlockWithEntityBase;
 import abused_master.techutilities.tiles.generator.BlockEntityLavaGenerator;
-import abused_master.techutilities.utils.fluid.FluidHelper;
 import net.minecraft.block.BlockRenderLayer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;

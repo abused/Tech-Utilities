@@ -1,10 +1,10 @@
 package abused_master.techutilities.tiles.machine;
 
+import abused_master.abusedlib.energy.EnergyStorage;
+import abused_master.abusedlib.energy.IEnergyReceiver;
+import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.registry.PulverizerRecipes;
-import abused_master.techutilities.tiles.BlockEntityEnergy;
-import abused_master.energy.EnergyStorage;
-import abused_master.energy.IEnergyReceiver;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SidedInventory;
@@ -18,7 +18,7 @@ import net.minecraft.util.math.Direction;
 
 import javax.annotation.Nullable;
 
-public class BlockEntityPulverizer extends BlockEntityEnergy implements IEnergyReceiver, SidedInventory, ILinkerHandler {
+public class BlockEntityPulverizer extends BlockEntityEnergyBase implements IEnergyReceiver, SidedInventory, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     public DefaultedList<ItemStack> inventory = DefaultedList.create(3, ItemStack.EMPTY);
@@ -168,7 +168,7 @@ public class BlockEntityPulverizer extends BlockEntityEnergy implements IEnergyR
     }
 
     @Override
-    public void clearInv() {
+    public void clear() {
         inventory.clear();
     }
 

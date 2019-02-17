@@ -1,12 +1,9 @@
 package abused_master.techutilities.client.render;
 
+import abused_master.abusedlib.client.render.RenderHelper;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCrystal;
-import abused_master.techutilities.utils.render.RenderHelper;
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 
 public class CrystalRenderer extends BlockEntityRenderer<BlockEntityEnergyCrystal> {
 

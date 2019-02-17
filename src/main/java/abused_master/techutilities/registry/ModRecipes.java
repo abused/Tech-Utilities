@@ -2,7 +2,6 @@ package abused_master.techutilities.registry;
 
 import abused_master.techutilities.blocks.generators.EnumSolarPanelTypes;
 import abused_master.techutilities.items.EnumResourceItems;
-import abused_master.techutilities.utils.RecipeGenerator;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;

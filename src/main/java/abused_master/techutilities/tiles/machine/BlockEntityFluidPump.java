@@ -1,15 +1,15 @@
 package abused_master.techutilities.tiles.machine;
 
+import abused_master.abusedlib.client.render.hud.IHudSupport;
+import abused_master.abusedlib.energy.EnergyStorage;
+import abused_master.abusedlib.energy.IEnergyReceiver;
+import abused_master.abusedlib.fluid.FluidStack;
+import abused_master.abusedlib.fluid.FluidTank;
+import abused_master.abusedlib.fluid.IFluidHandler;
+import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.registry.ModBlockEntities;
-import abused_master.techutilities.tiles.BlockEntityEnergy;
-import abused_master.energy.EnergyStorage;
-import abused_master.energy.IEnergyReceiver;
-import abused_master.techutilities.utils.fluid.FluidStack;
-import abused_master.techutilities.utils.fluid.FluidTank;
-import abused_master.techutilities.utils.fluid.IFluidHandler;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
-import abused_master.techutilities.utils.render.hud.IHudSupport;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.client.resource.language.I18n;
@@ -23,7 +23,7 @@ import net.minecraft.util.math.Direction;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockEntityFluidPump extends BlockEntityEnergy implements IEnergyReceiver, IFluidHandler, IHudSupport, ILinkerHandler {
+public class BlockEntityFluidPump extends BlockEntityEnergyBase implements IEnergyReceiver, IFluidHandler, IHudSupport, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(50000);
     public FluidTank tank = new FluidTank(32000);

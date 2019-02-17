@@ -1,10 +1,10 @@
 package abused_master.techutilities.tiles.machine;
 
+import abused_master.abusedlib.energy.EnergyStorage;
+import abused_master.abusedlib.energy.IEnergyReceiver;
+import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
+import abused_master.abusedlib.utils.CacheMapHolder;
 import abused_master.techutilities.registry.ModBlockEntities;
-import abused_master.techutilities.tiles.BlockEntityEnergy;
-import abused_master.techutilities.utils.CacheMapHolder;
-import abused_master.energy.EnergyStorage;
-import abused_master.energy.IEnergyReceiver;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SidedInventory;
@@ -19,7 +19,7 @@ import net.minecraft.util.math.Direction;
 import javax.annotation.Nullable;
 
 //TODO ADD UPGRADES
-public class BlockEntityEnergyFurnace extends BlockEntityEnergy implements SidedInventory, IEnergyReceiver, ILinkerHandler {
+public class BlockEntityEnergyFurnace extends BlockEntityEnergyBase implements SidedInventory, IEnergyReceiver, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     public DefaultedList<ItemStack> inventory = DefaultedList.create(2, ItemStack.EMPTY);
@@ -164,7 +164,7 @@ public class BlockEntityEnergyFurnace extends BlockEntityEnergy implements Sided
     }
 
     @Override
-    public void clearInv() {
+    public void clear() {
         inventory.clear();
     }
 

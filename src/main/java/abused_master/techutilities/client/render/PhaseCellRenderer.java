@@ -1,7 +1,7 @@
 package abused_master.techutilities.client.render;
 
+import abused_master.abusedlib.client.render.hud.HudRender;
 import abused_master.techutilities.tiles.machine.BlockEntityPhaseCell;
-import abused_master.techutilities.utils.render.hud.HudRender;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 
 public class PhaseCellRenderer extends BlockEntityRenderer<BlockEntityPhaseCell> {

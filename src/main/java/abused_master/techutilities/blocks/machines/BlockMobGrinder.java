@@ -1,9 +1,9 @@
 package abused_master.techutilities.blocks.machines;
 
+import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.blocks.BlockWithEntityBase;
 import abused_master.techutilities.tiles.machine.BlockEntityMobGrinder;
-import net.fabricmc.fabric.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;

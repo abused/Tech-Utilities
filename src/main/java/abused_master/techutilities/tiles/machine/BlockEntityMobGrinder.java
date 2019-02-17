@@ -1,12 +1,12 @@
 package abused_master.techutilities.tiles.machine;
 
+import abused_master.abusedlib.client.render.hud.IHudSupport;
+import abused_master.abusedlib.energy.EnergyStorage;
+import abused_master.abusedlib.energy.IEnergyReceiver;
+import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
 import abused_master.techutilities.blocks.machines.BlockMobGrinder;
 import abused_master.techutilities.registry.ModBlockEntities;
-import abused_master.techutilities.tiles.BlockEntityEnergy;
-import abused_master.energy.EnergyStorage;
-import abused_master.energy.IEnergyReceiver;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
-import abused_master.techutilities.utils.render.hud.IHudSupport;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,7 +20,7 @@ import net.minecraft.util.math.Direction;
 import java.util.Collections;
 import java.util.List;
 
-public class BlockEntityMobGrinder extends BlockEntityEnergy implements IEnergyReceiver, IHudSupport, ILinkerHandler {
+public class BlockEntityMobGrinder extends BlockEntityEnergyBase implements IEnergyReceiver, IHudSupport, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     public BoundingBox mobKillBox = null;

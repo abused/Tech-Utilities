@@ -1,7 +1,7 @@
 package abused_master.techutilities.blocks.crystals;
 
+import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.blocks.BlockWithEntityBase;
 import abused_master.techutilities.tiles.crystal.BlockEntityItemTransfer;
 import net.minecraft.block.BlockRenderLayer;
 import net.minecraft.block.BlockState;

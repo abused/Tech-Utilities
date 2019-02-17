@@ -1,7 +1,7 @@
 package abused_master.techutilities.blocks.generators;
 
+import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.blocks.BlockWithEntityBase;
 import abused_master.techutilities.tiles.generator.BlockEntitySolarPanel;
 import net.minecraft.block.BlockRenderLayer;
 import net.minecraft.block.BlockState;

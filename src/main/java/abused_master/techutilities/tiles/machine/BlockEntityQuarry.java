@@ -1,12 +1,12 @@
 package abused_master.techutilities.tiles.machine;
 
+import abused_master.abusedlib.client.render.hud.IHudSupport;
+import abused_master.abusedlib.energy.EnergyStorage;
+import abused_master.abusedlib.energy.IEnergyReceiver;
+import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
+import abused_master.abusedlib.utils.InventoryHelper;
 import abused_master.techutilities.registry.ModBlockEntities;
-import abused_master.techutilities.tiles.BlockEntityEnergy;
-import abused_master.techutilities.utils.InventoryHelper;
-import abused_master.energy.EnergyStorage;
-import abused_master.energy.IEnergyReceiver;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
-import abused_master.techutilities.utils.render.hud.IHudSupport;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Random;
 
 //TODO MAKE UPGRADES FOR QUARRY
-public class BlockEntityQuarry extends BlockEntityEnergy implements IHudSupport, IEnergyReceiver, ILinkerHandler {
+public class BlockEntityQuarry extends BlockEntityEnergyBase implements IHudSupport, IEnergyReceiver, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     private boolean running = false;

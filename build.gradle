@@ -25,8 +25,9 @@ dependencies {
 	modCompile "net.fabricmc:fabric-loader:${loader_version}"
 	modCompile "net.fabricmc:fabric:${fabric_version}"
 
-    modCompile "com.google.code.findbugs:jsr305:${findbugs_version}"
-    modCompile "com.github.Carleslc:Simple-YAML:${simpleyml_version}"
+	modCompile "abused_master.abusedlib:AbusedLib:${abusedlib_version}"
+
+	compileOnly "com.google.code.findbugs:jsr305:${findbugs_version}"
 }
 
 jar {

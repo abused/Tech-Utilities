@@ -1,8 +1,8 @@
 package abused_master.techutilities.items.tools;
 
+import abused_master.abusedlib.energy.EnergyStorage;
+import abused_master.abusedlib.energy.IEnergyItemHandler;
 import abused_master.techutilities.TechUtilities;
-import abused_master.energy.EnergyStorage;
-import abused_master.energy.IEnergyItemHandler;
 import net.minecraft.client.item.TooltipOptions;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

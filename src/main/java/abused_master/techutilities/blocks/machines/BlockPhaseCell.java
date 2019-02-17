@@ -1,7 +1,7 @@
 package abused_master.techutilities.blocks.machines;
 
+import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.blocks.BlockWithEntityBase;
 import abused_master.techutilities.tiles.machine.BlockEntityPhaseCell;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;

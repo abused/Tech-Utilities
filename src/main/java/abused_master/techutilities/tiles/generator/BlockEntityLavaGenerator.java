@@ -1,13 +1,13 @@
 package abused_master.techutilities.tiles.generator;
 
+import abused_master.abusedlib.client.render.hud.IHudSupport;
+import abused_master.abusedlib.energy.EnergyStorage;
+import abused_master.abusedlib.energy.IEnergyProvider;
+import abused_master.abusedlib.fluid.FluidStack;
+import abused_master.abusedlib.fluid.FluidTank;
+import abused_master.abusedlib.fluid.IFluidHandler;
+import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
 import abused_master.techutilities.registry.ModBlockEntities;
-import abused_master.techutilities.tiles.BlockEntityEnergy;
-import abused_master.energy.EnergyStorage;
-import abused_master.energy.IEnergyProvider;
-import abused_master.techutilities.utils.fluid.FluidStack;
-import abused_master.techutilities.utils.fluid.FluidTank;
-import abused_master.techutilities.utils.fluid.IFluidHandler;
-import abused_master.techutilities.utils.render.hud.IHudSupport;
 import net.minecraft.fluid.LavaFluid;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockEntityLavaGenerator extends BlockEntityEnergy implements IEnergyProvider, IHudSupport, IFluidHandler {
+public class BlockEntityLavaGenerator extends BlockEntityEnergyBase implements IEnergyProvider, IHudSupport, IFluidHandler {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     public int sendPerTick = 500;

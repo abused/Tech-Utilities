@@ -1,6 +1,6 @@
 package abused_master.techutilities.client.gui.container;
 
-import abused_master.techutilities.client.gui.OutputSlot;
+import abused_master.abusedlib.client.gui.OutputSlot;
 import net.minecraft.container.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

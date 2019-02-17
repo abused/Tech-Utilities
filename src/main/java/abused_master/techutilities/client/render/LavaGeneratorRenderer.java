@@ -1,8 +1,8 @@
 package abused_master.techutilities.client.render;
 
+import abused_master.abusedlib.client.render.RenderHelper;
+import abused_master.abusedlib.client.render.hud.HudRender;
 import abused_master.techutilities.tiles.generator.BlockEntityLavaGenerator;
-import abused_master.techutilities.utils.render.RenderHelper;
-import abused_master.techutilities.utils.render.hud.HudRender;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 

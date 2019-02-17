@@ -1,7 +1,7 @@
 package abused_master.techutilities.blocks.machines;
 
+import abused_master.abusedlib.blocks.BlockBase;
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.blocks.BlockBase;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.VerticalEntityPosition;

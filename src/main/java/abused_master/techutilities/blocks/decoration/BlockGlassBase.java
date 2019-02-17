@@ -1,10 +1,10 @@
 package abused_master.techutilities.blocks.decoration;
 
+import abused_master.abusedlib.blocks.BlockBase;
+import abused_master.abusedlib.blocks.property.BlockFacings;
+import abused_master.abusedlib.blocks.property.PropertyBlockFacings;
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.blocks.BlockBase;
-import abused_master.techutilities.utils.property.BlockFacings;
-import abused_master.techutilities.utils.property.PropertyBlockFacings;
-import net.fabricmc.fabric.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.sound.BlockSoundGroup;

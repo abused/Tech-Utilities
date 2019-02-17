@@ -1,10 +1,10 @@
 package abused_master.techutilities.tiles.machine;
 
+import abused_master.abusedlib.energy.EnergyStorage;
+import abused_master.abusedlib.energy.IEnergyReceiver;
+import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
+import abused_master.abusedlib.utils.InventoryHelper;
 import abused_master.techutilities.registry.ModBlockEntities;
-import abused_master.techutilities.tiles.BlockEntityEnergy;
-import abused_master.techutilities.utils.InventoryHelper;
-import abused_master.energy.EnergyStorage;
-import abused_master.energy.IEnergyReceiver;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -31,7 +31,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockEntityFarmer extends BlockEntityEnergy implements IEnergyReceiver, SidedInventory, ILinkerHandler {
+public class BlockEntityFarmer extends BlockEntityEnergyBase implements IEnergyReceiver, SidedInventory, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(50000);
     public DefaultedList<ItemStack> inventory = DefaultedList.create(12, ItemStack.EMPTY);
@@ -284,7 +284,7 @@ public class BlockEntityFarmer extends BlockEntityEnergy implements IEnergyRecei
     }
 
     @Override
-    public void clearInv() {
+    public void clear() {
         inventory.clear();
     }
 

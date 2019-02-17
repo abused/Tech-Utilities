@@ -8,7 +8,8 @@
     "abused_master.techutilities.TechUtilities"
   ],
   "requires": {
-    "fabric": "*"
+    "fabric": "*",
+    "abusedlib": "*"
   },
   "mixins": {
     "client": "techutilities.client.json",
