@@ -1,5 +1,6 @@
 package abused_master.techutilities.registry;
 
+import abused_master.abusedlib.registry.RegistryHelper;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.blocks.crystals.BlockEnergyCollector;
 import abused_master.techutilities.blocks.crystals.BlockEnergyCrystal;

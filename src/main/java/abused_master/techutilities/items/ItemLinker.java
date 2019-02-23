@@ -4,7 +4,7 @@ import abused_master.abusedlib.items.ItemBase;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.item.TooltipOptions;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
@@ -69,7 +69,7 @@ public class ItemLinker extends ItemBase {
     }
 
     @Override
-    public void buildTooltip(ItemStack itemStack, World world, List<TextComponent> list, TooltipOptions tooltipOptions) {
+    public void buildTooltip(ItemStack itemStack, World world, List<TextComponent> list, TooltipContext tooltipOptions) {
         CompoundTag tag = itemStack.getTag();
         if(tag != null) {
             if(tag.containsKey("collectorPos")) {

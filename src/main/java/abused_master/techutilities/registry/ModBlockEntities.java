@@ -4,6 +4,7 @@ import abused_master.abusedlib.registry.RegistryHelper;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.client.gui.container.*;
 import abused_master.techutilities.client.gui.gui.*;
+import abused_master.techutilities.client.render.*;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCollector;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCrystal;
 import abused_master.techutilities.tiles.crystal.BlockEntityItemReceiver;
@@ -11,6 +12,7 @@ import abused_master.techutilities.tiles.crystal.BlockEntityItemTransfer;
 import abused_master.techutilities.tiles.generator.BlockEntityLavaGenerator;
 import abused_master.techutilities.tiles.generator.BlockEntitySolarPanel;
 import abused_master.techutilities.tiles.machine.*;
+import net.fabricmc.fabric.api.client.render.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.entity.BlockEntityType;
@@ -58,6 +60,16 @@ public class ModBlockEntities {
         ITEM_RECEIVER = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "item_receiver"), BlockEntityItemReceiver.class);
         ITEM_TRANSFER = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "item_transfer"), BlockEntityItemTransfer.class);
         PHASE_CELL = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "phase_cell"), BlockEntityPhaseCell.class);
+    }
+
+    public static void registerEntityRenders() {
+        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityQuarry.class, new QuarryRenderer());
+        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityEnergyCollector.class, new CrystalCollectorRenderer());
+        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityLavaGenerator.class, new LavaGeneratorRenderer());
+        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityFluidPump.class, new FluidPumpRenderer());
+        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityMobGrinder.class, new MobGrinderRenderer());
+        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityItemTransfer.class, new ItemTransferRenderer());
+        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityPhaseCell.class, new PhaseCellRenderer());
     }
 
     public static void registerGUIs() {

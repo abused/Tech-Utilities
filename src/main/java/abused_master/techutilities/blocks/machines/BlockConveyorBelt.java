@@ -36,8 +36,7 @@ public class BlockConveyorBelt extends BlockBase {
             return;
         }
 
-        entity.velocityX += .15 * direction.getOffsetX();
-        entity.velocityZ += .15 * direction.getOffsetZ();
+        entity.setVelocity(entity.getVelocity().add(.15 * direction.getOffsetX(), 0, .15 * direction.getOffsetZ()));
     }
 
     @Override

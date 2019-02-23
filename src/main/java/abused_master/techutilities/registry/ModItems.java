@@ -1,10 +1,12 @@
 package abused_master.techutilities.registry;
 
+import abused_master.abusedlib.registry.RegistryHelper;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.items.EnumResourceItems;
 import abused_master.techutilities.items.ItemLinker;
 import abused_master.techutilities.items.ItemQuarryRecorder;
 import abused_master.techutilities.items.tools.ItemEnergizedSword;
+import net.minecraft.util.Identifier;
 
 public class ModItems {
 
@@ -15,7 +17,7 @@ public class ModItems {
     public static void registerItems() {
         RegistryHelper.registerItem(TechUtilities.MODID, RECORDER);
         RegistryHelper.registerItem(TechUtilities.MODID, LINKER);
-        RegistryHelper.registerItem(TechUtilities.MODID, "energized_sword", ENERGIZED_SWORD);
+        RegistryHelper.registerItem(new Identifier(TechUtilities.MODID, "energized_sword"), ENERGIZED_SWORD);
 
         for (EnumResourceItems item : EnumResourceItems.values()) {
             RegistryHelper.registerItem(TechUtilities.MODID, item.getItemIngot());

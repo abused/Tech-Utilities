@@ -81,7 +81,7 @@ public class BlockEntityMobGrinder extends BlockEntityEnergyBase implements IEne
     }
 
     public LivingEntity getTarget() {
-        List<LivingEntity> entitiesInRange = world.getVisibleEntities(LivingEntity.class, mobKillBox);
+        List<LivingEntity> entitiesInRange = world.method_18467(LivingEntity.class, mobKillBox);
 
         for (LivingEntity entity : entitiesInRange) {
             if(entity != null && !(entity instanceof PlayerEntity) && !entity.isInvulnerable()) {

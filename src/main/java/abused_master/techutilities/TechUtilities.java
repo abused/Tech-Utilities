@@ -30,6 +30,7 @@ public class TechUtilities implements ModInitializer, ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        ModBlockEntities.registerEntityRenders();
         ModBlockEntities.registerClientGUIs();
     }
 }

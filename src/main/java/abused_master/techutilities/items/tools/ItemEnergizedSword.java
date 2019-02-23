@@ -3,7 +3,7 @@ package abused_master.techutilities.items.tools;
 import abused_master.abusedlib.energy.EnergyStorage;
 import abused_master.abusedlib.energy.IEnergyItemHandler;
 import abused_master.techutilities.TechUtilities;
-import net.minecraft.client.item.TooltipOptions;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -98,7 +98,7 @@ public class ItemEnergizedSword extends SwordItem implements IEnergyItemHandler 
     }
 
     @Override
-    public void buildTooltip(ItemStack stack, @Nullable World world, List<TextComponent> list, TooltipOptions tooltipOptions) {
+    public void buildTooltip(ItemStack stack, @Nullable World world, List<TextComponent> list, TooltipContext tooltipOptions) {
         list.add(new StringTextComponent("Energy: " + storage.getEnergyStored() + " / " + storage.getEnergyCapacity() + " PE"));
     }
 }
