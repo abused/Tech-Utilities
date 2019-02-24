@@ -5,7 +5,8 @@
   "version": "1.0.0",
   "side": "universal",
   "initializers": [
-    "abused_master.techutilities.TechUtilities"
+    "abused_master.techutilities.TechUtilities",
+    "abused_master.techutilities.TechUtilitiesClient"
   ],
   "requires": {
     "fabric": "*",

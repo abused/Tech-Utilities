@@ -12,6 +12,8 @@ import abused_master.techutilities.tiles.crystal.BlockEntityItemTransfer;
 import abused_master.techutilities.tiles.generator.BlockEntityLavaGenerator;
 import abused_master.techutilities.tiles.generator.BlockEntitySolarPanel;
 import abused_master.techutilities.tiles.machine.*;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.render.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
@@ -62,6 +64,7 @@ public class ModBlockEntities {
         PHASE_CELL = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "phase_cell"), BlockEntityPhaseCell.class);
     }
 
+    @Environment(EnvType.CLIENT)
     public static void registerEntityRenders() {
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityQuarry.class, new QuarryRenderer());
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityEnergyCollector.class, new CrystalCollectorRenderer());
@@ -72,43 +75,11 @@ public class ModBlockEntities {
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityPhaseCell.class, new PhaseCellRenderer());
     }
 
-    public static void registerGUIs() {
+    public static void registerServerGUIs() {
         ContainerProviderRegistry.INSTANCE.registerFactory(ENERGY_FURNACE_CONTAINER, (syncid, identifier, player, buf) -> new ContainerEnergyFurnace(syncid, player.inventory, (BlockEntityEnergyFurnace) player.world.getBlockEntity(buf.readBlockPos())));
         ContainerProviderRegistry.INSTANCE.registerFactory(PULVERIZER_CONTAINER, (syncid, identifier, player, buf) -> new ContainerPulverizer(syncid, player.inventory, (BlockEntityPulverizer) player.world.getBlockEntity(buf.readBlockPos())));
         ContainerProviderRegistry.INSTANCE.registerFactory(ENERGY_CHARGER_CONTAINER, (syncid, identifier, player, buf) -> new ContainerEnergyCharger(syncid, player.inventory, (BlockEntityEnergyCharger) player.world.getBlockEntity(buf.readBlockPos())));
         ContainerProviderRegistry.INSTANCE.registerFactory(FARMER_CONTAINER, (syncid, identifier, player, buf) -> new ContainerFarmer(syncid, player.inventory, (BlockEntityFarmer) player.world.getBlockEntity(buf.readBlockPos())));
         ContainerProviderRegistry.INSTANCE.registerFactory(VACUUM_CONTAINER, (syncid, identifier, player, buf) -> new ContainerVacuum(syncid, player.inventory, (BlockEntityVacuum) player.world.getBlockEntity(buf.readBlockPos())));
-    }
-
-    public static void registerClientGUIs() {
-        ScreenProviderRegistry.INSTANCE.registerFactory(ENERGY_FURNACE_CONTAINER, ((syncid, identifier, player, buf) -> {
-            BlockPos pos = buf.readBlockPos();
-            BlockEntityEnergyFurnace furnace = (BlockEntityEnergyFurnace) player.world.getBlockEntity(pos);
-            return new GuiEnergyFurnace(furnace, new ContainerEnergyFurnace(syncid, player.inventory, furnace));
-        }));
-
-        ScreenProviderRegistry.INSTANCE.registerFactory(PULVERIZER_CONTAINER, ((syncid, identifier, player, buf) -> {
-            BlockPos pos = buf.readBlockPos();
-            BlockEntityPulverizer pulverizer = (BlockEntityPulverizer) player.world.getBlockEntity(pos);
-            return new GuiPulverizer(pulverizer, new ContainerPulverizer(syncid, player.inventory, pulverizer));
-        }));
-
-        ScreenProviderRegistry.INSTANCE.registerFactory(ENERGY_CHARGER_CONTAINER, ((syncid, identifier, player, buf) -> {
-            BlockPos pos = buf.readBlockPos();
-            BlockEntityEnergyCharger energyCharger = (BlockEntityEnergyCharger) player.world.getBlockEntity(pos);
-            return new GuiEnergyCharger(energyCharger, new ContainerEnergyCharger(syncid, player.inventory, energyCharger));
-        }));
-
-        ScreenProviderRegistry.INSTANCE.registerFactory(FARMER_CONTAINER, ((syncid, identifier, player, buf) -> {
-            BlockPos pos = buf.readBlockPos();
-            BlockEntityFarmer farmer = (BlockEntityFarmer) player.world.getBlockEntity(pos);
-            return new GuiFarmer(farmer, new ContainerFarmer(syncid, player.inventory, farmer));
-        }));
-
-        ScreenProviderRegistry.INSTANCE.registerFactory(VACUUM_CONTAINER, ((syncid, identifier, player, buf) -> {
-            BlockPos pos = buf.readBlockPos();
-            BlockEntityVacuum vacuum = (BlockEntityVacuum) player.world.getBlockEntity(pos);
-            return new GuiVacuum(vacuum , new ContainerVacuum(syncid, player.inventory, vacuum ));
-        }));
     }
 }

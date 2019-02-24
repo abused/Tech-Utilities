@@ -11,26 +11,20 @@ import net.minecraft.util.Identifier;
 
 import java.util.logging.Logger;
 
-public class TechUtilities implements ModInitializer, ClientModInitializer {
+public class TechUtilities implements ModInitializer {
 
     public static String MODID = "techutilities";
     public static ItemGroup modItemGroup = FabricItemGroupBuilder.build(new Identifier(MODID, "techutilities"), () -> new ItemStack(ModBlocks.ENERGY_FURNACE));
     public static Logger LOGGER = Logger.getLogger("TechUtilities");
 
-    public static Config config = new Config(MODID, TechUtilities.class, true);
+    public static Config config = new Config(MODID, TechUtilities.class);
 
     @Override
     public void onInitialize() {
         ModBlocks.registerBlocks();
         ModItems.registerItems();
         ModBlockEntities.registerBlockEntities();
-        ModBlockEntities.registerGUIs();
+        ModBlockEntities.registerServerGUIs();
         ModRecipes.registerRecipes();
-    }
-
-    @Override
-    public void onInitializeClient() {
-        ModBlockEntities.registerEntityRenders();
-        ModBlockEntities.registerClientGUIs();
     }
 }

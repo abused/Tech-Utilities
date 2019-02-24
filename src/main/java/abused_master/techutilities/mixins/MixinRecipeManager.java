@@ -1,12 +1,9 @@
 package abused_master.techutilities.mixins;
 
 import abused_master.abusedlib.registry.RecipeGenerator;
-import abused_master.abusedlib.utils.CacheMapHolder;
 import abused_master.techutilities.registry.ModRecipes;
-import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;
-import net.minecraft.recipe.RecipeType;
 import net.minecraft.resource.ResourceManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,16 +18,6 @@ public abstract class MixinRecipeManager {
     public void apply(ResourceManager resourceManager_1, CallbackInfo ci) {
         for (RecipeGenerator.Output output : ModRecipes.registerRecipes().getRecipes()) {
             this.add(RecipeManager.deserialize(output.name, output.recipe));
-        }
-    }
-
-    @Inject(method = "add", at = @At("RETURN"))
-    public void add(Recipe<?> recipe_1, CallbackInfo ci) {
-        if (recipe_1.getType() == RecipeType.SMELTING) {
-            ItemStack input = recipe_1.getPreviewInputs().get(0).getStackArray()[0];
-            if (!CacheMapHolder.INSTANCE.furnaceRecipes.containsKey(input)) {
-                CacheMapHolder.INSTANCE.furnaceRecipes.put(input, recipe_1.getOutput());
-            }
         }
     }
 
