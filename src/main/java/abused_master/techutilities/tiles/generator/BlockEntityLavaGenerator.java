@@ -4,7 +4,7 @@ import abused_master.abusedlib.client.render.hud.IHudSupport;
 import abused_master.abusedlib.energy.EnergyStorage;
 import abused_master.abusedlib.energy.IEnergyProvider;
 import abused_master.abusedlib.fluid.FluidStack;
-import abused_master.abusedlib.fluid.FluidTank;
+import abused_master.abusedlib.fluid.FluidContainer;
 import abused_master.abusedlib.fluid.IFluidHandler;
 import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
 import abused_master.techutilities.registry.ModBlockEntities;
@@ -22,7 +22,7 @@ public class BlockEntityLavaGenerator extends BlockEntityEnergyBase implements I
     public EnergyStorage storage = new EnergyStorage(100000);
     public int sendPerTick = 500;
     public int generatePer10 = 100;
-    public FluidTank tank = new FluidTank(8000);
+    public FluidContainer tank = new FluidContainer(8000);
 
     public BlockEntityLavaGenerator() {
         super(ModBlockEntities.LAVA_GENERATOR);
@@ -117,7 +117,7 @@ public class BlockEntityLavaGenerator extends BlockEntityEnergyBase implements I
     }
 
     @Override
-    public FluidTank getFluidTank() {
+    public FluidContainer getFluidTank() {
         return tank;
     }
 }

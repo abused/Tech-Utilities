@@ -4,7 +4,7 @@ import abused_master.abusedlib.client.render.hud.IHudSupport;
 import abused_master.abusedlib.energy.EnergyStorage;
 import abused_master.abusedlib.energy.IEnergyReceiver;
 import abused_master.abusedlib.fluid.FluidStack;
-import abused_master.abusedlib.fluid.FluidTank;
+import abused_master.abusedlib.fluid.FluidContainer;
 import abused_master.abusedlib.fluid.IFluidHandler;
 import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
 import abused_master.techutilities.TechUtilities;
@@ -26,7 +26,7 @@ import java.util.List;
 public class BlockEntityFluidPump extends BlockEntityEnergyBase implements IEnergyReceiver, IFluidHandler, IHudSupport, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(50000);
-    public FluidTank tank = new FluidTank(32000);
+    public FluidContainer tank = new FluidContainer(32000);
     public int pumpRage = TechUtilities.config.getInt("pumpRange");
     public BlockPos drainingPos = null;
     public int drainPerBlock = 250;
@@ -162,7 +162,7 @@ public class BlockEntityFluidPump extends BlockEntityEnergyBase implements IEner
     }
 
     @Override
-    public FluidTank getFluidTank() {
+    public FluidContainer getFluidTank() {
         return tank;
     }
 
