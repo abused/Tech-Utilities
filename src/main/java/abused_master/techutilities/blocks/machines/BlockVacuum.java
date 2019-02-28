@@ -9,6 +9,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.sortme.ItemScatterer;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -30,6 +31,18 @@ public class BlockVacuum extends BlockWithEntityBase {
         }
 
         return true;
+    }
+
+    @Override
+    public void onBlockRemoved(BlockState state, World world, BlockPos pos, BlockState state2, boolean boolean_1) {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+
+        if(state.getBlock() != state2.getBlock() && blockEntity instanceof BlockEntityVacuum) {
+            ItemScatterer.spawn(world, pos, (BlockEntityVacuum) blockEntity);
+            world.updateHorizontalAdjacent(pos, this);
+        }
+
+        super.onBlockRemoved(state, world, pos, state2, boolean_1);
     }
 
     @Nullable

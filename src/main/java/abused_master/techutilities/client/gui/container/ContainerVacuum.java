@@ -20,14 +20,9 @@ public class ContainerVacuum extends Container {
         this.playerInventory = playerInventory;
         this.world = playerInventory.player.world;
 
-        int j;
-        for(j = 0; j < 2; ++j) {
-            for(int var4 = 0; var4 < 7; ++var4) {
-                if (j == 1) {
-                    this.addSlot(new Slot(inventory, var4, 26 + var4 * 18, 20 + j * 18));
-                } else {
-                    this.addSlot(new Slot(inventory, 7 + var4, 26 + var4 * 18, 20 + j * 18));
-                }
+        for (int row = 0; row < 2; row++) {
+            for (int slot = 0; slot < 7; slot++) {
+                this.addSlot(new Slot(inventory, (7 * row) + slot, 26 + slot * 18, 20 + row * 18));
             }
         }
 

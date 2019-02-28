@@ -4,6 +4,7 @@ import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.tiles.machine.BlockEntityFarmer;
+import abused_master.techutilities.tiles.machine.BlockEntityPulverizer;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -12,6 +13,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.sortme.ItemScatterer;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -44,6 +46,18 @@ public class BlockFarmer extends BlockWithEntityBase {
                 world.setBlockState(blockPos, Blocks.FARMLAND.getDefaultState(), 3);
             }
         }
+    }
+
+    @Override
+    public void onBlockRemoved(BlockState state, World world, BlockPos pos, BlockState state2, boolean boolean_1) {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+
+        if(state.getBlock() != state2.getBlock() && blockEntity instanceof BlockEntityFarmer) {
+            ItemScatterer.spawn(world, pos, (BlockEntityFarmer) blockEntity);
+            world.updateHorizontalAdjacent(pos, this);
+        }
+
+        super.onBlockRemoved(state, world, pos, state2, boolean_1);
     }
 
     @Nullable

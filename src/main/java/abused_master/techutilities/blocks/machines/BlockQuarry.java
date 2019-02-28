@@ -4,6 +4,7 @@ import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.items.ItemQuarryRecorder;
 import abused_master.techutilities.registry.ModItems;
+import abused_master.techutilities.tiles.machine.BlockEntityEnergyCharger;
 import abused_master.techutilities.tiles.machine.BlockEntityQuarry;
 import net.minecraft.block.BlockRenderLayer;
 import net.minecraft.block.BlockRenderType;
@@ -14,8 +15,10 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sortme.ItemScatterer;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TagHelper;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -40,10 +43,12 @@ public class BlockQuarry extends BlockWithEntityBase {
                 quarry.setRunning(false);
                 quarry.setHasQuarryRecorder(false);
                 quarry.setCorners(null, null);
+                return true;
             }
 
             if (!quarry.isRunning() && quarry.canRun()) {
                 quarry.setRunning(true);
+                quarry.cacheMiningArea();
                 if (!quarry.blockPositionsActive()) {
                     if (!world.isClient) {
                         playerEntity.addChatMessage(new StringTextComponent("Error locating quarry mining corners!"), false);
@@ -72,7 +77,7 @@ public class BlockQuarry extends BlockWithEntityBase {
                 return true;
             }
 
-            quarry.setCorners(BlockPos.fromLong(tag.getLong("coordinates1")), BlockPos.fromLong(tag.getLong("coordinates2")));
+            quarry.setCorners(TagHelper.deserializeBlockPos(tag.getCompound("coordinates1")), TagHelper.deserializeBlockPos(tag.getCompound("coordinates2")));
             quarry.hasQuarryRecorder = true;
             playerEntity.setStackInHand(Hand.MAIN, ItemStack.EMPTY);
             playerEntity.addChatMessage(new StringTextComponent("Successfully linked quarry to positions"), true);
@@ -107,12 +112,17 @@ public class BlockQuarry extends BlockWithEntityBase {
     }
 
     @Override
-    public void onBroken(IWorld world, BlockPos blockPos, BlockState blockState) {
-        BlockEntityQuarry quarry = (BlockEntityQuarry) world.getBlockEntity(blockPos);
+    public void onBlockRemoved(BlockState state, World world, BlockPos pos, BlockState state2, boolean boolean_1) {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
 
-        if(quarry != null && quarry.hasQuarryRecorder) {
-            world.spawnEntity(new ItemEntity(world.getWorld(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(ModItems.RECORDER)));
+        if(state.getBlock() != state2.getBlock() && blockEntity instanceof BlockEntityQuarry) {
+            if(((BlockEntityQuarry) blockEntity).hasQuarryRecorder) {
+                ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.RECORDER));
+            }
+            world.updateHorizontalAdjacent(pos, this);
         }
+
+        super.onBlockRemoved(state, world, pos, state2, boolean_1);
     }
 
     @Override

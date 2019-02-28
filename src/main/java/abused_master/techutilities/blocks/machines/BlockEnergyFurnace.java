@@ -4,6 +4,7 @@ import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.tiles.machine.BlockEntityEnergyFurnace;
+import abused_master.techutilities.tiles.machine.BlockEntityFarmer;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -12,6 +13,7 @@ import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.sortme.ItemScatterer;
 import net.minecraft.state.StateFactory;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Property;
@@ -42,6 +44,18 @@ public class BlockEnergyFurnace extends BlockWithEntityBase {
         }
 
         return true;
+    }
+
+    @Override
+    public void onBlockRemoved(BlockState state, World world, BlockPos pos, BlockState state2, boolean boolean_1) {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+
+        if(state.getBlock() != state2.getBlock() && blockEntity instanceof BlockEntityEnergyFurnace) {
+            ItemScatterer.spawn(world, pos, (BlockEntityEnergyFurnace) blockEntity);
+            world.updateHorizontalAdjacent(pos, this);
+        }
+
+        super.onBlockRemoved(state, world, pos, state2, boolean_1);
     }
 
     @Nullable

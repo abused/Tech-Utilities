@@ -31,8 +31,8 @@ public class ModRecipes {
             $.createShaped(new ItemStack(ModBlocks.ITEM_RECEIVER), null, new RecipeGenerator.ShapedParser("OPO", "GPG", "OPO", 'O', Blocks.OBSIDIAN, 'P', EnumResourceItems.PHASE_INGOT.getItemIngot(), 'G', Items.GOLD_INGOT));
             $.createShaped(new ItemStack(ModBlocks.ITEM_TRANSFER), null, new RecipeGenerator.ShapedParser("GPG", "OPO", "GPG", 'G', Items.GOLD_INGOT, 'P', EnumResourceItems.PHASE_INGOT.getItemIngot(), 'O', Blocks.OBSIDIAN));
 
-            $.createShaped(new ItemStack(ModBlocks.GLASS_BLOCK, 8), null, new RecipeGenerator.ShapedParser("GGG", "GIG", "GGG", 'G', Blocks.GLASS, 'I', Items.INK_SAC));
-            $.createShaped(new ItemStack(ModBlocks.BLACK_GLASS_BLOCK, 8), null, new RecipeGenerator.ShapedParser("GGG", "GIG", "GGG", 'G', Blocks.GLASS, 'I', Items.BONE_MEAL));
+            $.createShaped(new ItemStack(ModBlocks.GLASS_BLOCK, 8), null, new RecipeGenerator.ShapedParser("GGG", "GIG", "GGG", 'G', Blocks.GLASS, 'I', Items.BONE_MEAL));
+            $.createShaped(new ItemStack(ModBlocks.BLACK_GLASS_BLOCK, 8), null, new RecipeGenerator.ShapedParser("GGG", "GIG", "GGG", 'G', Blocks.GLASS, 'I', Items.INK_SAC));
 
             $.createShaped(new ItemStack(ModItems.RECORDER), null, new RecipeGenerator.ShapedParser("PGP", "IBI", "PGP", 'P', EnumResourceItems.PHASE_INGOT.getItemIngot(), 'G', Items.GOLD_INGOT, 'I', Items.INK_SAC, 'B', Items.WRITABLE_BOOK));
             $.createShaped(new ItemStack(ModItems.LINKER), null, new RecipeGenerator.ShapedParser("P P", " P ", " P ", 'P', EnumResourceItems.PHASE_INGOT.getItemIngot()));

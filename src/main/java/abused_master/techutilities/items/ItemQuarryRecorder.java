@@ -11,6 +11,7 @@ import net.minecraft.text.StringTextComponent;
 import net.minecraft.text.TextComponent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TagHelper;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -37,13 +38,13 @@ public class ItemQuarryRecorder extends ItemBase {
             }
 
             if (!tag.containsKey("coordinates1")) {
-                tag.putLong("coordinates1", pos.asLong());
+                tag.put("coordinates1", TagHelper.serializeBlockPos(pos));
                 if (!world.isClient) {
                     player.addChatMessage(new StringTextComponent("Set coordinates for the first corner"), true);
                 }
 
             } else if (!tag.containsKey("coordinates2")) {
-                tag.putLong("coordinates2", pos.asLong());
+                tag.put("coordinates2", TagHelper.serializeBlockPos(pos));
                 if (!world.isClient) {
                     player.addChatMessage(new StringTextComponent("Set coordinates for the second corner"), true);
                 }
@@ -78,12 +79,12 @@ public class ItemQuarryRecorder extends ItemBase {
         CompoundTag tag = itemStack.getTag();
         if(tag != null) {
             if(tag.containsKey("coordinates1")) {
-                BlockPos pos = BlockPos.fromLong(tag.getLong("coordinates1"));
+                BlockPos pos = TagHelper.deserializeBlockPos(tag.getCompound("coordinates1"));
                 list.add(new StringTextComponent("First Corner, x: " + pos.getX() + " y: " + pos.getY() + " z: " + pos.getZ()));
             }
 
             if(tag.containsKey("coordinates2")) {
-                BlockPos pos = BlockPos.fromLong(tag.getLong("coordinates2"));
+                BlockPos pos = TagHelper.deserializeBlockPos(tag.getCompound("coordinates2"));
                 list.add(new StringTextComponent("Second Corner, x: " + pos.getX() + " y: " + pos.getY() + " z: " + pos.getZ()));
             }
         }else {

@@ -7,6 +7,7 @@ import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
 import abused_master.abusedlib.utils.InventoryHelper;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
+import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -15,26 +16,25 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.TagHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 //TODO MAKE UPGRADES FOR QUARRY
 public class BlockEntityQuarry extends BlockEntityEnergyBase implements IHudSupport, IEnergyReceiver, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(100000);
-    private boolean running = false;
+    public List<BlockPos> cachedAreaPos = new ArrayList<>();
     public BlockPos miningPos = null, firstCorner = null, secondCorner = null;
     public int energyUsagePerBlock = 500, miningSpeed = 0;
     public BlockState miningBlock = null;
-    public boolean completedArea = false, miningError = false, hasQuarryRecorder = false;
+    public boolean miningError = false, hasQuarryRecorder = false, running = false;
 
     public boolean silkTouch = false;
     public int fortuneLevel = 0, speedMultiplier = 1;
@@ -44,57 +44,74 @@ public class BlockEntityQuarry extends BlockEntityEnergyBase implements IHudSupp
     }
 
     @Override
-    public void fromTag(CompoundTag nbt) {
-        super.fromTag(nbt);
-        this.storage.readFromNBT(nbt);
-        this.running = nbt.getBoolean("running");
-        this.silkTouch = nbt.getBoolean("silkTouch");
-        this.fortuneLevel = nbt.getInt("fortuneLevel");
-        this.speedMultiplier = nbt.getInt("speedMultiplier");
-        this.hasQuarryRecorder = nbt.getBoolean("hasQuarryRecorder");
-        if (nbt.containsKey("firstCorner")) {
-            this.firstCorner = BlockPos.fromLong(nbt.getLong("firstCorner"));
+    public void fromTag(CompoundTag tag) {
+        super.fromTag(tag);
+        this.storage.readFromNBT(tag);
+        if(tag.containsKey("cachedAreaPos")) {
+            this.cachedAreaPos.clear();
+            ListTag listTag = tag.getList("cachedAreaPos", NbtType.COMPOUND);
+
+            for (Iterator<Tag> it = listTag.iterator(); it.hasNext(); ) {
+                CompoundTag compoundTag = (CompoundTag) it.next();
+                cachedAreaPos.add(TagHelper.deserializeBlockPos(compoundTag));
+            }
         }
 
-        if (nbt.containsKey("secondCorner")) {
-            this.secondCorner = BlockPos.fromLong(nbt.getLong("secondCorner"));
+        this.running = tag.getBoolean("running");
+        this.silkTouch = tag.getBoolean("silkTouch");
+        this.fortuneLevel = tag.getInt("fortuneLevel");
+        this.speedMultiplier = tag.getInt("speedMultiplier");
+        this.hasQuarryRecorder = tag.getBoolean("hasQuarryRecorder");
+        if (tag.containsKey("firstCorner")) {
+            this.firstCorner = TagHelper.deserializeBlockPos(tag.getCompound("firstCorner"));
+        }
+
+        if (tag.containsKey("secondCorner")) {
+            this.secondCorner = TagHelper.deserializeBlockPos(tag.getCompound("secondCorner"));
         }
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag nbt) {
-        super.toTag(nbt);
-        this.storage.writeEnergyToNBT(nbt);
-        nbt.putBoolean("running", this.running);
-        nbt.putBoolean("silkTouch", this.silkTouch);
-        nbt.putInt("fortuneLevel", this.fortuneLevel);
-        nbt.putInt("speedMultiplier", this.speedMultiplier);
-        nbt.putBoolean("hasQuarryRecorder", this.hasQuarryRecorder);
+    public CompoundTag toTag(CompoundTag tag) {
+        super.toTag(tag);
+        this.storage.writeEnergyToNBT(tag);
+        if(!this.cachedAreaPos.isEmpty()) {
+            ListTag listTag = new ListTag();
+
+            for (BlockPos areaPos : cachedAreaPos) {
+                listTag.add(TagHelper.serializeBlockPos(areaPos));
+            }
+
+            tag.put("cachedAreaPos", listTag);
+        }
+
+        tag.putBoolean("running", this.running);
+        tag.putBoolean("silkTouch", this.silkTouch);
+        tag.putInt("fortuneLevel", this.fortuneLevel);
+        tag.putInt("speedMultiplier", this.speedMultiplier);
+        tag.putBoolean("hasQuarryRecorder", this.hasQuarryRecorder);
         if(firstCorner != null) {
-            nbt.putLong("firstCorner", firstCorner.asLong());
+            tag.put("firstCorner", TagHelper.serializeBlockPos(firstCorner));
         }
 
         if(secondCorner != null) {
-            nbt.putLong("secondCorner", secondCorner.asLong());
+            tag.put("secondCorner", TagHelper.serializeBlockPos(secondCorner));
         }
 
-        return nbt;
+        return tag;
     }
 
     @Override
     public void tick() {
-        if (running && canRun() && storage.getEnergyStored() >= energyUsagePerBlock && !completedArea) {
+        if (running && canRun() && storage.getEnergyStored() >= energyUsagePerBlock) {
             if (!miningError) {
                 miningSpeed++;
                 if (miningSpeed >= (20 / speedMultiplier)) {
                     Inventory inventory = InventoryHelper.getNearbyInventory(world, pos);
                     this.mineBlocks(inventory);
-                    storage.extractEnergy(energyUsagePerBlock);
                 }
-            } else {
-                if (world.getBlockState(miningPos) != null && InventoryHelper.insertItemIfPossible(InventoryHelper.getNearbyInventory(world, pos), new ItemStack(world.getBlockState(miningPos).getBlock()), true)) {
-                    this.setMiningError(false);
-                }
+            } else if (world.getBlockState(miningPos) != null && InventoryHelper.insertItemIfPossible(InventoryHelper.getNearbyInventory(world, pos), new ItemStack(world.getBlockState(miningPos).getBlock()), true)) {
+                this.setMiningError(false);
             }
         } else if (running && !canRun()) {
             this.setRunning(false);
@@ -102,10 +119,11 @@ public class BlockEntityQuarry extends BlockEntityEnergyBase implements IHudSupp
     }
 
     public void mineBlocks(Inventory inventory) {
-        Iterable<BlockPos> blocksInQuarry = BlockPos.iterateBoxPositions(secondCorner, firstCorner);
+        for (Iterator<BlockPos> it = cachedAreaPos.iterator(); it.hasNext();) {
+            BlockPos currentMiningPos = it.next();
 
-        for (BlockPos currentMiningPos : listBlocksInIterable(blocksInQuarry)) {
             if (world.isAir(currentMiningPos) || world.getBlockState(currentMiningPos).getBlock() == Blocks.BEDROCK || world.getBlockState(currentMiningPos).getBlock() instanceof FluidBlock || world.getBlockEntity(currentMiningPos) != null) {
+                it.remove();
                 continue;
             }
 
@@ -114,13 +132,16 @@ public class BlockEntityQuarry extends BlockEntityEnergyBase implements IHudSupp
                 miningSpeed = 0;
                 BlockState state = world.getBlockState(currentMiningPos);
                 miningBlock = state;
-                if (!world.isClient) {
+                if(!world.isClient) {
                     List<ItemStack> drops = Block.getDroppedStacks(state, (ServerWorld) world, currentMiningPos, world.getBlockEntity(currentMiningPos));
                     world.setBlockState(currentMiningPos, Blocks.AIR.getDefaultState());
 
                     if (silkTouch) {
                         if (!InventoryHelper.insertItemIfPossible(inventory, new ItemStack(state.getBlock()), false)) {
                             setMiningError(true);
+                        }else {
+                            storage.extractEnergy(energyUsagePerBlock);
+                            it.remove();
                         }
                     } else {
                         for (ItemStack itemStack : drops) {
@@ -129,12 +150,21 @@ public class BlockEntityQuarry extends BlockEntityEnergyBase implements IHudSupp
 
                             if (!InventoryHelper.insertItemIfPossible(inventory, stackWithFortune, false)) {
                                 setMiningError(true);
+                            }else {
+                                storage.extractEnergy(energyUsagePerBlock);
+                                it.remove();
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    public void cacheMiningArea() {
+        Iterable<BlockPos> blocksInQuarry = BlockPos.iterateBoxPositions(secondCorner, firstCorner);
+        cachedAreaPos.addAll(listBlocksInIterable(blocksInQuarry));
+        this.markDirty();
     }
 
     public List<BlockPos> listBlocksInIterable(Iterable<BlockPos> iterable) {
@@ -176,7 +206,7 @@ public class BlockEntityQuarry extends BlockEntityEnergyBase implements IHudSupp
     }
 
     public boolean canRun() {
-        if (!blockPositionsActive()) {
+        if (!blockPositionsActive() && !cachedAreaPos.isEmpty()) {
             return false;
         }
 

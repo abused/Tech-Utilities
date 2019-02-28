@@ -1,8 +1,12 @@
 package abused_master.techutilities.client.render;
 
 import abused_master.abusedlib.client.render.RenderHelper;
+import abused_master.abusedlib.client.render.model.ObjModel;
+import abused_master.abusedlib.client.render.model.ObjModelLoader;
+import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCrystal;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
 public class CrystalRenderer extends BlockEntityRenderer<BlockEntityEnergyCrystal> {
@@ -22,6 +26,8 @@ public class CrystalRenderer extends BlockEntityRenderer<BlockEntityEnergyCrysta
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
         */
+
+        ObjModelLoader.renderOBJ(new ObjModel(TechUtilities.class, new Identifier(TechUtilities.MODID, "crystal.obj")), x, y, z);
 
         if(tile.tilePositions.size() > 0) {
             for (BlockPos pos : tile.tilePositions) {
