@@ -14,6 +14,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -132,7 +133,8 @@ public class BlockEntityQuarry extends BlockEntityEnergyBase implements IHudSupp
                 miningSpeed = 0;
                 BlockState state = world.getBlockState(currentMiningPos);
                 miningBlock = state;
-                if(!world.isClient) {
+
+                if(!world.isClient()) {
                     List<ItemStack> drops = Block.getDroppedStacks(state, (ServerWorld) world, currentMiningPos, world.getBlockEntity(currentMiningPos));
                     world.setBlockState(currentMiningPos, Blocks.AIR.getDefaultState());
 
@@ -163,15 +165,17 @@ public class BlockEntityQuarry extends BlockEntityEnergyBase implements IHudSupp
 
     public void cacheMiningArea() {
         Iterable<BlockPos> blocksInQuarry = BlockPos.iterateBoxPositions(secondCorner, firstCorner);
-        cachedAreaPos.addAll(listBlocksInIterable(blocksInQuarry));
+        cachedAreaPos = listBlocksInIterable(blocksInQuarry);
+
         this.markDirty();
     }
 
     public List<BlockPos> listBlocksInIterable(Iterable<BlockPos> iterable) {
         List<BlockPos> list = new ArrayList<>();
 
-        for (BlockPos pos : iterable) {
-            list.add(pos);
+        for (Iterator<BlockPos> it = iterable.iterator(); it.hasNext(); ) {
+            BlockPos pos = it.next();
+            list.add(pos.toImmutable());
         }
 
         Collections.sort(list, Collections.reverseOrder());
