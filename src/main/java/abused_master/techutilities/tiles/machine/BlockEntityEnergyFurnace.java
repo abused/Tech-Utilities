@@ -1,25 +1,25 @@
 package abused_master.techutilities.tiles.machine;
 
-import abused_master.abusedlib.energy.EnergyStorage;
-import abused_master.abusedlib.energy.IEnergyReceiver;
-import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
+import abused_master.abusedlib.tiles.BlockEntityBase;
 import abused_master.abusedlib.utils.CacheMapHolder;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
+import nerdhub.cardinalenergy.api.IEnergyHandler;
+import nerdhub.cardinalenergy.impl.EnergyStorage;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.DefaultedList;
-import net.minecraft.util.InventoryUtil;
 import net.minecraft.util.TagHelper;
 import net.minecraft.util.math.Direction;
 
 import javax.annotation.Nullable;
 
 //TODO ADD UPGRADES
-public class BlockEntityEnergyFurnace extends BlockEntityEnergyBase implements SidedInventory, IEnergyReceiver, ILinkerHandler {
+public class BlockEntityEnergyFurnace extends BlockEntityBase implements IEnergyHandler, SidedInventory, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     public DefaultedList<ItemStack> inventory = DefaultedList.create(2, ItemStack.EMPTY);
@@ -36,10 +36,10 @@ public class BlockEntityEnergyFurnace extends BlockEntityEnergyBase implements S
         super.fromTag(nbt);
         this.upgradeTier = nbt.getInt("upgradeTier");
         this.smeltTime = nbt.getInt("smeltTime");
-        this.storage.readFromNBT(nbt);
+        this.storage.readEnergyFromTag(nbt);
 
         inventory = DefaultedList.create(2, ItemStack.EMPTY);
-        InventoryUtil.deserialize(nbt, this.inventory);
+        Inventories.fromTag(nbt, this.inventory);
     }
 
     @Override
@@ -47,8 +47,8 @@ public class BlockEntityEnergyFurnace extends BlockEntityEnergyBase implements S
         super.toTag(nbt);
         nbt.putInt("upgradeTier", upgradeTier);
         nbt.putInt("smeltTime", this.smeltTime);
-        this.storage.writeEnergyToNBT(nbt);
-        InventoryUtil.serialize(nbt, this.inventory);
+        this.storage.writeEnergyToTag(nbt);
+        Inventories.toTag(nbt, this.inventory);
         return nbt;
     }
 
@@ -150,7 +150,7 @@ public class BlockEntityEnergyFurnace extends BlockEntityEnergyBase implements S
 
     @Override
     public ItemStack removeInvStack(int i) {
-        return InventoryUtil.removeStack(this.inventory, i);
+        return Inventories.removeStack(this.inventory, i);
     }
 
     @Override
@@ -169,12 +169,7 @@ public class BlockEntityEnergyFurnace extends BlockEntityEnergyBase implements S
     }
 
     @Override
-    public boolean receiveEnergy(int amount) {
-        return handleEnergyReceive(storage, amount);
-    }
-
-    @Override
-    public EnergyStorage getEnergyStorage() {
+    public EnergyStorage getEnergyStorage(Direction direction) {
         return storage;
     }
 

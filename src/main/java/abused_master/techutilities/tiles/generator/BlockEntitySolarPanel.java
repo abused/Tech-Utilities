@@ -1,14 +1,15 @@
 package abused_master.techutilities.tiles.generator;
 
-import abused_master.abusedlib.energy.EnergyStorage;
-import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
+import abused_master.abusedlib.tiles.BlockEntityBase;
 import abused_master.techutilities.blocks.generators.EnumSolarPanelTypes;
 import abused_master.techutilities.registry.ModBlockEntities;
+import nerdhub.cardinalenergy.api.IEnergyHandler;
+import nerdhub.cardinalenergy.impl.EnergyStorage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-public class BlockEntitySolarPanel extends BlockEntityEnergyBase {
+public class BlockEntitySolarPanel extends BlockEntityBase implements IEnergyHandler {
 
     public EnergyStorage storage;
     public EnumSolarPanelTypes type;
@@ -22,14 +23,14 @@ public class BlockEntitySolarPanel extends BlockEntityEnergyBase {
     public void fromTag(CompoundTag nbt) {
         super.fromTag(nbt);
         this.setType(EnumSolarPanelTypes.values()[nbt.getInt("type")]);
-        this.storage.readFromNBT(nbt);
+        this.storage.readEnergyFromTag(nbt);
     }
 
     @Override
     public CompoundTag toTag(CompoundTag nbt) {
         super.toTag(nbt);
         nbt.putInt("type", this.type.ordinal());
-        this.storage.writeEnergyToNBT(nbt);
+        this.storage.writeEnergyToTag(nbt);
         return nbt;
     }
 
@@ -37,7 +38,7 @@ public class BlockEntitySolarPanel extends BlockEntityEnergyBase {
     public void tick() {
         if(world.isDaylight()) {
             if((storage.getEnergyStored() + generationPerTick) < storage.getEnergyCapacity()) {
-                storage.recieveEnergy(generationPerTick);
+                storage.receiveEnergy(generationPerTick);
             }
         }
 
@@ -64,7 +65,12 @@ public class BlockEntitySolarPanel extends BlockEntityEnergyBase {
     }
 
     @Override
-    public EnergyStorage getEnergyStorage() {
+    public EnergyStorage getEnergyStorage(Direction direction) {
         return storage;
+    }
+
+    @Override
+    public boolean isEnergyProvider(Direction direction) {
+        return true;
     }
 }

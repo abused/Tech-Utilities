@@ -5,12 +5,12 @@ import abused_master.abusedlib.utils.InventoryHelper;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.DefaultedList;
-import net.minecraft.util.InventoryUtil;
 import net.minecraft.util.TagHelper;
 
 public class BlockEntityItemReceiver extends BlockEntityBase implements Inventory, ILinkerHandler {
@@ -25,13 +25,13 @@ public class BlockEntityItemReceiver extends BlockEntityBase implements Inventor
     public void fromTag(CompoundTag nbt) {
         super.fromTag(nbt);
         inventory = DefaultedList.create(9, ItemStack.EMPTY);
-        InventoryUtil.deserialize(nbt, this.inventory);
+        Inventories.fromTag(nbt, this.inventory);
     }
 
     @Override
     public CompoundTag toTag(CompoundTag nbt) {
         super.toTag(nbt);
-        InventoryUtil.serialize(nbt, this.inventory);
+        Inventories.toTag(nbt, this.inventory);
         return nbt;
     }
 

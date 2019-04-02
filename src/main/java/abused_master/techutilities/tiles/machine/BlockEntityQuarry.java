@@ -1,12 +1,12 @@
 package abused_master.techutilities.tiles.machine;
 
 import abused_master.abusedlib.client.render.hud.IHudSupport;
-import abused_master.abusedlib.energy.EnergyStorage;
-import abused_master.abusedlib.energy.IEnergyReceiver;
-import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
+import abused_master.abusedlib.tiles.BlockEntityBase;
 import abused_master.abusedlib.utils.InventoryHelper;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
+import nerdhub.cardinalenergy.api.IEnergyHandler;
+import nerdhub.cardinalenergy.impl.EnergyStorage;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -14,7 +14,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -28,7 +27,7 @@ import net.minecraft.util.math.Direction;
 import java.util.*;
 
 //TODO MAKE UPGRADES FOR QUARRY
-public class BlockEntityQuarry extends BlockEntityEnergyBase implements IHudSupport, IEnergyReceiver, ILinkerHandler {
+public class BlockEntityQuarry extends BlockEntityBase implements IEnergyHandler, IHudSupport, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     public List<BlockPos> cachedAreaPos = new ArrayList<>();
@@ -47,7 +46,7 @@ public class BlockEntityQuarry extends BlockEntityEnergyBase implements IHudSupp
     @Override
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
-        this.storage.readFromNBT(tag);
+        this.storage.readEnergyFromTag(tag);
         if(tag.containsKey("cachedAreaPos")) {
             this.cachedAreaPos.clear();
             ListTag listTag = tag.getList("cachedAreaPos", NbtType.COMPOUND);
@@ -75,7 +74,7 @@ public class BlockEntityQuarry extends BlockEntityEnergyBase implements IHudSupp
     @Override
     public CompoundTag toTag(CompoundTag tag) {
         super.toTag(tag);
-        this.storage.writeEnergyToNBT(tag);
+        this.storage.writeEnergyToTag(tag);
         if(!this.cachedAreaPos.isEmpty()) {
             ListTag listTag = new ListTag();
 
@@ -257,17 +256,12 @@ public class BlockEntityQuarry extends BlockEntityEnergyBase implements IHudSupp
             toDisplay.add("Mining at: x: " + miningPos.getX() + " y: " + miningPos.getY() + " z: " + miningPos.getZ());
         }
 
-        toDisplay.add("Energy: " + storage.getEnergyStored() + " / " + storage.getEnergyCapacity() + " PE");
+        toDisplay.add("Energy: " + storage.getEnergyStored() + " / " + storage.getEnergyCapacity() + " CE");
         return toDisplay;
     }
 
     @Override
-    public boolean receiveEnergy(int amount) {
-        return handleEnergyReceive(storage, amount);
-    }
-
-    @Override
-    public EnergyStorage getEnergyStorage() {
+    public EnergyStorage getEnergyStorage(Direction direction) {
         return storage;
     }
 

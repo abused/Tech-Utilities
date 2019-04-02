@@ -23,29 +23,29 @@ public class GuiVacuum extends ContainerScreen {
     }
 
     @Override
-    protected void onInitialized() {
-        super.onInitialized();
+    protected void init() {
+        super.init();
         this.guiLeft = (this.width - this.containerWidth) / 2;
         this.guiTop = (this.height - this.containerHeight) / 2;
     }
 
     @Override
-    public void draw(int var1, int var2, float var3) {
-        this.drawBackground();
-        super.draw(var1, var2, var3);
+    public void render(int var1, int var2, float var3) {
+        this.renderBackground();
+        super.render(var1, var2, var3);
         this.drawMouseoverTooltip(var1, var2);
     }
 
     @Override
     public void drawForeground(int int_1, int int_2) {
         String string_1 = "Vacuum";
-        this.fontRenderer.draw(string_1, (float)(this.containerWidth / 2 - this.fontRenderer.getStringWidth(string_1) / 2), 6.0F, 4210752);
+        this.font.draw(string_1, (float)(this.containerWidth / 2 - this.font.getStringWidth(string_1) / 2), 6.0F, 4210752);
     }
 
     @Override
     public void drawBackground(float v, int i, int i1) {
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        client.getTextureManager().bindTexture(vacuumGui);
-        drawTexturedRect(guiLeft, guiTop, 0, 0, containerWidth, containerHeight);
+        minecraft.getTextureManager().bindTexture(vacuumGui);
+        blit(guiLeft, guiTop, 0, 0, containerWidth, containerHeight);
     }
 }

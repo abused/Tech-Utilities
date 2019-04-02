@@ -5,11 +5,11 @@ import abused_master.abusedlib.utils.InventoryHelper;
 import abused_master.techutilities.registry.ModBlockEntities;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.DefaultedList;
-import net.minecraft.util.InventoryUtil;
 import net.minecraft.util.math.BoundingBox;
 import net.minecraft.util.math.Direction;
 
@@ -30,13 +30,13 @@ public class BlockEntityVacuum extends BlockEntityBase implements SidedInventory
         super.fromTag(nbt);
 
         inventory = DefaultedList.create(14, ItemStack.EMPTY);
-        InventoryUtil.deserialize(nbt, this.inventory);
+        Inventories.fromTag(nbt, this.inventory);
     }
 
     @Override
     public CompoundTag toTag(CompoundTag nbt) {
         super.toTag(nbt);
-        InventoryUtil.serialize(nbt, this.inventory);
+        Inventories.toTag(nbt, this.inventory);
         return nbt;
     }
 
@@ -105,7 +105,7 @@ public class BlockEntityVacuum extends BlockEntityBase implements SidedInventory
 
     @Override
     public ItemStack removeInvStack(int i) {
-        return InventoryUtil.removeStack(this.inventory, i);
+        return Inventories.removeStack(this.inventory, i);
     }
 
     @Override

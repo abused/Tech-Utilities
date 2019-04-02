@@ -1,11 +1,10 @@
 package abused_master.techutilities.tiles.crystal;
 
-import abused_master.abusedlib.energy.EnergyStorage;
-import abused_master.abusedlib.energy.IEnergyProvider;
-import abused_master.abusedlib.energy.IEnergyReceiver;
-import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
+import abused_master.abusedlib.tiles.BlockEntityBase;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
+import nerdhub.cardinalenergy.api.IEnergyHandler;
+import nerdhub.cardinalenergy.impl.EnergyStorage;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
@@ -14,12 +13,12 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.TagHelper;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.util.math.Direction;
 
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class BlockEntityEnergyCrystal extends BlockEntityEnergyBase implements IEnergyReceiver, IEnergyProvider, ILinkerHandler {
+public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergyHandler, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     public final HashSet<BlockPos> tilePositions = new HashSet<>();
@@ -32,7 +31,7 @@ public class BlockEntityEnergyCrystal extends BlockEntityEnergyBase implements I
     @Override
     public void fromTag(CompoundTag nbt) {
         super.fromTag(nbt);
-        storage.readFromNBT(nbt);
+        storage.readEnergyFromTag(nbt);
 
         if(nbt.containsKey("tilePositions")) {
             tilePositions.clear();
@@ -46,7 +45,7 @@ public class BlockEntityEnergyCrystal extends BlockEntityEnergyBase implements I
     @Override
     public CompoundTag toTag(CompoundTag nbt) {
         super.toTag(nbt);
-        storage.writeEnergyToNBT(nbt);
+        storage.writeEnergyToTag(nbt);
 
         if(tilePositions.size() > 0) {
             ListTag tags = new ListTag();
@@ -70,32 +69,20 @@ public class BlockEntityEnergyCrystal extends BlockEntityEnergyBase implements I
     public void sendEnergy() {
         for (Iterator<BlockPos> it = tilePositions.iterator(); it.hasNext();) {
             BlockPos blockPos = it.next();
-            if(blockPos == null || !(world.getBlockEntity(blockPos) instanceof IEnergyReceiver)) {
+            if(blockPos == null || !(world.getBlockEntity(blockPos) instanceof IEnergyHandler || ((IEnergyHandler) world.getBlockEntity(blockPos)).isEnergyReceiver(null))) {
                 it.remove();
                 this.markDirty();
                 world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
                 continue;
             }
 
-            sendEnergy(world, blockPos, sendPerTick);
+            storage.sendEnergy(world, blockPos, sendPerTick);
         }
     }
 
     @Override
-    public boolean receiveEnergy(int amount) {
-        return this.handleEnergyReceive(storage, amount);
-    }
-
-    @Override
-    public EnergyStorage getEnergyStorage() {
+    public EnergyStorage getEnergyStorage(Direction direction) {
         return storage;
-    }
-
-    @Override
-    public boolean sendEnergy(World world, BlockPos pos, int amount) {
-        boolean sent = storage.sendEnergy(world, pos, amount);
-        markDirty();
-        return sent;
     }
 
     @Override
@@ -114,7 +101,7 @@ public class BlockEntityEnergyCrystal extends BlockEntityEnergyBase implements I
                 }
             } else if (tag.containsKey("blockPos")) {
                 BlockPos blockPos = TagHelper.deserializeBlockPos(tag.getCompound("blockPos"));
-                if (world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof IEnergyReceiver && !tilePositions.contains(blockPos)) {
+                if (world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof IEnergyHandler && ((IEnergyHandler) world.getBlockEntity(blockPos)).isEnergyReceiver(null) && !tilePositions.contains(blockPos)) {
                     tilePositions.add(blockPos);
                     markDirty();
                     world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);

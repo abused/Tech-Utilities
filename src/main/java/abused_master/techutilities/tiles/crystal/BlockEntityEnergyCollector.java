@@ -1,17 +1,18 @@
 package abused_master.techutilities.tiles.crystal;
 
-import abused_master.abusedlib.energy.EnergyStorage;
-import abused_master.abusedlib.energy.IEnergyReceiver;
 import abused_master.abusedlib.tiles.BlockEntityBase;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
+import nerdhub.cardinalenergy.api.IEnergyHandler;
+import nerdhub.cardinalenergy.impl.EnergyStorage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.TagHelper;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 
-public class BlockEntityEnergyCollector extends BlockEntityBase implements IEnergyReceiver, ILinkerHandler {
+public class BlockEntityEnergyCollector extends BlockEntityBase implements IEnergyHandler, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(10000);
     private BlockPos crystalPos = null;
@@ -24,7 +25,7 @@ public class BlockEntityEnergyCollector extends BlockEntityBase implements IEner
     @Override
     public void fromTag(CompoundTag nbt) {
         super.fromTag(nbt);
-        this.storage.readFromNBT(nbt);
+        this.storage.readEnergyFromTag(nbt);
         if(nbt.containsKey("crystalPos")) {
             this.crystalPos = TagHelper.deserializeBlockPos(nbt.getCompound("crystalPos"));
         }
@@ -33,7 +34,7 @@ public class BlockEntityEnergyCollector extends BlockEntityBase implements IEner
     @Override
     public CompoundTag toTag(CompoundTag nbt) {
         super.toTag(nbt);
-        storage.writeEnergyToNBT(nbt);
+        storage.writeEnergyToTag(nbt);
         if(crystalPos != null) {
             nbt.put("crystalPos", TagHelper.serializeBlockPos(crystalPos));
         }
@@ -42,12 +43,10 @@ public class BlockEntityEnergyCollector extends BlockEntityBase implements IEner
 
     @Override
     public void tick() {
-        if(crystalPos != null && world.getBlockEntity(crystalPos) != null && world.getBlockEntity(crystalPos) instanceof BlockEntityEnergyCrystal && storage.getEnergyStored() >= sendPerTick) {
+        if (crystalPos != null && world.getBlockEntity(crystalPos) != null && world.getBlockEntity(crystalPos) instanceof BlockEntityEnergyCrystal && storage.getEnergyStored() >= sendPerTick) {
             BlockEntityEnergyCrystal energyCrystal = (BlockEntityEnergyCrystal) world.getBlockEntity(crystalPos);
-            if(energyCrystal.receiveEnergy(sendPerTick)) {
-                storage.extractEnergy(sendPerTick);
-            }
-        }else if(crystalPos != null && world.getBlockEntity(crystalPos) == null) {
+            storage.extractEnergy(energyCrystal.getEnergyStorage(null).receiveEnergy(sendPerTick));
+        } else if (crystalPos != null && world.getBlockEntity(crystalPos) == null) {
             crystalPos = null;
             world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
         }
@@ -61,24 +60,12 @@ public class BlockEntityEnergyCollector extends BlockEntityBase implements IEner
         return crystalPos;
     }
 
-    @Override
-    public boolean receiveEnergy(int amount) {
-        if(canReceive(amount)) {
-            storage.recieveEnergy(amount);
-            markDirty();
-            world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
-            return true;
-        }
-
-        return false;
-    }
-
     public boolean canReceive(int amount) {
         return (storage.getEnergyCapacity() - storage.getEnergyStored()) >= amount;
     }
 
     @Override
-    public EnergyStorage getEnergyStorage() {
+    public EnergyStorage getEnergyStorage(Direction direction) {
         return storage;
     }
 

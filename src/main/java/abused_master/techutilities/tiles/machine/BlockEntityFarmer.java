@@ -1,37 +1,35 @@
 package abused_master.techutilities.tiles.machine;
 
-import abused_master.abusedlib.energy.EnergyStorage;
-import abused_master.abusedlib.energy.IEnergyReceiver;
-import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
+import abused_master.abusedlib.tiles.BlockEntityBase;
 import abused_master.abusedlib.utils.InventoryHelper;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
+import nerdhub.cardinalenergy.api.IEnergyHandler;
+import nerdhub.cardinalenergy.impl.EnergyStorage;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.FoodCropItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SeedsItem;
+import net.minecraft.item.StringItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.ItemTags;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.DefaultedList;
-import net.minecraft.util.InventoryUtil;
 import net.minecraft.util.TagHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockEntityFarmer extends BlockEntityEnergyBase implements IEnergyReceiver, SidedInventory, ILinkerHandler {
+public class BlockEntityFarmer extends BlockEntityBase implements IEnergyHandler, SidedInventory, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(50000);
     public DefaultedList<ItemStack> inventory = DefaultedList.create(12, ItemStack.EMPTY);
@@ -49,17 +47,17 @@ public class BlockEntityFarmer extends BlockEntityEnergyBase implements IEnergyR
     @Override
     public void fromTag(CompoundTag nbt) {
         super.fromTag(nbt);
-        this.storage.readFromNBT(nbt);
+        this.storage.readEnergyFromTag(nbt);
 
         inventory = DefaultedList.create(12, ItemStack.EMPTY);
-        InventoryUtil.deserialize(nbt, this.inventory);
+        Inventories.fromTag(nbt, this.inventory);
     }
 
     @Override
     public CompoundTag toTag(CompoundTag nbt) {
         super.toTag(nbt);
-        this.storage.writeEnergyToNBT(nbt);
-        InventoryUtil.serialize(nbt, this.inventory);
+        this.storage.writeEnergyToTag(nbt);
+        Inventories.toTag(nbt, this.inventory);
         return nbt;
     }
 
@@ -103,7 +101,7 @@ public class BlockEntityFarmer extends BlockEntityEnergyBase implements IEnergyR
                     }
 
                     for (ItemStack stack : drops) {
-                        insertItem(stack, stack.getItem() instanceof SeedsItem || ItemTags.SAPLINGS.contains(stack.getItem()));
+                        insertItem(stack, (stack.getItem() instanceof StringItem && ((StringItem) stack.getItem()).getBlock() instanceof CropBlock) || ItemTags.SAPLINGS.contains(stack.getItem()));
                     }
 
                     timer = 0;
@@ -136,7 +134,7 @@ public class BlockEntityFarmer extends BlockEntityEnergyBase implements IEnergyR
                     return true;
                 }
             }
-        } else if (world.getBlockState(plantingPos.down()).getBlock() == Blocks.FARMLAND && (stack.getItem() instanceof SeedsItem || stack.getItem() instanceof FoodCropItem)) {
+        } else if (world.getBlockState(plantingPos.down()).getBlock() == Blocks.FARMLAND && (stack.getItem() instanceof StringItem && ((StringItem) stack.getItem()).getBlock() instanceof CropBlock)) {
             useOnBlock(plantingPos, stack.getItem());
             return true;
         }
@@ -145,20 +143,8 @@ public class BlockEntityFarmer extends BlockEntityEnergyBase implements IEnergyR
     }
 
     public void useOnBlock(BlockPos plantingPos, Item seedsItem) {
-        try {
-            if(seedsItem instanceof FoodCropItem) {
-                Field cropField = FoodCropItem.class.getDeclaredField("crop");
-                cropField.setAccessible(true);
-                world.setBlockState(plantingPos, (BlockState) cropField.get(seedsItem), 11);
-            }else if(seedsItem instanceof SeedsItem) {
-                Field cropField = SeedsItem.class.getDeclaredField("crop");
-                cropField.setAccessible(true);
-                world.setBlockState(plantingPos, (BlockState) cropField.get(seedsItem), 11);
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+        if(seedsItem instanceof StringItem && ((StringItem) seedsItem).getBlock() instanceof CropBlock) {
+            world.setBlockState(plantingPos, ((StringItem) seedsItem).getBlock().getDefaultState(), 11);
         }
     }
 
@@ -224,13 +210,8 @@ public class BlockEntityFarmer extends BlockEntityEnergyBase implements IEnergyR
     }
 
     @Override
-    public EnergyStorage getEnergyStorage() {
+    public EnergyStorage getEnergyStorage(Direction direction) {
         return storage;
-    }
-
-    @Override
-    public boolean receiveEnergy(int amount) {
-        return handleEnergyReceive(storage, amount);
     }
 
     @Override
@@ -270,7 +251,7 @@ public class BlockEntityFarmer extends BlockEntityEnergyBase implements IEnergyR
 
     @Override
     public ItemStack removeInvStack(int i) {
-        return InventoryUtil.removeStack(this.inventory, i);
+        return Inventories.removeStack(this.inventory, i);
     }
 
     @Override

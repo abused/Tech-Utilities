@@ -1,12 +1,12 @@
 package abused_master.techutilities.tiles.machine;
 
 import abused_master.abusedlib.client.render.hud.IHudSupport;
-import abused_master.abusedlib.energy.EnergyStorage;
-import abused_master.abusedlib.energy.IEnergyReceiver;
-import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
+import abused_master.abusedlib.tiles.BlockEntityBase;
 import abused_master.techutilities.blocks.machines.BlockMobGrinder;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
+import nerdhub.cardinalenergy.api.IEnergyHandler;
+import nerdhub.cardinalenergy.impl.EnergyStorage;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,7 +20,7 @@ import net.minecraft.util.math.Direction;
 import java.util.Collections;
 import java.util.List;
 
-public class BlockEntityMobGrinder extends BlockEntityEnergyBase implements IEnergyReceiver, IHudSupport, ILinkerHandler {
+public class BlockEntityMobGrinder extends BlockEntityBase implements IEnergyHandler, IHudSupport, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     public BoundingBox mobKillBox = null;
@@ -34,14 +34,14 @@ public class BlockEntityMobGrinder extends BlockEntityEnergyBase implements IEne
     @Override
     public void fromTag(CompoundTag nbt) {
         super.fromTag(nbt);
-        this.storage.readFromNBT(nbt);
+        this.storage.readEnergyFromTag(nbt);
         killTimer = nbt.getInt("killTimer");
     }
 
     @Override
     public CompoundTag toTag(CompoundTag nbt) {
         super.toTag(nbt);
-        this.storage.writeEnergyToNBT(nbt);
+        this.storage.writeEnergyToTag(nbt);
         nbt.putInt("killTimer", this.killTimer);
         return nbt;
     }
@@ -100,13 +100,8 @@ public class BlockEntityMobGrinder extends BlockEntityEnergyBase implements IEne
     }
 
     @Override
-    public EnergyStorage getEnergyStorage() {
+    public EnergyStorage getEnergyStorage(Direction direction) {
         return storage;
-    }
-
-    @Override
-    public boolean receiveEnergy(int amount) {
-        return handleEnergyReceive(storage, amount);
     }
 
     @Override
@@ -121,7 +116,7 @@ public class BlockEntityMobGrinder extends BlockEntityEnergyBase implements IEne
 
     @Override
     public List<String> getClientLog() {
-        return Collections.singletonList("Energy: " + storage.getEnergyStored() + " / " + storage.getEnergyCapacity() + " PE");
+        return Collections.singletonList("Energy: " + storage.getEnergyStored() + " / " + storage.getEnergyCapacity() + " CE");
     }
 
     @Override

@@ -1,11 +1,11 @@
 package abused_master.techutilities.tiles.machine;
 
 import abused_master.abusedlib.client.render.hud.IHudSupport;
-import abused_master.abusedlib.energy.EnergyStorage;
-import abused_master.abusedlib.energy.IEnergyReceiver;
-import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
+import abused_master.abusedlib.tiles.BlockEntityBase;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
+import nerdhub.cardinalenergy.api.IEnergyHandler;
+import nerdhub.cardinalenergy.impl.EnergyStorage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.StringTextComponent;
@@ -16,7 +16,7 @@ import net.minecraft.util.math.Direction;
 import java.util.Arrays;
 import java.util.List;
 
-public class BlockEntityPhaseCell extends BlockEntityEnergyBase implements IHudSupport, IEnergyReceiver, ILinkerHandler {
+public class BlockEntityPhaseCell extends BlockEntityBase implements IEnergyHandler, IHudSupport, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(1000000);
 
@@ -27,13 +27,13 @@ public class BlockEntityPhaseCell extends BlockEntityEnergyBase implements IHudS
     @Override
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
-        storage.readFromNBT(tag);
+        storage.readEnergyFromTag(tag);
     }
 
     @Override
     public CompoundTag toTag(CompoundTag tag) {
         super.toTag(tag);
-        storage.writeEnergyToNBT(tag);
+        storage.writeEnergyToTag(tag);
         return tag;
     }
 
@@ -51,12 +51,7 @@ public class BlockEntityPhaseCell extends BlockEntityEnergyBase implements IHudS
     }
 
     @Override
-    public boolean receiveEnergy(int amount) {
-        return handleEnergyReceive(storage, amount);
-    }
-
-    @Override
-    public EnergyStorage getEnergyStorage() {
+    public EnergyStorage getEnergyStorage(Direction direction) {
         return storage;
     }
 
@@ -72,7 +67,7 @@ public class BlockEntityPhaseCell extends BlockEntityEnergyBase implements IHudS
 
     @Override
     public List<String> getClientLog() {
-        return Arrays.asList(new String[]{"Energy: " + storage.getEnergyStored() + " / " + storage.getEnergyCapacity() + " PE"});
+        return Arrays.asList(new String[]{"Energy: " + storage.getEnergyStored() + " / " + storage.getEnergyCapacity() + " CE"});
     }
 
     @Override

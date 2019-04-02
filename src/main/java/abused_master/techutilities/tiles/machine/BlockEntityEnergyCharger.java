@@ -1,24 +1,24 @@
 package abused_master.techutilities.tiles.machine;
 
-import abused_master.abusedlib.energy.EnergyStorage;
-import abused_master.abusedlib.energy.IEnergyItemHandler;
-import abused_master.abusedlib.energy.IEnergyReceiver;
-import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
+import abused_master.abusedlib.tiles.BlockEntityBase;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
+import nerdhub.cardinalenergy.api.IEnergyHandler;
+import nerdhub.cardinalenergy.api.IEnergyItemHandler;
+import nerdhub.cardinalenergy.impl.EnergyStorage;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.DefaultedList;
-import net.minecraft.util.InventoryUtil;
 import net.minecraft.util.TagHelper;
 import net.minecraft.util.math.Direction;
 
 import javax.annotation.Nullable;
 
-public class BlockEntityEnergyCharger extends BlockEntityEnergyBase implements IEnergyReceiver, SidedInventory, ILinkerHandler {
+public class BlockEntityEnergyCharger extends BlockEntityBase implements IEnergyHandler, SidedInventory, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(50000);
     public DefaultedList<ItemStack> inventory = DefaultedList.create(2, ItemStack.EMPTY);
@@ -31,40 +31,39 @@ public class BlockEntityEnergyCharger extends BlockEntityEnergyBase implements I
     @Override
     public void fromTag(CompoundTag nbt) {
         super.fromTag(nbt);
-        this.storage.readFromNBT(nbt);
+        this.storage.readEnergyFromTag(nbt);
 
         inventory = DefaultedList.create(2, ItemStack.EMPTY);
-        InventoryUtil.deserialize(nbt, this.inventory);
+        Inventories.fromTag(nbt, this.inventory);
     }
 
     @Override
     public CompoundTag toTag(CompoundTag nbt) {
         super.toTag(nbt);
-        this.storage.writeEnergyToNBT(nbt);
-        InventoryUtil.serialize(nbt, this.inventory);
+        this.storage.writeEnergyToTag(nbt);
+        Inventories.toTag(nbt, this.inventory);
         return nbt;
     }
 
     @Override
     public void tick() {
-        if(!inventory.get(0).isEmpty() && inventory.get(0).getItem() instanceof IEnergyItemHandler) {
-            IEnergyItemHandler energyItemHandler = (IEnergyItemHandler) inventory.get(0).getItem();
-            if(isEnergyFull(energyItemHandler) && inventory.get(1).isEmpty()) {
-                inventory.set(1, inventory.get(0));
+        if (!inventory.get(0).isEmpty() && inventory.get(0).getItem() instanceof IEnergyItemHandler) {
+            ItemStack stack = inventory.get(0);
+            IEnergyItemHandler energyItemHandler = (IEnergyItemHandler) stack.getItem();
+
+            if(isEnergyFull(energyItemHandler, stack)) {
                 inventory.set(0, ItemStack.EMPTY);
-            }else if(!isEnergyFull(energyItemHandler) && (storage.getEnergyStored() >= chargePerTick || storage.getEnergyStored() >= getChargeAmount(energyItemHandler))) {
-                storage.extractEnergy(getChargeAmount(energyItemHandler) >= chargePerTick ? chargePerTick : getChargeAmount(energyItemHandler));
-                energyItemHandler.receiveEnergy(getChargeAmount(energyItemHandler) >= chargePerTick ? chargePerTick : getChargeAmount(energyItemHandler));
+                inventory.set(1, stack);
+            }else {
+               if(storage.canExtract(chargePerTick)) {
+                   storage.extractEnergy(energyItemHandler.getEnergyStorage().receiveEnergy(stack, chargePerTick));
+               }
             }
         }
     }
 
-    public int getChargeAmount(IEnergyItemHandler energyItemHandler) {
-        return energyItemHandler.getEnergyStorage().getEnergyCapacity() - energyItemHandler.getEnergyStorage().getEnergyStored();
-    }
-
-    public boolean isEnergyFull(IEnergyItemHandler energyItemHandler) {
-        return energyItemHandler.getEnergyStorage().getEnergyStored() == energyItemHandler.getEnergyStorage().getEnergyCapacity();
+    public boolean isEnergyFull(IEnergyItemHandler energyItemHandler, ItemStack stack) {
+        return energyItemHandler.getEnergyStorage().getEnergyStored(stack) == energyItemHandler.getEnergyStorage().getEnergyCapacity(stack);
     }
 
     @Override
@@ -104,7 +103,7 @@ public class BlockEntityEnergyCharger extends BlockEntityEnergyBase implements I
 
     @Override
     public ItemStack removeInvStack(int i) {
-        return InventoryUtil.removeStack(this.inventory, i);
+        return Inventories.removeStack(this.inventory, i);
     }
 
     @Override
@@ -123,13 +122,8 @@ public class BlockEntityEnergyCharger extends BlockEntityEnergyBase implements I
     }
 
     @Override
-    public EnergyStorage getEnergyStorage() {
+    public EnergyStorage getEnergyStorage(Direction direction) {
         return storage;
-    }
-
-    @Override
-    public boolean receiveEnergy(int amount) {
-        return handleEnergyReceive(storage, amount);
     }
 
     @Override

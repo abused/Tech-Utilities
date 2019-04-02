@@ -1,15 +1,15 @@
 package abused_master.techutilities.tiles.machine;
 
 import abused_master.abusedlib.client.render.hud.IHudSupport;
-import abused_master.abusedlib.energy.EnergyStorage;
-import abused_master.abusedlib.energy.IEnergyReceiver;
 import abused_master.abusedlib.fluid.FluidStack;
 import abused_master.abusedlib.fluid.FluidContainer;
 import abused_master.abusedlib.fluid.IFluidHandler;
-import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
+import abused_master.abusedlib.tiles.BlockEntityBase;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
+import nerdhub.cardinalenergy.api.IEnergyHandler;
+import nerdhub.cardinalenergy.impl.EnergyStorage;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.client.resource.language.I18n;
@@ -23,7 +23,7 @@ import net.minecraft.util.math.Direction;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockEntityFluidPump extends BlockEntityEnergyBase implements IEnergyReceiver, IFluidHandler, IHudSupport, ILinkerHandler {
+public class BlockEntityFluidPump extends BlockEntityBase implements IEnergyHandler, IFluidHandler, IHudSupport, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(50000);
     public FluidContainer tank = new FluidContainer(32000);
@@ -39,7 +39,7 @@ public class BlockEntityFluidPump extends BlockEntityEnergyBase implements IEner
     @Override
     public void fromTag(CompoundTag nbt) {
         super.fromTag(nbt);
-        storage.readFromNBT(nbt);
+        storage.readEnergyFromTag(nbt);
 
         if(this.tank != null) {
             this.tank.setBlockEntity(this);
@@ -62,7 +62,7 @@ public class BlockEntityFluidPump extends BlockEntityEnergyBase implements IEner
     @Override
     public CompoundTag toTag(CompoundTag nbt) {
         super.toTag(nbt);
-        storage.writeEnergyToNBT(nbt);
+        storage.writeEnergyToTag(nbt);
 
         if (this.tank != null && this.tank.getFluidStack() != null) {
             CompoundTag tankTag = new CompoundTag();
@@ -152,13 +152,8 @@ public class BlockEntityFluidPump extends BlockEntityEnergyBase implements IEner
     }
 
     @Override
-    public EnergyStorage getEnergyStorage() {
+    public EnergyStorage getEnergyStorage(Direction direction) {
         return storage;
-    }
-
-    @Override
-    public boolean receiveEnergy(int amount) {
-        return handleEnergyReceive(storage, amount);
     }
 
     @Override
@@ -188,7 +183,7 @@ public class BlockEntityFluidPump extends BlockEntityEnergyBase implements IEner
         }else {
             toDisplay.add("Internal Tank Empty");
         }
-        toDisplay.add("Energy: " + storage.getEnergyStored() + " / " + storage.getEnergyCapacity() + " PE");
+        toDisplay.add("Energy: " + storage.getEnergyStored() + " / " + storage.getEnergyCapacity() + " CE");
         if(drainingPos != null) {
             toDisplay.add("Draining: X: " + drainingPos.getX() + " Y: " + drainingPos.getY() + " Z: " + drainingPos.getZ());
         }else {

@@ -1,23 +1,22 @@
 package abused_master.techutilities.tiles.generator;
 
 import abused_master.abusedlib.client.render.hud.IHudSupport;
-import abused_master.abusedlib.energy.EnergyStorage;
-import abused_master.abusedlib.energy.IEnergyProvider;
 import abused_master.abusedlib.fluid.FluidStack;
 import abused_master.abusedlib.fluid.FluidContainer;
 import abused_master.abusedlib.fluid.IFluidHandler;
-import abused_master.abusedlib.tiles.BlockEntityEnergyBase;
+import abused_master.abusedlib.tiles.BlockEntityBase;
 import abused_master.techutilities.registry.ModBlockEntities;
+import nerdhub.cardinalenergy.api.IEnergyHandler;
+import nerdhub.cardinalenergy.impl.EnergyStorage;
 import net.minecraft.fluid.LavaFluid;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockEntityLavaGenerator extends BlockEntityEnergyBase implements IEnergyProvider, IHudSupport, IFluidHandler {
+public class BlockEntityLavaGenerator extends BlockEntityBase implements IEnergyHandler, IHudSupport, IFluidHandler {
 
     public EnergyStorage storage = new EnergyStorage(100000);
     public int sendPerTick = 500;
@@ -31,7 +30,7 @@ public class BlockEntityLavaGenerator extends BlockEntityEnergyBase implements I
     @Override
     public void fromTag(CompoundTag nbt) {
         super.fromTag(nbt);
-        storage.readFromNBT(nbt);
+        storage.readEnergyFromTag(nbt);
 
         if(this.tank != null) {
             this.tank.setBlockEntity(this);
@@ -48,7 +47,7 @@ public class BlockEntityLavaGenerator extends BlockEntityEnergyBase implements I
     @Override
     public CompoundTag toTag(CompoundTag nbt) {
         super.toTag(nbt);
-        storage.writeEnergyToNBT(nbt);
+        storage.writeEnergyToTag(nbt);
 
         if (this.tank != null && this.tank.getFluidStack() != null) {
             CompoundTag tankTag = new CompoundTag();
@@ -64,7 +63,7 @@ public class BlockEntityLavaGenerator extends BlockEntityEnergyBase implements I
     public void tick() {
         if (tank.getFluidAmount() >= 10 && tank.getFluidStack().getFluid() instanceof LavaFluid && (storage.getEnergyStored() + generatePer10) <= storage.getEnergyCapacity()) {
             if(!world.isReceivingRedstonePower(pos)) {
-                storage.recieveEnergy(generatePer10);
+                storage.receiveEnergy(generatePer10);
                 tank.extractFluid(10);
                 this.markDirty();
             }
@@ -82,15 +81,13 @@ public class BlockEntityLavaGenerator extends BlockEntityEnergyBase implements I
     }
 
     @Override
-    public boolean sendEnergy(World world, BlockPos pos, int amount) {
-        boolean sent = storage.sendEnergy(world, pos, amount);
-        markDirty();
-        return sent;
+    public EnergyStorage getEnergyStorage(Direction direction) {
+        return storage;
     }
 
     @Override
-    public EnergyStorage getEnergyStorage() {
-        return storage;
+    public boolean isEnergyProvider(Direction direction) {
+        return true;
     }
 
     @Override
@@ -107,7 +104,7 @@ public class BlockEntityLavaGenerator extends BlockEntityEnergyBase implements I
     public List<String> getClientLog() {
         List<String> toDisplay = new ArrayList<>();
         toDisplay.add("Lava: " + tank.getFluidAmount() + " / " + tank.getFluidCapacity() + " Lava");
-        toDisplay.add("Energy: " + storage.getEnergyStored() + " / " + storage.getEnergyCapacity() + " PE");
+        toDisplay.add("Energy: " + storage.getEnergyStored() + " / " + storage.getEnergyCapacity() + " CE");
         return toDisplay;
     }
 
