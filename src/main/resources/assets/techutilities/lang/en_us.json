@@ -4,11 +4,13 @@
   "item.techutilities.diamond_dust" : "Diamond Dust",
   "item.techutilities.iron_dust" : "Iron Dust",
   "item.techutilities.gold_dust" : "Gold Dust",
-  "item.techutilities.phase_dust" : "Phase Dust",
-  "item.techutilities.phase_ingot" : "Phase Ingot",
+  "item.techutilities.flow_dust" : "Flow Dust",
+  "item.techutilities.flow_ingot" : "Flow Ingot",
   "item.techutilities.quarry_recorder" : "Quarry Recorder",
   "item.techutilities.energized_sword" : "Energized Sword",
   "item.techutilities.linker" : "Linker Tool",
+  "item.techutilities.steel_ingot" : "Steel Ingot",
+  "item.techutilities.energized_steel_ingot" : "Energized Steel Ingot",
   "block.techutilities.energy_furnace" : "Energy Furnace",
   "block.techutilities.pulverizer" : "Pulverizer",
   "block.techutilities.quarry" : "Quarry",
@@ -28,5 +30,6 @@
   "block.techutilities.conveyor_belt" : "Conveyor Belt",
   "block.techutilities.item_receiver" : "Item Receiver Crystal",
   "block.techutilities.item_transfer" : "Item Transfer Crystal",
-  "block.techutilities.phase_cell" : "Phase Cell"
+  "block.techutilities.energy_cell" : "Cardinal Energy Cell",
+  "block.techutilities.machine_frame" : "Machine Frame"
 }

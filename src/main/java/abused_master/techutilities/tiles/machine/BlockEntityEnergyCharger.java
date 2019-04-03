@@ -2,6 +2,7 @@ package abused_master.techutilities.tiles.machine;
 
 import abused_master.abusedlib.tiles.BlockEntityBase;
 import abused_master.techutilities.registry.ModBlockEntities;
+import abused_master.techutilities.registry.ModItems;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
 import nerdhub.cardinalenergy.api.IEnergyHandler;
 import nerdhub.cardinalenergy.api.IEnergyItemHandler;
@@ -53,7 +54,11 @@ public class BlockEntityEnergyCharger extends BlockEntityBase implements IEnergy
 
             if(isEnergyFull(energyItemHandler, stack)) {
                 inventory.set(0, ItemStack.EMPTY);
-                inventory.set(1, stack);
+                if(stack.getItem() == ModItems.STEEL_INGOT) {
+                    inventory.set(1, new ItemStack(ModItems.ENERGIZED_STEEL_INGOT));
+                }else {
+                    inventory.set(1, stack);
+                }
             }else {
                if(storage.canExtract(chargePerTick)) {
                    storage.extractEnergy(energyItemHandler.getEnergyStorage().receiveEnergy(stack, chargePerTick));

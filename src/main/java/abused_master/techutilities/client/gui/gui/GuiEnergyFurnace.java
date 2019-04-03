@@ -39,7 +39,7 @@ public class GuiEnergyFurnace extends ContainerScreen {
 
     @Override
     public void drawForeground(int int_1, int int_2) {
-        String string_1 = "RF Furnace";
+        String string_1 = "Energy Furnace";
         this.font.draw(string_1, (float)(this.containerWidth / 2 - this.font.getStringWidth(string_1) / 2), 6.0F, 4210752);
     }
 

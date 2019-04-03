@@ -9,10 +9,10 @@ import net.minecraft.world.BlockView;
 
 import javax.annotation.Nullable;
 
-public class BlockPhaseCell extends BlockWithEntityBase {
+public class BlockEnergyCell extends BlockWithEntityBase {
 
-    public BlockPhaseCell() {
-        super("phase_cell", Material.STONE, 1.0f, TechUtilities.modItemGroup);
+    public BlockEnergyCell() {
+        super("energy_cell", Material.STONE, 1.0f, TechUtilities.modItemGroup);
     }
 
     @Nullable

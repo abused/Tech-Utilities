@@ -10,7 +10,8 @@
   ],
   "requires": {
     "fabric": "*",
-    "abusedlib": "*"
+    "abusedlib": "*",
+    "cardinalenergy": "*"
   },
   "mixins": {
     "client": "techutilities.client.json",
