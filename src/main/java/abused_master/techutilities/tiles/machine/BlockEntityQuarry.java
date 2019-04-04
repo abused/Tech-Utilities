@@ -119,54 +119,58 @@ public class BlockEntityQuarry extends BlockEntityBase implements IEnergyHandler
     }
 
     public void mineBlocks(Inventory inventory) {
-        for (Iterator<BlockPos> it = cachedAreaPos.iterator(); it.hasNext();) {
-            BlockPos currentMiningPos = it.next();
+        if (!cachedAreaPos.isEmpty()) {
+            BlockPos currentMiningPos = null;
+            System.out.println("working???");
 
-            if (world.isAir(currentMiningPos) || world.getBlockState(currentMiningPos).getBlock() == Blocks.BEDROCK || world.getBlockState(currentMiningPos).getBlock() instanceof FluidBlock || world.getBlockEntity(currentMiningPos) != null) {
-                it.remove();
-                continue;
+            for (Iterator<BlockPos> it = cachedAreaPos.iterator(); it.hasNext(); ) {
+                BlockPos pos = it.next();
+                if (world.isAir(pos) || world.getBlockState(pos).getBlock() == Blocks.BEDROCK || world.getBlockState(pos).getBlock() instanceof FluidBlock || world.getBlockEntity(pos) != null) {
+                    it.remove();
+                    continue;
+                }
+
+                currentMiningPos = pos;
+                this.miningPos = currentMiningPos;
+                break;
             }
 
-            if (miningSpeed >= (20 / speedMultiplier)) {
-                this.miningPos = currentMiningPos;
-                miningSpeed = 0;
-                BlockState state = world.getBlockState(currentMiningPos);
-                miningBlock = state;
+            miningSpeed = 0;
+            BlockState state = world.getBlockState(currentMiningPos);
+            miningBlock = state;
 
-                if(!world.isClient()) {
-                    List<ItemStack> drops = Block.getDroppedStacks(state, (ServerWorld) world, currentMiningPos, world.getBlockEntity(currentMiningPos));
-                    world.setBlockState(currentMiningPos, Blocks.AIR.getDefaultState());
+            if (!world.isClient()) {
+                List<ItemStack> drops = Block.getDroppedStacks(state, (ServerWorld) world, currentMiningPos, world.getBlockEntity(currentMiningPos));
+                world.setBlockState(currentMiningPos, Blocks.AIR.getDefaultState());
 
-                    if (silkTouch) {
-                        if (!InventoryHelper.insertItemIfPossible(inventory, new ItemStack(state.getBlock()), false)) {
+                if (silkTouch) {
+                    if (!InventoryHelper.insertItemIfPossible(inventory, new ItemStack(state.getBlock()), false)) {
+                        setMiningError(true);
+                    }
+                } else {
+                    for (ItemStack itemStack : drops) {
+                        Random random = new Random();
+                        ItemStack stackWithFortune = new ItemStack(itemStack.getItem(), fortuneLevel == 0 ? 1 : random.nextInt(fortuneLevel * 2));
+
+                        if (!InventoryHelper.insertItemIfPossible(inventory, stackWithFortune, false)) {
                             setMiningError(true);
-                        }else {
-                            storage.extractEnergy(energyUsagePerBlock);
-                            it.remove();
-                        }
-                    } else {
-                        for (ItemStack itemStack : drops) {
-                            Random random = new Random();
-                            ItemStack stackWithFortune = new ItemStack(itemStack.getItem(), fortuneLevel == 0 ? 1 : random.nextInt(fortuneLevel * 2));
-
-                            if (!InventoryHelper.insertItemIfPossible(inventory, stackWithFortune, false)) {
-                                setMiningError(true);
-                            }else {
-                                storage.extractEnergy(energyUsagePerBlock);
-                                it.remove();
-                            }
                         }
                     }
                 }
+
+                storage.extractEnergy(energyUsagePerBlock);
+                cachedAreaPos.remove(currentMiningPos);
             }
         }
     }
 
     public void cacheMiningArea() {
-        Iterable<BlockPos> blocksInQuarry = BlockPos.iterateBoxPositions(secondCorner, firstCorner);
-        cachedAreaPos = listBlocksInIterable(blocksInQuarry);
+        if(secondCorner != null && firstCorner != null) {
+            Iterable<BlockPos> blocksInQuarry = BlockPos.iterateBoxPositions(secondCorner, firstCorner);
+            cachedAreaPos = listBlocksInIterable(blocksInQuarry);
+        }
 
-        this.markDirty();
+        this.updateEntity();
     }
 
     public static List<BlockPos> listBlocksInIterable(Iterable<BlockPos> iterable) {
@@ -209,7 +213,7 @@ public class BlockEntityQuarry extends BlockEntityBase implements IEnergyHandler
     }
 
     public boolean canRun() {
-        if (!blockPositionsActive() && !cachedAreaPos.isEmpty()) {
+        if (!blockPositionsActive() || cachedAreaPos.isEmpty()) {
             return false;
         }
 

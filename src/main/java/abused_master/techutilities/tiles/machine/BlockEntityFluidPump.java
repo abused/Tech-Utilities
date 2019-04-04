@@ -139,22 +139,23 @@ public class BlockEntityFluidPump extends BlockEntityBase implements IEnergyHand
                 }
 
                 pos = pos2;
+                drainingPos = pos2;
                 break;
             }
 
             if (tank.getFluidStack() == null) {
-                drainingPos = pos;
                 tank.setFluidStack(new FluidStack(world.getFluidState(pos).getFluid(), 1000));
                 world.setBlockState(pos, Blocks.STONE.getDefaultState());
                 drainingSpeed = 0;
                 storage.extractEnergy(drainPerBlock);
             } else if (tank.getFluidStack().getFluid().getDefaultState().getBlockState() == world.getFluidState(pos).getBlockState()) {
-                drainingPos = pos;
                 tank.fillFluid(new FluidStack(world.getFluidState(pos).getFluid(), 1000));
                 world.setBlockState(pos, Blocks.STONE.getDefaultState());
                 drainingSpeed = 0;
                 storage.extractEnergy(drainPerBlock);
             }
+
+            cachedDrainingPos.remove(pos);
         }
     }
 

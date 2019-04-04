@@ -17,6 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sortme.ItemScatterer;
 import net.minecraft.text.StringTextComponent;
+import net.minecraft.text.Style;
+import net.minecraft.text.TextFormat;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TagHelper;
 import net.minecraft.util.hit.BlockHitResult;
@@ -37,8 +39,8 @@ public class BlockQuarry extends BlockWithEntityBase {
         BlockEntityQuarry quarry = (BlockEntityQuarry) world.getBlockEntity(blockPos);
         ItemStack stack = playerEntity.getStackInHand(hand);
 
-        if(!(stack.getItem() instanceof ItemQuarryRecorder)) {
-            if(playerEntity.isSneaking() && stack.isEmpty() && quarry.hasQuarryRecorder) {
+        if (!(stack.getItem() instanceof ItemQuarryRecorder)) {
+            if (playerEntity.isSneaking() && stack.isEmpty() && quarry.hasQuarryRecorder) {
                 playerEntity.setStackInHand(hand, new ItemStack(ModItems.RECORDER));
                 quarry.setRunning(false);
                 quarry.setHasQuarryRecorder(false);
@@ -46,33 +48,28 @@ public class BlockQuarry extends BlockWithEntityBase {
                 return true;
             }
 
-            if (!quarry.isRunning() && quarry.canRun()) {
+            if (!quarry.isRunning() && quarry.blockPositionsActive()) {
                 quarry.setRunning(true);
                 quarry.cacheMiningArea();
-                if (!quarry.blockPositionsActive()) {
-                    if (!world.isClient) {
-                        playerEntity.addChatMessage(new StringTextComponent("Error locating quarry mining corners!"), false);
-                    }
-                    quarry.setRunning(false);
-                } else {
-                    if (!world.isClient) {
-                        playerEntity.addChatMessage(new StringTextComponent("Set quarry to now running!"), false);
-                    }
+                if (!world.isClient) {
+                    playerEntity.addChatMessage(new StringTextComponent("Set quarry to now running!").setStyle(new Style().setColor(TextFormat.DARK_RED)), true);
                 }
+            } else if (!quarry.blockPositionsActive()) {
+                playerEntity.addChatMessage(new StringTextComponent("Error, no mining positions are set!").setStyle(new Style().setColor(TextFormat.DARK_RED)), true);
             }
-        }else {
+        } else {
             CompoundTag tag = stack.getTag();
 
             if (tag == null) {
                 if (!world.isClient) {
-                    playerEntity.addChatMessage(new StringTextComponent("Missing coordinate points for recorder"), true);
+                    playerEntity.addChatMessage(new StringTextComponent("Missing coordinate points for recorder").setStyle(new Style().setColor(TextFormat.DARK_RED)), true);
                 }
                 return true;
             }
 
             if (!tag.containsKey("coordinates1") || !tag.containsKey("coordinates2")) {
                 if (!world.isClient) {
-                    playerEntity.addChatMessage(new StringTextComponent("Missing coordinate points for recorder"), true);
+                    playerEntity.addChatMessage(new StringTextComponent("Missing coordinate points for recorder").setStyle(new Style().setColor(TextFormat.DARK_RED)), true);
                 }
                 return true;
             }
@@ -80,7 +77,7 @@ public class BlockQuarry extends BlockWithEntityBase {
             quarry.setCorners(TagHelper.deserializeBlockPos(tag.getCompound("coordinates1")), TagHelper.deserializeBlockPos(tag.getCompound("coordinates2")));
             quarry.hasQuarryRecorder = true;
             playerEntity.setStackInHand(Hand.MAIN, ItemStack.EMPTY);
-            playerEntity.addChatMessage(new StringTextComponent("Successfully linked quarry to positions"), true);
+            playerEntity.addChatMessage(new StringTextComponent("Successfully linked quarry to positions").setStyle(new Style().setColor(TextFormat.DARK_RED)), true);
         }
 
         return true;
