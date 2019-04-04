@@ -2,8 +2,8 @@ package abused_master.techutilities.registry;
 
 import abused_master.abusedlib.registry.RegistryHelper;
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.blocks.crystals.BlockEnergyCollector;
-import abused_master.techutilities.blocks.crystals.BlockEnergyCrystal;
+import abused_master.techutilities.blocks.crystals.BlockWirelessTransmitter;
+import abused_master.techutilities.blocks.crystals.BlockWirelessController;
 import abused_master.techutilities.blocks.crystals.BlockItemReceiverCrystal;
 import abused_master.techutilities.blocks.crystals.BlockItemTransferCrystal;
 import abused_master.techutilities.blocks.decoration.BlockGlassBase;
@@ -16,8 +16,8 @@ public class ModBlocks {
     public static BlockEnergyFurnace ENERGY_FURNACE = new BlockEnergyFurnace();
     public static BlockPulverizer PULVERIZER = new BlockPulverizer();
     public static BlockQuarry QUARRY = new BlockQuarry();
-    public static BlockEnergyCrystal ENERGY_CRYSTAL = new BlockEnergyCrystal();
-    public static BlockEnergyCollector ENERGY_CRYSTAL_COLLECTOR = new BlockEnergyCollector();
+    public static BlockWirelessController ENERGY_CRYSTAL = new BlockWirelessController();
+    public static BlockWirelessTransmitter ENERGY_CRYSTAL_COLLECTOR = new BlockWirelessTransmitter();
     public static BlockLavaGenerator LAVA_GENERATOR = new BlockLavaGenerator();
     public static BlockEnergyCharger ENERGY_CHARGER = new BlockEnergyCharger();
     public static BlockFluidPump FLUID_PUMP = new BlockFluidPump();

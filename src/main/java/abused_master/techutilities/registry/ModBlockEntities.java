@@ -3,10 +3,9 @@ package abused_master.techutilities.registry;
 import abused_master.abusedlib.registry.RegistryHelper;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.client.gui.container.*;
-import abused_master.techutilities.client.gui.gui.*;
 import abused_master.techutilities.client.render.*;
-import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCollector;
-import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCrystal;
+import abused_master.techutilities.tiles.crystal.BlockEntityWirelessController;
+import abused_master.techutilities.tiles.crystal.BlockEntityWirelessTransmitter;
 import abused_master.techutilities.tiles.crystal.BlockEntityItemReceiver;
 import abused_master.techutilities.tiles.crystal.BlockEntityItemTransfer;
 import abused_master.techutilities.tiles.generator.BlockEntityLavaGenerator;
@@ -15,19 +14,17 @@ import abused_master.techutilities.tiles.machine.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.render.BlockEntityRendererRegistry;
-import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
 
 public class ModBlockEntities {
 
     public static BlockEntityType<BlockEntityEnergyFurnace> ENERGY_FURNACE;
     public static BlockEntityType<BlockEntityQuarry> QUARRY;
     public static BlockEntityType<BlockEntitySolarPanel> SOLAR_PANEL;
-    public static BlockEntityType<BlockEntityEnergyCrystal> ENERGY_CRYSTAL;
-    public static BlockEntityType<BlockEntityEnergyCollector> ENERGY_CRYSTAL_COLLECTOR;
+    public static BlockEntityType<BlockEntityWirelessController> ENERGY_CRYSTAL;
+    public static BlockEntityType<BlockEntityWirelessTransmitter> ENERGY_CRYSTAL_COLLECTOR;
     public static BlockEntityType<BlockEntityPulverizer> PULVERIZER;
     public static BlockEntityType<BlockEntityLavaGenerator> LAVA_GENERATOR;
     public static BlockEntityType<BlockEntityEnergyCharger> ENERGY_CHARGER;
@@ -50,8 +47,8 @@ public class ModBlockEntities {
         ENERGY_FURNACE = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "energy_furnace"), BlockEntityEnergyFurnace.class);
         QUARRY = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "quarry"), BlockEntityQuarry.class);
         SOLAR_PANEL = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "solar_panel"), BlockEntitySolarPanel.class);
-        ENERGY_CRYSTAL = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "energy_crystal"), BlockEntityEnergyCrystal.class);
-        ENERGY_CRYSTAL_COLLECTOR = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "energy_crystal_collector"), BlockEntityEnergyCollector.class);
+        ENERGY_CRYSTAL = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "energy_crystal"), BlockEntityWirelessController.class);
+        ENERGY_CRYSTAL_COLLECTOR = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "energy_crystal_collector"), BlockEntityWirelessTransmitter.class);
         PULVERIZER = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "pulverizer"), BlockEntityPulverizer.class);
         LAVA_GENERATOR = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "lava_generator"), BlockEntityLavaGenerator.class);
         ENERGY_CHARGER = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "energy_charger"), BlockEntityEnergyCharger.class);
@@ -67,7 +64,8 @@ public class ModBlockEntities {
     @Environment(EnvType.CLIENT)
     public static void registerEntityRenders() {
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityQuarry.class, new QuarryRenderer());
-        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityEnergyCollector.class, new CrystalCollectorRenderer());
+        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityWirelessController.class, new WirelessControllerRenderer());
+        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityWirelessTransmitter.class, new WirelessTransmitterRenderer());
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityLavaGenerator.class, new LavaGeneratorRenderer());
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityFluidPump.class, new FluidPumpRenderer());
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityMobGrinder.class, new MobGrinderRenderer());

@@ -17,14 +17,15 @@ import net.minecraft.util.math.Direction;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
-public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergyHandler, ILinkerHandler {
+public class BlockEntityWirelessController extends BlockEntityBase implements IEnergyHandler, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(100000);
-    public final HashSet<BlockPos> tilePositions = new HashSet<>();
+    public final Set<BlockPos> tilePositions = new HashSet<>();
     public int sendPerTick = 250;
 
-    public BlockEntityEnergyCrystal() {
+    public BlockEntityWirelessController() {
         super(ModBlockEntities.ENERGY_CRYSTAL);
     }
 
@@ -69,7 +70,7 @@ public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergy
     public void sendEnergy() {
         for (Iterator<BlockPos> it = tilePositions.iterator(); it.hasNext();) {
             BlockPos blockPos = it.next();
-            if(blockPos == null || !(world.getBlockEntity(blockPos) instanceof IEnergyHandler || ((IEnergyHandler) world.getBlockEntity(blockPos)).isEnergyReceiver(null))) {
+            if(blockPos == null || !(world.getBlockEntity(blockPos) instanceof IEnergyHandler) || !((IEnergyHandler) world.getBlockEntity(blockPos)).isEnergyReceiver(null)) {
                 it.remove();
                 this.markDirty();
                 world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
@@ -77,6 +78,7 @@ public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergy
             }
 
             storage.sendEnergy(world, blockPos, sendPerTick);
+            world.updateListeners(blockPos, world.getBlockState(blockPos), world.getBlockState(blockPos), 3);
         }
     }
 
@@ -87,29 +89,27 @@ public class BlockEntityEnergyCrystal extends BlockEntityBase implements IEnergy
 
     @Override
     public void link(PlayerEntity player, CompoundTag tag) {
-        if(!world.isClient) {
-            if (tag.containsKey("collectorPos")) {
-                BlockPos collectorPos = TagHelper.deserializeBlockPos(tag.getCompound("collectorPos"));
-                BlockEntityEnergyCollector energyCollector = (BlockEntityEnergyCollector) world.getBlockEntity(collectorPos);
-                if (energyCollector != null) {
-                    energyCollector.setCrystalPos(pos);
-                    energyCollector.markDirty();
-                    world.updateListeners(collectorPos, world.getBlockState(collectorPos), world.getBlockState(collectorPos), 3);
-                    player.addChatMessage(new StringTextComponent("Linked collector position!"), true);
-                } else {
-                    player.addChatMessage(new StringTextComponent("Invalid collector position!"), true);
-                }
-            } else if (tag.containsKey("blockPos")) {
-                BlockPos blockPos = TagHelper.deserializeBlockPos(tag.getCompound("blockPos"));
-                if (world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof IEnergyHandler && ((IEnergyHandler) world.getBlockEntity(blockPos)).isEnergyReceiver(null) && !tilePositions.contains(blockPos)) {
-                    tilePositions.add(blockPos);
-                    markDirty();
-                    world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
-                    player.addChatMessage(new StringTextComponent("Linked BlockEntity position!"), true);
-                }
+        if (tag.containsKey("collectorPos")) {
+            BlockPos collectorPos = TagHelper.deserializeBlockPos(tag.getCompound("collectorPos"));
+            BlockEntityWirelessTransmitter energyCollector = (BlockEntityWirelessTransmitter) world.getBlockEntity(collectorPos);
+            if (energyCollector != null) {
+                energyCollector.setCrystalPos(pos);
+                energyCollector.markDirty();
+                world.updateListeners(collectorPos, world.getBlockState(collectorPos), world.getBlockState(collectorPos), 3);
+                player.addChatMessage(new StringTextComponent("Linked collector position!"), true);
             } else {
-                player.addChatMessage(new StringTextComponent("No block position has been linked!"), true);
+                player.addChatMessage(new StringTextComponent("Invalid collector position!"), true);
             }
+        } else if (tag.containsKey("blockPos")) {
+            BlockPos blockPos = TagHelper.deserializeBlockPos(tag.getCompound("blockPos"));
+            if (world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof IEnergyHandler && ((IEnergyHandler) world.getBlockEntity(blockPos)).isEnergyReceiver(null) && !tilePositions.contains(blockPos)) {
+                tilePositions.add(blockPos);
+                markDirty();
+                world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+                player.addChatMessage(new StringTextComponent("Linked BlockEntity position!"), true);
+            }
+        } else {
+            player.addChatMessage(new StringTextComponent("No block position has been linked!"), true);
         }
     }
 }

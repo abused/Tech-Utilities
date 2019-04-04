@@ -12,13 +12,13 @@ import net.minecraft.util.TagHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-public class BlockEntityEnergyCollector extends BlockEntityBase implements IEnergyHandler, ILinkerHandler {
+public class BlockEntityWirelessTransmitter extends BlockEntityBase implements IEnergyHandler, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(10000);
     private BlockPos crystalPos = null;
     private int sendPerTick = 500;
 
-    public BlockEntityEnergyCollector() {
+    public BlockEntityWirelessTransmitter() {
         super(ModBlockEntities.ENERGY_CRYSTAL_COLLECTOR);
     }
 
@@ -43,8 +43,8 @@ public class BlockEntityEnergyCollector extends BlockEntityBase implements IEner
 
     @Override
     public void tick() {
-        if (crystalPos != null && world.getBlockEntity(crystalPos) != null && world.getBlockEntity(crystalPos) instanceof BlockEntityEnergyCrystal && storage.getEnergyStored() >= sendPerTick) {
-            BlockEntityEnergyCrystal energyCrystal = (BlockEntityEnergyCrystal) world.getBlockEntity(crystalPos);
+        if (crystalPos != null && world.getBlockEntity(crystalPos) != null && world.getBlockEntity(crystalPos) instanceof BlockEntityWirelessController && storage.getEnergyStored() >= sendPerTick) {
+            BlockEntityWirelessController energyCrystal = (BlockEntityWirelessController) world.getBlockEntity(crystalPos);
             storage.extractEnergy(energyCrystal.getEnergyStorage(null).receiveEnergy(sendPerTick));
         } else if (crystalPos != null && world.getBlockEntity(crystalPos) == null) {
             crystalPos = null;
@@ -60,10 +60,6 @@ public class BlockEntityEnergyCollector extends BlockEntityBase implements IEner
         return crystalPos;
     }
 
-    public boolean canReceive(int amount) {
-        return (storage.getEnergyCapacity() - storage.getEnergyStored()) >= amount;
-    }
-
     @Override
     public EnergyStorage getEnergyStorage(Direction direction) {
         return storage;
@@ -71,12 +67,11 @@ public class BlockEntityEnergyCollector extends BlockEntityBase implements IEner
 
     @Override
     public void link(PlayerEntity player, CompoundTag tag) {
-        if(!world.isClient) {
-            if (tag.containsKey("blockPos")) {
-                tag.remove("blockPos");
-            }
-            tag.put("collectorPos", TagHelper.serializeBlockPos(pos));
-            player.addChatMessage(new StringTextComponent("Saved collector position!"), true);
+        if (tag.containsKey("blockPos")) {
+            tag.remove("blockPos");
         }
+
+        tag.put("collectorPos", TagHelper.serializeBlockPos(pos));
+        player.addChatMessage(new StringTextComponent("Saved collector position!"), true);
     }
 }

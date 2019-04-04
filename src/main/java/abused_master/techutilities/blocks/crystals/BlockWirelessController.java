@@ -2,10 +2,8 @@ package abused_master.techutilities.blocks.crystals;
 
 import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.tiles.crystal.BlockEntityEnergyCollector;
-import net.minecraft.block.BlockRenderLayer;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Material;
+import abused_master.techutilities.tiles.crystal.BlockEntityWirelessController;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -13,10 +11,10 @@ import net.minecraft.world.BlockView;
 
 import javax.annotation.Nullable;
 
-public class BlockEnergyCollector extends BlockWithEntityBase {
+public class BlockWirelessController extends BlockWithEntityBase {
 
-    public BlockEnergyCollector() {
-        super("crystal_energy_collector", Material.STONE, 1.0f, TechUtilities.modItemGroup);
+    public BlockWirelessController() {
+        super("wireless_controller", Material.STONE, 1.0f, TechUtilities.modItemGroup);
     }
 
     @Override
@@ -41,7 +39,7 @@ public class BlockEnergyCollector extends BlockWithEntityBase {
 
     @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockView blockView) {
-        return new BlockEntityEnergyCollector();
+    public BlockEntity createBlockEntity(BlockView var1) {
+        return new BlockEntityWirelessController();
     }
 }
