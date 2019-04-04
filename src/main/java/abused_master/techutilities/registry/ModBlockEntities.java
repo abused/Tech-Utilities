@@ -6,8 +6,6 @@ import abused_master.techutilities.client.gui.container.*;
 import abused_master.techutilities.client.render.*;
 import abused_master.techutilities.tiles.crystal.BlockEntityWirelessController;
 import abused_master.techutilities.tiles.crystal.BlockEntityWirelessTransmitter;
-import abused_master.techutilities.tiles.crystal.BlockEntityItemReceiver;
-import abused_master.techutilities.tiles.crystal.BlockEntityItemTransfer;
 import abused_master.techutilities.tiles.generator.BlockEntityLavaGenerator;
 import abused_master.techutilities.tiles.generator.BlockEntitySolarPanel;
 import abused_master.techutilities.tiles.machine.*;
@@ -32,8 +30,6 @@ public class ModBlockEntities {
     public static BlockEntityType<BlockEntityFarmer> FARMER;
     public static BlockEntityType<BlockEntityMobGrinder> MOB_GRINDER;
     public static BlockEntityType<BlockEntityVacuum> VACUUM;
-    public static BlockEntityType<BlockEntityItemReceiver> ITEM_RECEIVER;
-    public static BlockEntityType<BlockEntityItemTransfer> ITEM_TRANSFER;
     public static BlockEntityType<BlockEntityPhaseCell> PHASE_CELL;
 
     //Container Identifiers
@@ -56,8 +52,6 @@ public class ModBlockEntities {
         FARMER = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "farmer"), BlockEntityFarmer.class);
         MOB_GRINDER = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "mob_grinder"), BlockEntityMobGrinder.class);
         VACUUM = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "vacuum"), BlockEntityVacuum.class);
-        ITEM_RECEIVER = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "item_receiver"), BlockEntityItemReceiver.class);
-        ITEM_TRANSFER = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "item_transfer"), BlockEntityItemTransfer.class);
         PHASE_CELL = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "phase_cell"), BlockEntityPhaseCell.class);
     }
 
@@ -69,7 +63,6 @@ public class ModBlockEntities {
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityLavaGenerator.class, new LavaGeneratorRenderer());
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityFluidPump.class, new FluidPumpRenderer());
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityMobGrinder.class, new MobGrinderRenderer());
-        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityItemTransfer.class, new ItemTransferRenderer());
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityPhaseCell.class, new PhaseCellRenderer());
     }
 

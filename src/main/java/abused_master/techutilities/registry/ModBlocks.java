@@ -4,8 +4,6 @@ import abused_master.abusedlib.registry.RegistryHelper;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.blocks.crystals.BlockWirelessTransmitter;
 import abused_master.techutilities.blocks.crystals.BlockWirelessController;
-import abused_master.techutilities.blocks.crystals.BlockItemReceiverCrystal;
-import abused_master.techutilities.blocks.crystals.BlockItemTransferCrystal;
 import abused_master.techutilities.blocks.decoration.BlockGlassBase;
 import abused_master.techutilities.blocks.generators.BlockLavaGenerator;
 import abused_master.techutilities.blocks.generators.EnumSolarPanelTypes;
@@ -25,8 +23,6 @@ public class ModBlocks {
     public static BlockMobGrinder MOB_GRINDER = new BlockMobGrinder();
     public static BlockVacuum VACUUM = new BlockVacuum();
     public static BlockConveyorBelt CONVEYOR_BELT = new BlockConveyorBelt();
-    public static BlockItemTransferCrystal ITEM_TRANSFER = new BlockItemTransferCrystal();
-    public static BlockItemReceiverCrystal ITEM_RECEIVER = new BlockItemReceiverCrystal();
     public static BlockEnergyCell PHASE_CELL = new BlockEnergyCell();
     public static BlockMachineFrame MACHINE_FRAME = new BlockMachineFrame();
 
@@ -47,8 +43,6 @@ public class ModBlocks {
         RegistryHelper.registerBlock(TechUtilities.MODID, MOB_GRINDER);
         RegistryHelper.registerBlock(TechUtilities.MODID, VACUUM);
         RegistryHelper.registerBlock(TechUtilities.MODID, CONVEYOR_BELT);
-        RegistryHelper.registerBlock(TechUtilities.MODID, ITEM_TRANSFER);
-        RegistryHelper.registerBlock(TechUtilities.MODID, ITEM_RECEIVER);
         RegistryHelper.registerBlock(TechUtilities.MODID, PHASE_CELL);
         RegistryHelper.registerBlock(TechUtilities.MODID, MACHINE_FRAME);
 

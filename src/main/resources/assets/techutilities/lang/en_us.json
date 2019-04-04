@@ -28,8 +28,6 @@
   "block.techutilities.mob_grinder" : "Mob Grinder",
   "block.techutilities.vacuum" : "Vacuum Block",
   "block.techutilities.conveyor_belt" : "Conveyor Belt",
-  "block.techutilities.item_receiver" : "Item Receiver Crystal",
-  "block.techutilities.item_transfer" : "Item Transfer Crystal",
   "block.techutilities.energy_cell" : "Cardinal Energy Cell",
   "block.techutilities.machine_frame" : "Machine Frame"
 }
