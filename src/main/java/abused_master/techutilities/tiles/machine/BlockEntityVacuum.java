@@ -54,7 +54,7 @@ public class BlockEntityVacuum extends BlockEntityBase implements SidedInventory
     }
 
     public ItemEntity findTarget() {
-        List<ItemEntity> items = world.method_18467(ItemEntity.class, new BoundingBox(pos.add(-3, -3, -3), pos.add(3, 3, 3)));
+        List<ItemEntity> items = world.getEntitiesInBox(ItemEntity.class, new BoundingBox(pos.add(-3, -3, -3), pos.add(3, 3, 3)));
         if(items.isEmpty()) {
             return null;
         }
