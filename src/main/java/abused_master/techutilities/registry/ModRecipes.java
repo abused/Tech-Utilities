@@ -28,8 +28,6 @@ public class ModRecipes {
 
             $.createShaped(new ItemStack(ModBlocks.ENERGY_CRYSTAL), null, new RecipeGenerator.ShapedParser("GPG", "GPG", "GPG", 'G', Items.GOLD_INGOT, 'P', EnumResourceItems.FLOW_INGOT.getItemIngot()));
             $.createShaped(new ItemStack(ModBlocks.ENERGY_CRYSTAL_COLLECTOR), null, new RecipeGenerator.ShapedParser("GPG", "GPG", "OOO", 'G', Items.GOLD_INGOT, 'P', EnumResourceItems.FLOW_INGOT.getItemIngot(), 'O', Blocks.OBSIDIAN));
-            $.createShaped(new ItemStack(ModBlocks.ITEM_RECEIVER), null, new RecipeGenerator.ShapedParser("OPO", "GPG", "OPO", 'O', Blocks.OBSIDIAN, 'P', EnumResourceItems.FLOW_INGOT.getItemIngot(), 'G', Items.GOLD_INGOT));
-            $.createShaped(new ItemStack(ModBlocks.ITEM_TRANSFER), null, new RecipeGenerator.ShapedParser("GPG", "OPO", "GPG", 'G', Items.GOLD_INGOT, 'P', EnumResourceItems.FLOW_INGOT.getItemIngot(), 'O', Blocks.OBSIDIAN));
 
             $.createShaped(new ItemStack(ModBlocks.GLASS_BLOCK, 8), null, new RecipeGenerator.ShapedParser("GGG", "GIG", "GGG", 'G', Blocks.GLASS, 'I', Items.BONE_MEAL));
             $.createShaped(new ItemStack(ModBlocks.BLACK_GLASS_BLOCK, 8), null, new RecipeGenerator.ShapedParser("GGG", "GIG", "GGG", 'G', Blocks.GLASS, 'I', Items.INK_SAC));
