@@ -1,4 +1,4 @@
-package abused_master.techutilities.tiles.crystal;
+package abused_master.techutilities.tiles.transport;
 
 import abused_master.abusedlib.tiles.BlockEntityBase;
 import abused_master.techutilities.registry.ModBlockEntities;

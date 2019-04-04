@@ -169,7 +169,7 @@ public class BlockEntityQuarry extends BlockEntityBase implements IEnergyHandler
         this.markDirty();
     }
 
-    public List<BlockPos> listBlocksInIterable(Iterable<BlockPos> iterable) {
+    public static List<BlockPos> listBlocksInIterable(Iterable<BlockPos> iterable) {
         List<BlockPos> list = new ArrayList<>();
 
         for (Iterator<BlockPos> it = iterable.iterator(); it.hasNext(); ) {

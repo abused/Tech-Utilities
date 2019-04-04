@@ -1,8 +1,8 @@
-package abused_master.techutilities.blocks.crystals;
+package abused_master.techutilities.blocks.transport;
 
 import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.tiles.crystal.BlockEntityWirelessController;
+import abused_master.techutilities.tiles.transport.BlockEntityWirelessController;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;

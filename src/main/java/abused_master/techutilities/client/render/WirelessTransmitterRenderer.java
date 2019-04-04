@@ -1,7 +1,7 @@
 package abused_master.techutilities.client.render;
 
 import abused_master.abusedlib.client.render.RenderHelper;
-import abused_master.techutilities.tiles.crystal.BlockEntityWirelessTransmitter;
+import abused_master.techutilities.tiles.transport.BlockEntityWirelessTransmitter;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 
 public class WirelessTransmitterRenderer extends BlockEntityRenderer<BlockEntityWirelessTransmitter> {

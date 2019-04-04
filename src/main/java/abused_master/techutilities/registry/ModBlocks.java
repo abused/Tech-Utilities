@@ -2,8 +2,8 @@ package abused_master.techutilities.registry;
 
 import abused_master.abusedlib.registry.RegistryHelper;
 import abused_master.techutilities.TechUtilities;
-import abused_master.techutilities.blocks.crystals.BlockWirelessTransmitter;
-import abused_master.techutilities.blocks.crystals.BlockWirelessController;
+import abused_master.techutilities.blocks.transport.BlockWirelessTransmitter;
+import abused_master.techutilities.blocks.transport.BlockWirelessController;
 import abused_master.techutilities.blocks.decoration.BlockGlassBase;
 import abused_master.techutilities.blocks.generators.BlockLavaGenerator;
 import abused_master.techutilities.blocks.generators.EnumSolarPanelTypes;

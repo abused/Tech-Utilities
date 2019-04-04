@@ -10,23 +10,28 @@ import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
 import nerdhub.cardinalenergy.api.IEnergyHandler;
 import nerdhub.cardinalenergy.impl.EnergyStorage;
+import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.TagHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class BlockEntityFluidPump extends BlockEntityBase implements IEnergyHandler, IFluidHandler, IHudSupport, ILinkerHandler {
 
     public EnergyStorage storage = new EnergyStorage(50000);
     public FluidContainer tank = new FluidContainer(32000);
+    public List<BlockPos> cachedDrainingPos = new ArrayList<>();
     public int pumpRage = TechUtilities.config.getInt("pumpRange");
     public BlockPos drainingPos = null;
     public int drainPerBlock = 250;
@@ -37,57 +42,77 @@ public class BlockEntityFluidPump extends BlockEntityBase implements IEnergyHand
     }
 
     @Override
-    public void fromTag(CompoundTag nbt) {
-        super.fromTag(nbt);
-        storage.readEnergyFromTag(nbt);
+    public void fromTag(CompoundTag tag) {
+        super.fromTag(tag);
+        storage.readEnergyFromTag(tag);
 
         if(this.tank != null) {
             this.tank.setBlockEntity(this);
             if(this.tank.getFluidStack() != null) {
-                this.tank.readFromNBT(nbt);
+                this.tank.readFromNBT(tag);
             }
 
-            if (nbt.containsKey("FluidData")) {
-                this.tank.setFluidStack(FluidStack.fluidFromTag(nbt.getCompound("FluidData")));
+            if (tag.containsKey("FluidData")) {
+                this.tank.setFluidStack(FluidStack.fluidFromTag(tag.getCompound("FluidData")));
             }
         }
 
-        if(nbt.containsKey("drainingPos")) {
-            this.drainingPos = TagHelper.deserializeBlockPos(nbt.getCompound("drainingPos"));
+        if(tag.containsKey("cachedDrainingPos")) {
+            this.cachedDrainingPos.clear();
+            ListTag listTag = tag.getList("cachedDrainingPos", NbtType.COMPOUND);
+
+            for (Iterator<Tag> it = listTag.iterator(); it.hasNext(); ) {
+                CompoundTag compoundTag = (CompoundTag) it.next();
+                cachedDrainingPos.add(TagHelper.deserializeBlockPos(compoundTag));
+            }
         }
 
-        this.drainingSpeed = nbt.getInt("drainingSpeed");
+        if(tag.containsKey("drainingPos")) {
+            this.drainingPos = TagHelper.deserializeBlockPos(tag.getCompound("drainingPos"));
+        }
+
+        this.drainingSpeed = tag.getInt("drainingSpeed");
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag nbt) {
-        super.toTag(nbt);
-        storage.writeEnergyToTag(nbt);
+    public CompoundTag toTag(CompoundTag tag) {
+        super.toTag(tag);
+        storage.writeEnergyToTag(tag);
 
         if (this.tank != null && this.tank.getFluidStack() != null) {
             CompoundTag tankTag = new CompoundTag();
             this.tank.getFluidStack().toTag(tankTag);
-            nbt.put("FluidData", tankTag);
-            this.tank.writeToNBT(nbt);
+            tag.put("FluidData", tankTag);
+            this.tank.writeToNBT(tag);
         }
+
+        if(!this.cachedDrainingPos.isEmpty()) {
+            ListTag listTag = new ListTag();
+
+            for (BlockPos areaPos : cachedDrainingPos) {
+                listTag.add(TagHelper.serializeBlockPos(areaPos));
+            }
+
+            tag.put("cachedDrainingPos", listTag);
+        }
+
 
         if(drainingPos != null) {
-            nbt.put("drainingPos", TagHelper.serializeBlockPos(drainingPos));
+            tag.put("drainingPos", TagHelper.serializeBlockPos(drainingPos));
         }
 
-        nbt.putInt("drainingSpeed", this.drainingSpeed);
+        tag.putInt("drainingSpeed", this.drainingSpeed);
 
-        return nbt;
+        return tag;
     }
 
     @Override
     public void tick() {
-        if(!world.isReceivingRedstonePower(pos)) {
-            if (canRun()) {
-                drainingSpeed++;
-                if (drainingSpeed >= 20) {
-                    run();
-                }
+        if (!world.isReceivingRedstonePower(pos) && canRun()) {
+            drainingSpeed++;
+            if (drainingSpeed >= 20) {
+                run();
+                this.updateEntity();
             }
         }
 
@@ -103,28 +128,32 @@ public class BlockEntityFluidPump extends BlockEntityBase implements IEnergyHand
     }
 
     public void run() {
-        Iterable<BlockPos> drainArea = BlockPos.iterateBoxPositions(new BlockPos(pos.getX() - pumpRage, pos.getY() - pumpRage, pos.getZ() - pumpRage), new BlockPos(pos.getX() + pumpRage, pos.getY() + pumpRage, pos.getZ() + pumpRage));
-        for (BlockPos pos : drainArea) {
-            if(world.isAir(pos) || world.getFluidState(pos) == null || !(world.getBlockState(pos).getBlock() instanceof FluidBlock)) {
-                continue;
-            }
+        if(!cachedDrainingPos.isEmpty()) {
+            BlockPos pos = null;
 
-            if(drainingSpeed > 20) {
-                if (tank.getFluidStack() == null) {
-                    tank.setFluidStack(new FluidStack(world.getFluidState(pos).getFluid(), 1000));
-                    world.setBlockState(pos, Blocks.STONE.getDefaultState());
-                    drainingSpeed = 0;
-                    drainingPos = pos;
-                    storage.extractEnergy(drainPerBlock);
-                } else if (tank.getFluidStack().getFluid().getDefaultState().getBlockState() == world.getFluidState(pos).getBlockState()) {
-                    tank.fillFluid(new FluidStack(world.getFluidState(pos).getFluid(), 1000));
-                    world.setBlockState(pos, Blocks.STONE.getDefaultState());
-                    drainingSpeed = 0;
-                    drainingPos = pos;
-                    storage.extractEnergy(drainPerBlock);
-                } else {
+            for (Iterator<BlockPos> it = cachedDrainingPos.iterator(); it.hasNext(); ) {
+                BlockPos pos2 = it.next();
+                if (world.isAir(pos2) || world.getFluidState(pos2) == null || !(world.getBlockState(pos2).getBlock() instanceof FluidBlock)) {
+                    it.remove();
                     continue;
                 }
+
+                pos = pos2;
+                break;
+            }
+
+            if (tank.getFluidStack() == null) {
+                drainingPos = pos;
+                tank.setFluidStack(new FluidStack(world.getFluidState(pos).getFluid(), 1000));
+                world.setBlockState(pos, Blocks.STONE.getDefaultState());
+                drainingSpeed = 0;
+                storage.extractEnergy(drainPerBlock);
+            } else if (tank.getFluidStack().getFluid().getDefaultState().getBlockState() == world.getFluidState(pos).getBlockState()) {
+                drainingPos = pos;
+                tank.fillFluid(new FluidStack(world.getFluidState(pos).getFluid(), 1000));
+                world.setBlockState(pos, Blocks.STONE.getDefaultState());
+                drainingSpeed = 0;
+                storage.extractEnergy(drainPerBlock);
             }
         }
     }
@@ -144,11 +173,17 @@ public class BlockEntityFluidPump extends BlockEntityBase implements IEnergyHand
                             tank.extractFluid(250);
                         }
 
-                        this.markDirty();
+                        this.updateEntity();
                     }
                 }
             }
         }
+    }
+
+    public void cacheDrainingArea() {
+        Iterable<BlockPos> drainArea = BlockPos.iterateBoxPositions(new BlockPos(pos.getX() - pumpRage, pos.getY() - pumpRage, pos.getZ() - pumpRage), new BlockPos(pos.getX() + pumpRage, pos.getY() + pumpRage, pos.getZ() + pumpRage));
+        this.cachedDrainingPos = BlockEntityQuarry.listBlocksInIterable(drainArea);
+        this.updateEntity();
     }
 
     @Override
@@ -175,6 +210,7 @@ public class BlockEntityFluidPump extends BlockEntityBase implements IEnergyHand
     public BlockPos getBlockPos() {
         return getPos();
     }
+
     @Override
     public List<String> getClientLog() {
         List<String> toDisplay = new ArrayList<>();
@@ -198,6 +234,7 @@ public class BlockEntityFluidPump extends BlockEntityBase implements IEnergyHand
             if (tag.containsKey("collectorPos")) {
                 tag.remove("collectorPos");
             }
+
             tag.put("blockPos", TagHelper.serializeBlockPos(pos));
             player.addChatMessage(new StringTextComponent("Saved block position!"), true);
         }

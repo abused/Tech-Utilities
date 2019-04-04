@@ -1,7 +1,7 @@
 package abused_master.techutilities.client.render;
 
 import abused_master.abusedlib.client.render.RenderHelper;
-import abused_master.techutilities.tiles.crystal.BlockEntityWirelessController;
+import abused_master.techutilities.tiles.transport.BlockEntityWirelessController;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.util.math.BlockPos;
 
