@@ -14,15 +14,13 @@ public class ModItems {
     public static ItemQuarryRecorder RECORDER = new ItemQuarryRecorder();
     public static ItemLinker LINKER = new ItemLinker();
     public static ItemEnergizedSword ENERGIZED_SWORD = new ItemEnergizedSword();
-    public static ItemSteelIngot STEEL_INGOT = new ItemSteelIngot("steel_ingot");
-    public static ItemSteelIngot ENERGIZED_STEEL_INGOT = new ItemSteelIngot("energized_steel_ingot");
+    public static ItemSteelIngot STEEL_INGOT = new ItemSteelIngot();
 
     public static void registerItems() {
         RegistryHelper.registerItem(TechUtilities.MODID, RECORDER);
         RegistryHelper.registerItem(TechUtilities.MODID, LINKER);
         RegistryHelper.registerItem(new Identifier(TechUtilities.MODID, "energized_sword"), ENERGIZED_SWORD);
         RegistryHelper.registerItem(TechUtilities.MODID, STEEL_INGOT);
-        RegistryHelper.registerItem(TechUtilities.MODID, ENERGIZED_STEEL_INGOT);
 
         for (EnumResourceItems item : EnumResourceItems.values()) {
             RegistryHelper.registerItem(TechUtilities.MODID, item.getItemIngot());

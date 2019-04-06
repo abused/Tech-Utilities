@@ -22,23 +22,18 @@ public class ItemSteelIngot extends ItemBase implements IEnergyItemHandler {
 
     public ItemEnergyStorage storage = new ItemEnergyStorage(500000);
 
-    public ItemSteelIngot(String name) {
-        super(name, TechUtilities.modItemGroup);
+    public ItemSteelIngot() {
+        super("steel_ingot", TechUtilities.modItemGroup);
     }
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity playerEntity, Hand hand) {
         ItemStack stack = playerEntity.getMainHandStack();
         if(playerEntity.isSneaking() && stack.getItem() == ModItems.STEEL_INGOT && storage.getEnergyStored(stack) == storage.getEnergyCapacity(stack)) {
-            playerEntity.setStackInHand(hand, new ItemStack(ModItems.ENERGIZED_STEEL_INGOT));
+            playerEntity.setStackInHand(hand, new ItemStack(EnumResourceItems.ENERGIZED_STEEL_INGOT.getItemIngot()));
         }
 
         return new TypedActionResult<>(ActionResult.SUCCESS, playerEntity.getMainHandStack());
-    }
-
-    @Override
-    public boolean hasEnchantmentGlint(ItemStack stack) {
-        return stack.getItem() == ModItems.ENERGIZED_STEEL_INGOT;
     }
 
     @Override

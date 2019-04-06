@@ -1,6 +1,7 @@
 package abused_master.techutilities.tiles.machine;
 
 import abused_master.abusedlib.tiles.BlockEntityBase;
+import abused_master.techutilities.items.EnumResourceItems;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.registry.ModItems;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
@@ -55,7 +56,7 @@ public class BlockEntityEnergyCharger extends BlockEntityBase implements IEnergy
             if(isEnergyFull(energyItemHandler, stack)) {
                 inventory.set(0, ItemStack.EMPTY);
                 if(stack.getItem() == ModItems.STEEL_INGOT) {
-                    inventory.set(1, new ItemStack(ModItems.ENERGIZED_STEEL_INGOT));
+                    inventory.set(1, new ItemStack(EnumResourceItems.ENERGIZED_STEEL_INGOT.getItemIngot()));
                 }else {
                     inventory.set(1, stack);
                 }
