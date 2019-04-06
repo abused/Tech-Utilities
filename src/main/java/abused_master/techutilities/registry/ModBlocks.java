@@ -14,8 +14,8 @@ public class ModBlocks {
     public static BlockEnergyFurnace ENERGY_FURNACE = new BlockEnergyFurnace();
     public static BlockPulverizer PULVERIZER = new BlockPulverizer();
     public static BlockQuarry QUARRY = new BlockQuarry();
-    public static BlockWirelessController ENERGY_CRYSTAL = new BlockWirelessController();
-    public static BlockWirelessTransmitter ENERGY_CRYSTAL_COLLECTOR = new BlockWirelessTransmitter();
+    public static BlockWirelessController WIRELESS_CONTROLLER = new BlockWirelessController();
+    public static BlockWirelessTransmitter WIRELESS_TRANSMITTER = new BlockWirelessTransmitter();
     public static BlockLavaGenerator LAVA_GENERATOR = new BlockLavaGenerator();
     public static BlockEnergyCharger ENERGY_CHARGER = new BlockEnergyCharger();
     public static BlockFluidPump FLUID_PUMP = new BlockFluidPump();
@@ -34,8 +34,8 @@ public class ModBlocks {
         RegistryHelper.registerBlock(TechUtilities.MODID, ENERGY_FURNACE);
         RegistryHelper.registerBlock(TechUtilities.MODID, PULVERIZER);
         RegistryHelper.registerBlock(TechUtilities.MODID, QUARRY);
-        RegistryHelper.registerBlock(TechUtilities.MODID, ENERGY_CRYSTAL);
-        RegistryHelper.registerBlock(TechUtilities.MODID, ENERGY_CRYSTAL_COLLECTOR);
+        RegistryHelper.registerBlock(TechUtilities.MODID, WIRELESS_CONTROLLER);
+        RegistryHelper.registerBlock(TechUtilities.MODID, WIRELESS_TRANSMITTER);
         RegistryHelper.registerBlock(TechUtilities.MODID, LAVA_GENERATOR);
         RegistryHelper.registerBlock(TechUtilities.MODID, ENERGY_CHARGER);
         RegistryHelper.registerBlock(TechUtilities.MODID, FLUID_PUMP);

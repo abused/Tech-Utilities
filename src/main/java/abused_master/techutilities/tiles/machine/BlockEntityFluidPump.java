@@ -133,7 +133,7 @@ public class BlockEntityFluidPump extends BlockEntityBase implements IEnergyHand
 
             for (Iterator<BlockPos> it = cachedDrainingPos.iterator(); it.hasNext(); ) {
                 BlockPos pos2 = it.next();
-                if (world.isAir(pos2) || world.getFluidState(pos2) == null || !(world.getBlockState(pos2).getBlock() instanceof FluidBlock)) {
+                if (world.isAir(pos2) || world.getFluidState(pos2) == null || !(world.getBlockState(pos2).getBlock() instanceof FluidBlock) || world.isHeightInvalid(pos)) {
                     it.remove();
                     continue;
                 }

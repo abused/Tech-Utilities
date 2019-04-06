@@ -121,11 +121,10 @@ public class BlockEntityQuarry extends BlockEntityBase implements IEnergyHandler
     public void mineBlocks(Inventory inventory) {
         if (!cachedAreaPos.isEmpty()) {
             BlockPos currentMiningPos = null;
-            System.out.println("working???");
 
             for (Iterator<BlockPos> it = cachedAreaPos.iterator(); it.hasNext(); ) {
                 BlockPos pos = it.next();
-                if (world.isAir(pos) || world.getBlockState(pos).getBlock() == Blocks.BEDROCK || world.getBlockState(pos).getBlock() instanceof FluidBlock || world.getBlockEntity(pos) != null) {
+                if (world.isAir(pos) || world.getBlockState(pos).getBlock() == Blocks.BEDROCK || world.getBlockState(pos).getBlock() instanceof FluidBlock || world.getBlockEntity(pos) != null || world.isHeightInvalid(pos)) {
                     it.remove();
                     continue;
                 }
@@ -135,31 +134,35 @@ public class BlockEntityQuarry extends BlockEntityBase implements IEnergyHandler
                 break;
             }
 
-            miningSpeed = 0;
-            BlockState state = world.getBlockState(currentMiningPos);
-            miningBlock = state;
+            if (currentMiningPos != null) {
+                miningSpeed = 0;
+                BlockState state = world.getBlockState(currentMiningPos);
+                miningBlock = state;
 
-            if (!world.isClient()) {
-                List<ItemStack> drops = Block.getDroppedStacks(state, (ServerWorld) world, currentMiningPos, world.getBlockEntity(currentMiningPos));
-                world.setBlockState(currentMiningPos, Blocks.AIR.getDefaultState());
+                if (!world.isClient()) {
+                    List<ItemStack> drops = Block.getDroppedStacks(state, (ServerWorld) world, currentMiningPos, world.getBlockEntity(currentMiningPos));
+                    world.setBlockState(currentMiningPos, Blocks.AIR.getDefaultState());
 
-                if (silkTouch) {
-                    if (!InventoryHelper.insertItemIfPossible(inventory, new ItemStack(state.getBlock()), false)) {
-                        setMiningError(true);
-                    }
-                } else {
-                    for (ItemStack itemStack : drops) {
-                        Random random = new Random();
-                        ItemStack stackWithFortune = new ItemStack(itemStack.getItem(), fortuneLevel == 0 ? 1 : random.nextInt(fortuneLevel * 2));
-
-                        if (!InventoryHelper.insertItemIfPossible(inventory, stackWithFortune, false)) {
+                    if (silkTouch) {
+                        if (!InventoryHelper.insertItemIfPossible(inventory, new ItemStack(state.getBlock()), false)) {
                             setMiningError(true);
                         }
-                    }
-                }
+                    } else {
+                        for (ItemStack itemStack : drops) {
+                            Random random = new Random();
+                            ItemStack stackWithFortune = new ItemStack(itemStack.getItem(), fortuneLevel == 0 ? 1 : random.nextInt(fortuneLevel * 2));
 
-                storage.extractEnergy(energyUsagePerBlock);
-                cachedAreaPos.remove(currentMiningPos);
+                            if (!InventoryHelper.insertItemIfPossible(inventory, stackWithFortune, false)) {
+                                setMiningError(true);
+                            }
+                        }
+                    }
+
+                    storage.extractEnergy(energyUsagePerBlock);
+                    cachedAreaPos.remove(currentMiningPos);
+                }
+            }else if(currentMiningPos == null && cachedAreaPos.isEmpty()){
+                this.setRunning(false);
             }
         }
     }

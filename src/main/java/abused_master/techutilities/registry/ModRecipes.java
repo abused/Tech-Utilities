@@ -26,8 +26,8 @@ public class ModRecipes {
             $.createShaped(new ItemStack(EnumSolarPanelTypes.SOLAR_PANEL_MK2.getBlockSolar()), null, new RecipeGenerator.ShapedParser("SSS", "IGI", "PLP", 'S', EnumSolarPanelTypes.SOLAR_PANEL_MK1.getBlockSolar(), 'I', Items.IRON_INGOT, 'G', Blocks.GLOWSTONE, 'P', EnumResourceItems.FLOW_INGOT.getItemIngot(), 'L', Items.LAPIS_LAZULI));
             $.createShaped(new ItemStack(EnumSolarPanelTypes.SOLAR_PANEL_MK3.getBlockSolar()), null, new RecipeGenerator.ShapedParser("SSS", "GDG", "PLP", 'S', EnumSolarPanelTypes.SOLAR_PANEL_MK2.getBlockSolar(), 'G', Items.GOLD_INGOT, 'D', Blocks.DIAMOND_BLOCK, 'P', EnumResourceItems.FLOW_INGOT.getItemIngot(), 'L', Blocks.SEA_LANTERN));
 
-            $.createShaped(new ItemStack(ModBlocks.ENERGY_CRYSTAL), null, new RecipeGenerator.ShapedParser("GPG", "GPG", "GPG", 'G', Items.GOLD_INGOT, 'P', EnumResourceItems.FLOW_INGOT.getItemIngot()));
-            $.createShaped(new ItemStack(ModBlocks.ENERGY_CRYSTAL_COLLECTOR), null, new RecipeGenerator.ShapedParser("GPG", "GPG", "OOO", 'G', Items.GOLD_INGOT, 'P', EnumResourceItems.FLOW_INGOT.getItemIngot(), 'O', Blocks.OBSIDIAN));
+            $.createShaped(new ItemStack(ModBlocks.WIRELESS_CONTROLLER), null, new RecipeGenerator.ShapedParser("GPG", "GPG", "GPG", 'G', Items.GOLD_INGOT, 'P', EnumResourceItems.FLOW_INGOT.getItemIngot()));
+            $.createShaped(new ItemStack(ModBlocks.WIRELESS_TRANSMITTER), null, new RecipeGenerator.ShapedParser("GPG", "GPG", "OOO", 'G', Items.GOLD_INGOT, 'P', EnumResourceItems.FLOW_INGOT.getItemIngot(), 'O', Blocks.OBSIDIAN));
 
             $.createShaped(new ItemStack(ModBlocks.GLASS_BLOCK, 8), null, new RecipeGenerator.ShapedParser("GGG", "GIG", "GGG", 'G', Blocks.GLASS, 'I', Items.BONE_MEAL));
             $.createShaped(new ItemStack(ModBlocks.BLACK_GLASS_BLOCK, 8), null, new RecipeGenerator.ShapedParser("GGG", "GIG", "GGG", 'G', Blocks.GLASS, 'I', Items.INK_SAC));

@@ -1,5 +1,6 @@
 {
     "variants": {
-        "": { "model": "techutilities:block/wireless_controller" }
+        "state=idle": { "model": "techutilities:block/wireless_controller_idle" },
+        "state=running": { "model": "techutilities:block/wireless_controller_rotate" }
     }
 }

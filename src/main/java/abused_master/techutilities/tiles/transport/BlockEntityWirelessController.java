@@ -72,13 +72,12 @@ public class BlockEntityWirelessController extends BlockEntityBase implements IE
             BlockPos blockPos = it.next();
             if(blockPos == null || !(world.getBlockEntity(blockPos) instanceof IEnergyHandler) || !((IEnergyHandler) world.getBlockEntity(blockPos)).isEnergyReceiver(null)) {
                 it.remove();
-                this.markDirty();
-                world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+                this.updateEntity();
                 continue;
             }
 
             storage.sendEnergy(world, blockPos, sendPerTick);
-            world.updateListeners(blockPos, world.getBlockState(blockPos), world.getBlockState(blockPos), 3);
+            this.updateEntity();
         }
     }
 
@@ -104,8 +103,7 @@ public class BlockEntityWirelessController extends BlockEntityBase implements IE
             BlockPos blockPos = TagHelper.deserializeBlockPos(tag.getCompound("blockPos"));
             if (world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof IEnergyHandler && ((IEnergyHandler) world.getBlockEntity(blockPos)).isEnergyReceiver(null) && !tilePositions.contains(blockPos)) {
                 tilePositions.add(blockPos);
-                markDirty();
-                world.updateListeners(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+                this.updateEntity();
                 player.addChatMessage(new StringTextComponent("Linked BlockEntity position!"), true);
             }
         } else {
