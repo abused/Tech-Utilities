@@ -1,5 +1,6 @@
 package abused_master.techutilities.client.gui.container;
 
+import abused_master.abusedlib.utils.InventoryHelper;
 import net.minecraft.container.Container;
 import net.minecraft.container.Slot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -45,7 +46,7 @@ public class ContainerVacuum extends Container {
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity playerEntity_1, int int_1) {
-        return ItemStack.EMPTY;
+    public ItemStack transferSlot(PlayerEntity player, int int_1) {
+        return InventoryHelper.handleShiftClick(this, player, int_1);
     }
 }

@@ -1,6 +1,7 @@
 package abused_master.techutilities.client.gui.container;
 
 import abused_master.abusedlib.client.gui.OutputSlot;
+import abused_master.abusedlib.utils.InventoryHelper;
 import net.minecraft.container.Container;
 import net.minecraft.container.Slot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -43,7 +44,7 @@ public class ContainerPulverizer extends Container {
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity playerEntity, int i) {
-        return ItemStack.EMPTY;
+    public ItemStack transferSlot(PlayerEntity player, int i) {
+        return InventoryHelper.handleShiftClick(this, player, i);
     }
 }
