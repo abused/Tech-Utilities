@@ -4,6 +4,7 @@ import abused_master.abusedlib.registry.RegistryHelper;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.client.gui.container.*;
 import abused_master.techutilities.client.render.*;
+import abused_master.techutilities.tiles.transport.BlockEntityEnergyCable;
 import abused_master.techutilities.tiles.transport.BlockEntityWirelessController;
 import abused_master.techutilities.tiles.transport.BlockEntityWirelessTransmitter;
 import abused_master.techutilities.tiles.generator.BlockEntityLavaGenerator;
@@ -31,6 +32,7 @@ public class ModBlockEntities {
     public static BlockEntityType<BlockEntityMobGrinder> MOB_GRINDER;
     public static BlockEntityType<BlockEntityVacuum> VACUUM;
     public static BlockEntityType<BlockEntityPhaseCell> PHASE_CELL;
+    public static BlockEntityType<BlockEntityEnergyCable> ENERGY_CABLE;
 
     //Container Identifiers
     public static final Identifier ENERGY_FURNACE_CONTAINER = new Identifier(TechUtilities.MODID, "energy_furnace_container");
@@ -53,6 +55,7 @@ public class ModBlockEntities {
         MOB_GRINDER = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "mob_grinder"), BlockEntityMobGrinder.class);
         VACUUM = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "vacuum"), BlockEntityVacuum.class);
         PHASE_CELL = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "phase_cell"), BlockEntityPhaseCell.class);
+        ENERGY_CABLE = RegistryHelper.registerTile(new Identifier(TechUtilities.MODID, "energy_cable"), BlockEntityEnergyCable.class);
     }
 
     @Environment(EnvType.CLIENT)

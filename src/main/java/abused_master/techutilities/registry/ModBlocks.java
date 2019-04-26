@@ -2,6 +2,7 @@ package abused_master.techutilities.registry;
 
 import abused_master.abusedlib.registry.RegistryHelper;
 import abused_master.techutilities.TechUtilities;
+import abused_master.techutilities.blocks.transport.BlockEnergyCable;
 import abused_master.techutilities.blocks.transport.BlockWirelessTransmitter;
 import abused_master.techutilities.blocks.transport.BlockWirelessController;
 import abused_master.techutilities.blocks.decoration.BlockGlassBase;
@@ -25,6 +26,7 @@ public class ModBlocks {
     public static BlockConveyorBelt CONVEYOR_BELT = new BlockConveyorBelt();
     public static BlockEnergyCell PHASE_CELL = new BlockEnergyCell();
     public static BlockMachineFrame MACHINE_FRAME = new BlockMachineFrame();
+    public static BlockEnergyCable ENERGY_CABLE = new BlockEnergyCable();
 
     //Decoration
     public static BlockGlassBase GLASS_BLOCK = new BlockGlassBase("glass_block");
@@ -45,6 +47,7 @@ public class ModBlocks {
         RegistryHelper.registerBlock(TechUtilities.MODID, CONVEYOR_BELT);
         RegistryHelper.registerBlock(TechUtilities.MODID, PHASE_CELL);
         RegistryHelper.registerBlock(TechUtilities.MODID, MACHINE_FRAME);
+        RegistryHelper.registerBlock(TechUtilities.MODID, ENERGY_CABLE);
 
         RegistryHelper.registerBlock(TechUtilities.MODID, GLASS_BLOCK);
         RegistryHelper.registerBlock(TechUtilities.MODID, BLACK_GLASS_BLOCK);
