@@ -6,17 +6,13 @@ import abused_master.techutilities.tiles.transport.BlockEntityEnergyCable;
 import nerdhub.cardinalenergy.api.IEnergyHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateFactory;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Property;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
@@ -35,57 +31,6 @@ public class BlockEnergyCable extends BlockWithEntityBase {
     public BlockEnergyCable() {
         super("energy_cable", Material.STONE, 1.0f, TechUtilities.modItemGroup);
         this.setDefaultState(this.getStateFactory().getDefaultState().with(PROPS[6], true));
-    }
-
-    @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
-        BlockEntityEnergyCable energyCable = (BlockEntityEnergyCable) world.getBlockEntity(pos);
-
-        for (Direction direction : Direction.values()) {
-            BlockEntity blockEntity = world.getBlockEntity(pos.offset(direction));
-            if(blockEntity instanceof IEnergyHandler) {
-                IEnergyHandler energyHandler = (IEnergyHandler) blockEntity;
-
-                if(energyHandler.isEnergyProvider(direction)) {
-                    energyCable.addPowerSource(pos.offset(direction));
-
-                }else if(energyHandler.isEnergyReceiver(direction)) {
-                    energyCable.addConnection(pos.offset(direction));
-                }
-            }
-        }
-    }
-
-    @Override
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos neighborPos, boolean boolean_1) {
-        BlockEntityEnergyCable energyCable = (BlockEntityEnergyCable) world.getBlockEntity(pos);
-
-        if(world.isAir(neighborPos)) {
-            if (energyCable.powerSources.contains(neighborPos)) {
-                energyCable.removePowerSource(neighborPos);
-                return;
-            } else if (energyCable.connections.contains(neighborPos)) {
-                energyCable.removeConnection(neighborPos);
-                return;
-            }
-        }
-
-        BlockEntity blockEntity = world.getBlockEntity(neighborPos);
-        if(blockEntity instanceof IEnergyHandler) {
-            IEnergyHandler energyHandler = (IEnergyHandler) blockEntity;
-            Direction direction = Direction.fromVector(pos.subtract(neighborPos));
-
-            if(energyHandler.isEnergyProvider(direction.getOpposite())) {
-                energyCable.addPowerSource(neighborPos);
-            }else if(energyHandler.isEnergyReceiver(direction.getOpposite())) {
-                energyCable.addConnection(neighborPos);
-            }
-        }else if(blockEntity instanceof BlockEntityEnergyCable) {
-            ((BlockEntityEnergyCable) blockEntity).powerSources.addAll(energyCable.powerSources);
-            ((BlockEntityEnergyCable) blockEntity).updateEntity();
-        }
-
-        super.neighborUpdate(state, world, pos, block, neighborPos, boolean_1);
     }
 
     @Nullable
