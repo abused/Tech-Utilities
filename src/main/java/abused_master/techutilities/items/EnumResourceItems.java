@@ -5,13 +5,23 @@ import abused_master.techutilities.TechUtilities;
 import net.minecraft.item.ItemStack;
 
 public enum EnumResourceItems {
+    COPPER_INGOT,
+    TIN_INGOT,
+    LEAD_INGOT,
+    SILVER_INGOT,
+    NICKEL_INGOT,
     FLOW_INGOT,
-    ENERGIZED_STEEL_INGOT(true),
     FLOW_DUST,
     COAL_DUST,
     DIAMOND_DUST,
     IRON_DUST,
-    GOLD_DUST;
+    GOLD_DUST,
+    COPPER_DUST,
+    TIN_DUST,
+    LEAD_DUST,
+    SILVER_DUST,
+    NICKEL_DUST,
+    ENERGIZED_STEEL_INGOT(true);
 
     private ItemBase itemResource;
 

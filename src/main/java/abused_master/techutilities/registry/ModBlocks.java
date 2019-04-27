@@ -2,6 +2,7 @@ package abused_master.techutilities.registry;
 
 import abused_master.abusedlib.registry.RegistryHelper;
 import abused_master.techutilities.TechUtilities;
+import abused_master.techutilities.blocks.BlockResources;
 import abused_master.techutilities.blocks.transport.BlockEnergyCable;
 import abused_master.techutilities.blocks.transport.BlockWirelessTransmitter;
 import abused_master.techutilities.blocks.transport.BlockWirelessController;
@@ -54,6 +55,14 @@ public class ModBlocks {
 
         for (EnumSolarPanelTypes panel : EnumSolarPanelTypes.values()) {
             RegistryHelper.registerBlock(TechUtilities.MODID, panel.getBlockSolar());
+        }
+
+        for (BlockResources.EnumResourceOres ore : BlockResources.EnumResourceOres.values()) {
+            RegistryHelper.registerBlock(TechUtilities.MODID, ore.getBlockOres());
+        }
+
+        for (BlockResources.EnumResourceBlocks ore : BlockResources.EnumResourceBlocks.values()) {
+            RegistryHelper.registerBlock(TechUtilities.MODID, ore.getBlockOres());
         }
     }
 }

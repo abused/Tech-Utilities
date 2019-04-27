@@ -19,6 +19,7 @@ public class TechUtilities implements ModInitializer {
     public void onInitialize() {
         ModBlocks.registerBlocks();
         ModItems.registerItems();
+        WorldGenRegistry.generateOres();
         ModBlockEntities.registerBlockEntities();
         ModBlockEntities.registerServerGUIs();
         ModRecipes.registerRecipes();
