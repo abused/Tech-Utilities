@@ -11,6 +11,8 @@ public class ModRecipes {
 
     public static RecipeGenerator registerRecipes() {
         RecipeGenerator generator =  new RecipeGenerator($ -> {
+            /**
+             * TODO redo all these
             $.createShaped(new ItemStack(ModBlocks.ENERGY_FURNACE), null, new RecipeGenerator.ShapedParser("GFG", "PRP", "PCP", 'G', Blocks.GLASS, 'F', Blocks.FURNACE, 'P', EnumResourceItems.FLOW_INGOT.getItemIngot(), 'C', ModBlocks.PHASE_CELL, 'R', Items.REDSTONE));
             $.createShaped(new ItemStack(ModBlocks.PULVERIZER), null, new RecipeGenerator.ShapedParser("PRP", "PRP", "FCF", 'P', EnumResourceItems.FLOW_INGOT.getItemIngot(), 'R', Items.REDSTONE, 'F', Items.FLINT, 'C', ModBlocks.PHASE_CELL));
             $.createShaped(new ItemStack(ModBlocks.QUARRY), null, new RecipeGenerator.ShapedParser("ORO", "PDP", "OCO", 'O', Blocks.OBSIDIAN, 'R', Items.REDSTONE, 'P', Items.DIAMOND_PICKAXE, 'C', ModBlocks.PHASE_CELL, 'D', Blocks.CRAFTING_TABLE));
@@ -35,6 +37,7 @@ public class ModRecipes {
             $.createShaped(new ItemStack(ModItems.RECORDER), null, new RecipeGenerator.ShapedParser("PGP", "IBI", "PGP", 'P', EnumResourceItems.FLOW_INGOT.getItemIngot(), 'G', Items.GOLD_INGOT, 'I', Items.INK_SAC, 'B', Items.WRITABLE_BOOK));
             $.createShaped(new ItemStack(ModItems.LINKER), null, new RecipeGenerator.ShapedParser("P P", " P ", " P ", 'P', EnumResourceItems.FLOW_INGOT.getItemIngot()));
             $.createShapeless(new ItemStack(EnumResourceItems.FLOW_INGOT.getItemIngot(), 4), null, new RecipeGenerator.ShapelessParser(Items.IRON_INGOT, Items.ENDER_PEARL, Items.REDSTONE));
+             */
         });
 
         generator.accept();
