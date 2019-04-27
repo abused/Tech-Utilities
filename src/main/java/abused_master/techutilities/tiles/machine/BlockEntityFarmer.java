@@ -14,7 +14,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.StringItem;
+import net.minecraft.item.AliasedBlockItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.BlockTags;
@@ -75,7 +75,7 @@ public class BlockEntityFarmer extends BlockEntityBase implements IEnergyHandler
     }
 
     public void run() {
-        Iterable<BlockPos> farmerTreeArea = BlockPos.iterateBoxPositions(new BlockPos(pos.getX() - farmerRange, pos.getY(), pos.getZ() - farmerRange), new BlockPos(pos.getX() + farmerRange, pos.getY() + farmerRange, pos.getZ() + farmerRange));
+        Iterable<BlockPos> farmerTreeArea = BlockPos.iterate(new BlockPos(pos.getX() - farmerRange, pos.getY(), pos.getZ() - farmerRange), new BlockPos(pos.getX() + farmerRange, pos.getY() + farmerRange, pos.getZ() + farmerRange));
         for (BlockPos pos : farmerTreeArea) {
             if(world.isAir(pos) || world.getBlockEntity(pos) != null || !(world.getBlockState(pos).getBlock() instanceof CropBlock || world.getBlockState(pos).getBlock() instanceof LeavesBlock || world.getBlockState(pos).getBlock() instanceof LogBlock)) {
                 continue;
@@ -101,7 +101,7 @@ public class BlockEntityFarmer extends BlockEntityBase implements IEnergyHandler
                     }
 
                     for (ItemStack stack : drops) {
-                        insertItem(stack, (stack.getItem() instanceof StringItem && ((StringItem) stack.getItem()).getBlock() instanceof CropBlock) || ItemTags.SAPLINGS.contains(stack.getItem()));
+                        insertItem(stack, (stack.getItem() instanceof AliasedBlockItem && ((AliasedBlockItem) stack.getItem()).getBlock() instanceof CropBlock) || ItemTags.SAPLINGS.contains(stack.getItem()));
                     }
 
                     timer = 0;
@@ -111,7 +111,7 @@ public class BlockEntityFarmer extends BlockEntityBase implements IEnergyHandler
     }
 
     public void autoPlant() {
-        Iterable<BlockPos> farmerPlantArea = BlockPos.iterateBoxPositions(new BlockPos(pos.getX() - farmerRange, pos.getY(), pos.getZ() - farmerRange), new BlockPos(pos.getX() + farmerRange, pos.getY(), pos.getZ() + farmerRange));
+        Iterable<BlockPos> farmerPlantArea = BlockPos.iterate(new BlockPos(pos.getX() - farmerRange, pos.getY(), pos.getZ() - farmerRange), new BlockPos(pos.getX() + farmerRange, pos.getY(), pos.getZ() + farmerRange));
 
         for (int i : seedsSlot) {
             for (BlockPos blockPos : farmerPlantArea) {
@@ -134,7 +134,7 @@ public class BlockEntityFarmer extends BlockEntityBase implements IEnergyHandler
                     return true;
                 }
             }
-        } else if (world.getBlockState(plantingPos.down()).getBlock() == Blocks.FARMLAND && (stack.getItem() instanceof StringItem && ((StringItem) stack.getItem()).getBlock() instanceof CropBlock)) {
+        } else if (world.getBlockState(plantingPos.down()).getBlock() == Blocks.FARMLAND && (stack.getItem() instanceof AliasedBlockItem && ((AliasedBlockItem) stack.getItem()).getBlock() instanceof CropBlock)) {
             useOnBlock(plantingPos, stack.getItem());
             return true;
         }
@@ -143,8 +143,8 @@ public class BlockEntityFarmer extends BlockEntityBase implements IEnergyHandler
     }
 
     public void useOnBlock(BlockPos plantingPos, Item seedsItem) {
-        if(seedsItem instanceof StringItem && ((StringItem) seedsItem).getBlock() instanceof CropBlock) {
-            world.setBlockState(plantingPos, ((StringItem) seedsItem).getBlock().getDefaultState(), 11);
+        if(seedsItem instanceof AliasedBlockItem && ((AliasedBlockItem) seedsItem).getBlock() instanceof CropBlock) {
+            world.setBlockState(plantingPos, ((AliasedBlockItem) seedsItem).getBlock().getDefaultState(), 11);
         }
     }
 

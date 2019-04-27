@@ -4,7 +4,6 @@ import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.tiles.machine.BlockEntityFarmer;
-import abused_master.techutilities.tiles.machine.BlockEntityPulverizer;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -13,8 +12,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.sortme.ItemScatterer;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
@@ -40,7 +39,7 @@ public class BlockFarmer extends BlockWithEntityBase {
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
         BlockEntityFarmer farmer = (BlockEntityFarmer) world.getBlockEntity(pos);
-        Iterable<BlockPos> areaPos = BlockPos.iterateBoxPositions(new BlockPos(pos.getX() - farmer.farmerRange, pos.getY() - 1, pos.getZ() - farmer.farmerRange), new BlockPos(pos.getX() + farmer.farmerRange, pos.getY() - 1, pos.getZ() + farmer.farmerRange));
+        Iterable<BlockPos> areaPos = BlockPos.iterate(new BlockPos(pos.getX() - farmer.farmerRange, pos.getY() - 1, pos.getZ() - farmer.farmerRange), new BlockPos(pos.getX() + farmer.farmerRange, pos.getY() - 1, pos.getZ() + farmer.farmerRange));
         for (BlockPos blockPos : areaPos) {
             if(!world.isAir(blockPos) && world.getBlockState(blockPos).getBlock() == Blocks.GRASS_BLOCK || world.getBlockState(blockPos).getBlock() == Blocks.DIRT) {
                 world.setBlockState(blockPos, Blocks.FARMLAND.getDefaultState(), 3);

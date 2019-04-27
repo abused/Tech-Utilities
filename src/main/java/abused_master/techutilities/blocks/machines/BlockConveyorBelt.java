@@ -10,8 +10,8 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateFactory;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Property;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.BlockMirror;
+import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 public class BlockConveyorBelt extends BlockBase {
 
-    public static final DirectionProperty FACING = HorizontalFacingBlock.field_11177;
+    public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 
     public BlockConveyorBelt() {
         super("conveyor_belt", Material.STONE, 1.0f, TechUtilities.modItemGroup);
@@ -56,13 +56,13 @@ public class BlockConveyorBelt extends BlockBase {
     }
 
     @Override
-    public BlockState rotate(BlockState blockState_1, Rotation rotation_1) {
-        return blockState_1.with(FACING, rotation_1.rotate(blockState_1.get(FACING)));
+    public BlockState rotate(BlockState blockState_1, BlockRotation rotation) {
+        return blockState_1.with(FACING, rotation.rotate(blockState_1.get(FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState blockState_1, Mirror mirror_1) {
-        return blockState_1.rotate(mirror_1.getRotation(blockState_1.get(FACING)));
+    public BlockState mirror(BlockState blockState_1, BlockMirror mirror) {
+        return blockState_1.rotate(mirror.getRotation(blockState_1.get(FACING)));
     }
 
     @Override

@@ -169,7 +169,7 @@ public class BlockEntityQuarry extends BlockEntityBase implements IEnergyHandler
 
     public void cacheMiningArea() {
         if(secondCorner != null && firstCorner != null) {
-            Iterable<BlockPos> blocksInQuarry = BlockPos.iterateBoxPositions(secondCorner, firstCorner);
+            Iterable<BlockPos> blocksInQuarry = BlockPos.iterate(secondCorner, firstCorner);
             cachedAreaPos = listBlocksInIterable(blocksInQuarry);
         }
 

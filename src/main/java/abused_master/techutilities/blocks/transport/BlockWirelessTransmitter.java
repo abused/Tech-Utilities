@@ -20,12 +20,12 @@ public class BlockWirelessTransmitter extends BlockWithEntityBase {
 
     public BlockWirelessTransmitter() {
         super("wireless_transmitter", Material.STONE, 1.0f, TechUtilities.modItemGroup);
-        this.setDefaultState(this.stateFactory.getDefaultState().with(HorizontalFacingBlock.field_11177, Direction.NORTH).with(WallMountedBlock.FACE, WallMountLocation.WALL));
+        this.setDefaultState(this.stateFactory.getDefaultState().with(HorizontalFacingBlock.FACING, Direction.NORTH).with(WallMountedBlock.FACE, WallMountLocation.WALL));
     }
 
     @Override
     public boolean canPlaceAt(BlockState state, ViewableWorld viewableWorld, BlockPos pos) {
-        return WallMountedBlock.method_20046(viewableWorld, pos, getDirection(state).getOpposite());
+        return WallMountedBlock.canPlaceAt(viewableWorld, pos, getDirection(state).getOpposite());
     }
 
     @Override
@@ -47,9 +47,9 @@ public class BlockWirelessTransmitter extends BlockWithEntityBase {
             Direction direction = directions[i];
             BlockState state;
             if (direction.getAxis() == Direction.Axis.Y) {
-                state = this.getDefaultState().with(WallMountedBlock.FACE, direction == Direction.UP ? WallMountLocation.CEILING : WallMountLocation.FLOOR).with(HorizontalFacingBlock.field_11177, context.getPlayerHorizontalFacing());
+                state = this.getDefaultState().with(WallMountedBlock.FACE, direction == Direction.UP ? WallMountLocation.CEILING : WallMountLocation.FLOOR).with(HorizontalFacingBlock.FACING, context.getPlayerHorizontalFacing());
             } else {
-                state = this.getDefaultState().with(WallMountedBlock.FACE, WallMountLocation.WALL).with(HorizontalFacingBlock.field_11177, direction.getOpposite());
+                state = this.getDefaultState().with(WallMountedBlock.FACE, WallMountLocation.WALL).with(HorizontalFacingBlock.FACING, direction.getOpposite());
             }
 
             if (state.canPlaceAt(context.getWorld(), context.getBlockPos())) {
@@ -77,7 +77,7 @@ public class BlockWirelessTransmitter extends BlockWithEntityBase {
 
     @Override
     protected void appendProperties(StateFactory.Builder<Block, BlockState> builder) {
-        super.appendProperties(builder.with(WallMountedBlock.FACE, HorizontalFacingBlock.field_11177));
+        super.appendProperties(builder.with(WallMountedBlock.FACE, HorizontalFacingBlock.FACING));
     }
 
     public Direction getDirection(BlockState state) {
@@ -87,7 +87,7 @@ public class BlockWirelessTransmitter extends BlockWithEntityBase {
             case FLOOR:
                 return Direction.UP;
             default:
-                return state.get(HorizontalFacingBlock.field_11177);
+                return state.get(HorizontalFacingBlock.FACING);
         }
     }
 

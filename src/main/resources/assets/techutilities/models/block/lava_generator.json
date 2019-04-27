@@ -1,7 +1,7 @@
 {
     "parent": "block/cube_all",
     "textures": {
-	    "particle": "techutilities:blocks/lava_generator_top",
+        "particle": "techutilities:blocks/lava_generator_top",
         "lava_generator_top": "techutilities:blocks/lava_generator_top",
         "machine_top": "techutilities:blocks/machine_top",
         "lava_generator_base": "techutilities:blocks/lava_generator_base"
@@ -41,8 +41,8 @@
     "elements": [
         {
             "name": "Cube",
-            "from": [ 5, 5, 13 ], 
-            "to": [ 11, 11, 13 ], 
+            "from": [ 5, 5, 13 ],
+            "to": [ 11, 11, 13 ],
             "faces": {
                 "north": { "texture": "#lava_generator_base", "uv": [ 0, 0, 16, 16 ] },
                 "east": { "texture": "#lava_generator_base", "uv": [ 0, 0, 0, 6 ] },
@@ -54,8 +54,8 @@
         },
         {
             "name": "Cube",
-            "from": [ 5, 5, 3 ], 
-            "to": [ 11, 11, 3 ], 
+            "from": [ 5, 5, 3 ],
+            "to": [ 11, 11, 3 ],
             "faces": {
                 "north": { "texture": "#lava_generator_base", "uv": [ 0, 0, 16, 16 ] },
                 "east": { "texture": "#lava_generator_base", "uv": [ 0, 0, 0, 6 ] },
@@ -67,8 +67,8 @@
         },
         {
             "name": "Cube",
-            "from": [ 13, 5, 5 ], 
-            "to": [ 13, 11, 11 ], 
+            "from": [ 13, 5, 5 ],
+            "to": [ 13, 11, 11 ],
             "faces": {
                 "north": { "texture": "#lava_generator_base", "uv": [ 0, 0, 0, 6 ] },
                 "east": { "texture": "#lava_generator_base", "uv": [ 0, 0, 16, 16 ] },
@@ -80,8 +80,8 @@
         },
         {
             "name": "Cube",
-            "from": [ 3, 5, 5 ], 
-            "to": [ 3, 11, 11 ], 
+            "from": [ 3, 5, 5 ],
+            "to": [ 3, 11, 11 ],
             "faces": {
                 "north": { "texture": "#lava_generator_base", "uv": [ 0, 0, 0, 6 ] },
                 "east": { "texture": "#lava_generator_base", "uv": [ 0, 0, 16, 16 ] },
@@ -93,8 +93,8 @@
         },
         {
             "name": "Cube",
-            "from": [ 5, 1, 5 ], 
-            "to": [ 11, 4, 11 ], 
+            "from": [ 5, 1, 5 ],
+            "to": [ 11, 4, 11 ],
             "faces": {
                 "north": { "texture": "#lava_generator_base", "uv": [ 5, 1, 11, 4 ] },
                 "east": { "texture": "#lava_generator_base", "uv": [ 5, 1, 11, 4 ] },
@@ -105,8 +105,8 @@
         },
         {
             "name": "Cube",
-            "from": [ 5, 12, 5 ], 
-            "to": [ 11, 15, 11 ], 
+            "from": [ 5, 12, 5 ],
+            "to": [ 11, 15, 11 ],
             "faces": {
                 "north": { "texture": "#lava_generator_base", "uv": [ 5, 1, 11, 4 ] },
                 "east": { "texture": "#lava_generator_base", "uv": [ 5, 1, 11, 4 ] },
@@ -117,8 +117,8 @@
         },
         {
             "name": "Cube",
-            "from": [ 0, 15, 0 ], 
-            "to": [ 16, 16, 16 ], 
+            "from": [ 0, 15, 0 ],
+            "to": [ 16, 16, 16 ],
             "faces": {
                 "north": { "texture": "#lava_generator_top", "uv": [ 0, 0, 16, 1 ] },
                 "east": { "texture": "#lava_generator_top", "uv": [ 0, 0, 16, 1 ] },
@@ -130,8 +130,8 @@
         },
         {
             "name": "Cube",
-            "from": [ 0, 1, 14 ], 
-            "to": [ 2, 15, 16 ], 
+            "from": [ 0, 1, 14 ],
+            "to": [ 2, 15, 16 ],
             "faces": {
                 "north": { "texture": "#machine_top", "uv": [ 3, 1, 5, 15 ] },
                 "east": { "texture": "#machine_top", "uv": [ 3, 1, 5, 15 ] },
@@ -141,8 +141,8 @@
         },
         {
             "name": "Cube",
-            "from": [ 0, 0, 0 ], 
-            "to": [ 16, 1, 16 ], 
+            "from": [ 0, 0, 0 ],
+            "to": [ 16, 1, 16 ],
             "faces": {
                 "north": { "texture": "#lava_generator_top", "uv": [ 0, 0, 16, 1 ] },
                 "east": { "texture": "#lava_generator_top", "uv": [ 0, 0, 16, 1 ] },
@@ -154,8 +154,8 @@
         },
         {
             "name": "Cube",
-            "from": [ 0, 1, 0 ], 
-            "to": [ 2, 15, 2 ], 
+            "from": [ 0, 1, 0 ],
+            "to": [ 2, 15, 2 ],
             "faces": {
                 "north": { "texture": "#machine_top", "uv": [ 4, 1, 6, 15 ] },
                 "east": { "texture": "#machine_top", "uv": [ 9, 1, 11, 15 ] },
@@ -165,8 +165,8 @@
         },
         {
             "name": "Cube",
-            "from": [ 14, 1, 0 ], 
-            "to": [ 16, 15, 2 ], 
+            "from": [ 14, 1, 0 ],
+            "to": [ 16, 15, 2 ],
             "faces": {
                 "north": { "texture": "#machine_top", "uv": [ 10, 1, 12, 15 ] },
                 "east": { "texture": "#machine_top", "uv": [ 6, 1, 8, 15 ] },
@@ -176,8 +176,8 @@
         },
         {
             "name": "Cube",
-            "from": [ 14, 1, 14 ], 
-            "to": [ 16, 15, 16 ], 
+            "from": [ 14, 1, 14 ],
+            "to": [ 16, 15, 16 ],
             "faces": {
                 "north": { "texture": "#machine_top", "uv": [ 9, 1, 11, 15 ] },
                 "east": { "texture": "#machine_top", "uv": [ 7, 1, 9, 15 ] },

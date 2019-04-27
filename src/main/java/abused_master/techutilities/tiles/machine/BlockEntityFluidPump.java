@@ -182,7 +182,7 @@ public class BlockEntityFluidPump extends BlockEntityBase implements IEnergyHand
     }
 
     public void cacheDrainingArea() {
-        Iterable<BlockPos> drainArea = BlockPos.iterateBoxPositions(new BlockPos(pos.getX() - pumpRage, pos.getY() - pumpRage, pos.getZ() - pumpRage), new BlockPos(pos.getX() + pumpRage, pos.getY() + pumpRage, pos.getZ() + pumpRage));
+        Iterable<BlockPos> drainArea = BlockPos.iterate(new BlockPos(pos.getX() - pumpRage, pos.getY() - pumpRage, pos.getZ() - pumpRage), new BlockPos(pos.getX() + pumpRage, pos.getY() + pumpRage, pos.getZ() + pumpRage));
         this.cachedDrainingPos = BlockEntityQuarry.listBlocksInIterable(drainArea);
         this.updateEntity();
     }
