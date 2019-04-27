@@ -2,18 +2,21 @@ package abused_master.techutilities.registry;
 
 import abused_master.techutilities.items.EnumResourceItems;
 import com.google.common.collect.Maps;
+import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tag.BlockTags;
+import net.minecraft.tag.Tag;
 
 import java.util.Map;
 
 public class PulverizerRecipes {
 
     public static PulverizerRecipes INSTANCE = instance();
-    private final Map<ItemStack, PulverizerRecipe> recipesMap = Maps.newHashMap();
+    private final Map<Object, PulverizerRecipe> recipesMap = Maps.newHashMap();
 
     private static PulverizerRecipes instance() {
         return new PulverizerRecipes();
@@ -37,29 +40,21 @@ public class PulverizerRecipes {
         registerRecipe(new ItemStack(Items.BLAZE_ROD), new ItemStack(Items.BLAZE_POWDER), 4, ItemStack.EMPTY, 0, 0);
         registerRecipe(new ItemStack(Blocks.MAGMA_BLOCK), new ItemStack(Items.MAGMA_CREAM), 4, ItemStack.EMPTY, 0, 0);
 
-        //TODO ADD RECIPES BACK WITH TAGS
-        /*
-        registerRecipe(new ItemStack(Blocks.IRON_ORE), new ItemStack(EnumResourceItems.IRON_DUST.getItemIngot()), 2, new ItemStack(EnumResourceItems.NICKEL_DUST.getItemIngot()), 1, 10);
-        registerRecipe(new ItemStack(Blocks.GOLD_ORE), new ItemStack(EnumResourceItems.GOLD_DUST.getItemIngot()), 2, ItemStack.EMPTY, 0, 0);
-        registerRecipe(new ItemStack(BlockResources.EnumResourceOres.COPPER_ORE.getBlockOres()), new ItemStack(EnumResourceItems.COPPER_DUST.getItemIngot()), 2, new ItemStack(EnumResourceItems.GOLD_DUST.getItemIngot()), 1, 10);
-        registerRecipe(new ItemStack(BlockResources.EnumResourceOres.TIN_ORE.getBlockOres()), new ItemStack(EnumResourceItems.TIN_DUST.getItemIngot()), 2, new ItemStack(EnumResourceItems.IRON_DUST.getItemIngot()), 1, 10);
-        registerRecipe(new ItemStack(BlockResources.EnumResourceOres.SILVER_ORE.getBlockOres()), new ItemStack(EnumResourceItems.SILVER_DUST.getItemIngot()), 2, new ItemStack(EnumResourceItems.LEAD_DUST.getItemIngot()), 1, 10);
-        registerRecipe(new ItemStack(BlockResources.EnumResourceOres.LEAD_ORE.getBlockOres()), new ItemStack(EnumResourceItems.LEAD_DUST.getItemIngot()), 2, new ItemStack(EnumResourceItems.SILVER_DUST.getItemIngot()), 1, 10);
-        registerRecipe(new ItemStack(BlockResources.EnumResourceOres.NICKEL_ORE.getBlockOres()), new ItemStack(EnumResourceItems.NICKEL_DUST.getItemIngot()), 2, new ItemStack(EnumResourceItems.PLATINUM_DUST.getItemIngot()), 1, 10);
-        registerRecipe(new ItemStack(BlockResources.EnumResourceOres.PLATINUM_ORE.getBlockOres()), new ItemStack(EnumResourceItems.PLATINUM_DUST.getItemIngot()), 2, ItemStack.EMPTY, 0, 0);
+        registerRecipe(new ItemStack(Blocks.IRON_ORE), TechUtilitiesTags.IRON_DUST, 2, TechUtilitiesTags.NICKEL_DUST, 1, 10);
+        registerRecipe(new ItemStack(Blocks.GOLD_ORE), TechUtilitiesTags.GOLD_DUST, 2, ItemStack.EMPTY, 0, 0);
+        registerRecipe(TechUtilitiesTags.COPPER_ORE, TechUtilitiesTags.COPPER_DUST, 2, TechUtilitiesTags.GOLD_DUST, 1, 10);
+        registerRecipe(TechUtilitiesTags.TIN_ORE, TechUtilitiesTags.TIN_DUST, 2, TechUtilitiesTags.IRON_DUST, 1, 10);
+        registerRecipe(TechUtilitiesTags.SILVER_ORE, TechUtilitiesTags.SILVER_DUST, 2, TechUtilitiesTags.LEAD_DUST, 1, 10);
+        registerRecipe(TechUtilitiesTags.LEAD_ORE, TechUtilitiesTags.LEAD_DUST, 2, TechUtilitiesTags.SILVER_DUST, 1, 10);
+        registerRecipe(TechUtilitiesTags.NICKEL_ORE, TechUtilitiesTags.NICKEL_DUST, 2, ItemStack.EMPTY, 1, 10);
 
+        registerRecipe(TechUtilitiesTags.COPPER_INGOT, TechUtilitiesTags.COPPER_DUST, 1, ItemStack.EMPTY, 0, 0);
+        registerRecipe(TechUtilitiesTags.TIN_INGOT, TechUtilitiesTags.TIN_DUST, 1, ItemStack.EMPTY, 0, 0);
+        registerRecipe(TechUtilitiesTags.LEAD_INGOT, TechUtilitiesTags.LEAD_DUST, 1, ItemStack.EMPTY, 0, 0);
+        registerRecipe(TechUtilitiesTags.SILVER_INGOT, TechUtilitiesTags.SILVER_DUST, 1, ItemStack.EMPTY, 0, 0);
+        registerRecipe(TechUtilitiesTags.NICKEL_INGOT, TechUtilitiesTags.NICKEL_DUST, 1, ItemStack.EMPTY, 0, 0);
 
-        registerRecipe(new ItemStack(EnumResourceItems.COPPER_INGOT.getItemIngot()), new ItemStack(EnumResourceItems.COPPER_DUST.getItemIngot()), 1, ItemStack.EMPTY, 0, 0);
-        registerRecipe(new ItemStack(EnumResourceItems.TIN_INGOT.getItemIngot()), new ItemStack(EnumResourceItems.TIN_DUST.getItemIngot()), 1, ItemStack.EMPTY, 0, 0);
-        registerRecipe(new ItemStack(EnumResourceItems.LEAD_INGOT.getItemIngot()), new ItemStack(EnumResourceItems.LEAD_DUST.getItemIngot()), 1, ItemStack.EMPTY, 0, 0);
-        registerRecipe(new ItemStack(EnumResourceItems.SILVER_INGOT.getItemIngot()), new ItemStack(EnumResourceItems.SILVER_DUST.getItemIngot()), 1, ItemStack.EMPTY, 0, 0);
-        registerRecipe(new ItemStack(EnumResourceItems.NICKEL_INGOT.getItemIngot()), new ItemStack(EnumResourceItems.NICKEL_DUST.getItemIngot()), 1, ItemStack.EMPTY, 0, 0);
-        registerRecipe(new ItemStack(EnumResourceItems.PLATINUM_INGOT.getItemIngot()), new ItemStack(EnumResourceItems.PLATINUM_DUST.getItemIngot()), 1, ItemStack.EMPTY, 0, 0);
-        registerRecipe(new ItemStack(EnumResourceItems.ELECTRUM_INGOT.getItemIngot()), new ItemStack(EnumResourceItems.ELECTRUM_DUST.getItemIngot()), 1, ItemStack.EMPTY, 0, 0);
-        registerRecipe(new ItemStack(EnumResourceItems.INVAR_INGOT.getItemIngot()), new ItemStack(EnumResourceItems.INVAR_DUST.getItemIngot()), 1, ItemStack.EMPTY, 0, 0);
-        */
-
-        registerRecipe(new ItemStack(Blocks.COAL_ORE), new ItemStack(Items.COAL), 3, new ItemStack(EnumResourceItems.COAL_DUST.getItemIngot()), 1, 25);
+        registerRecipe(new ItemStack(Blocks.COAL_ORE), new ItemStack(Items.COAL), 3, TechUtilitiesTags.COAL_DUST, 1, 25);
         registerRecipe(new ItemStack(Blocks.LAPIS_ORE), new ItemStack(Items.LAPIS_LAZULI), 8, ItemStack.EMPTY, 0, 0);
         registerRecipe(new ItemStack(Blocks.REDSTONE_ORE), new ItemStack(Items.REDSTONE), 6, ItemStack.EMPTY, 0, 0);
         registerRecipe(new ItemStack(Blocks.DIAMOND_ORE), new ItemStack(Items.DIAMOND), 2, new ItemStack(Items.DIAMOND), 1, 10);
@@ -71,14 +66,18 @@ public class PulverizerRecipes {
         }
     }
 
-    public void registerRecipe(ItemStack input, ItemStack output, int outputAmount, ItemStack randomDrop, int randomDropAmount, int percentageDrop) {
-        recipesMap.put(input, new PulverizerRecipe(input, output, outputAmount, randomDrop, randomDropAmount, percentageDrop));
+    public void registerRecipe(Object input, Object output, int outputAmount, Object randomDrop, int randomDropAmount, int percentageDrop) {
+        recipesMap.put(input, new PulverizerRecipe(output, outputAmount, randomDrop, randomDropAmount, percentageDrop));
     }
 
     public PulverizerRecipe getOutputRecipe(ItemStack input) {
-        for (Map.Entry<ItemStack, PulverizerRecipe> entry : this.recipesMap.entrySet()) {
-            if(input.getItem() == entry.getKey().getItem()) {
-                return entry.getValue();
+        for (Map.Entry<Object, PulverizerRecipe> entry : this.recipesMap.entrySet()) {
+            if(entry.getKey() instanceof ItemStack) {
+                if(input.getItem() == ((ItemStack) entry.getKey()).getItem()) {
+                    return entry.getValue();
+                }
+            }else if(entry.getKey() instanceof Tag) {
+                return ((Tag) entry.getKey()).contains(input.getItem()) ? entry.getValue() : null;
             }
         }
 
@@ -87,20 +86,15 @@ public class PulverizerRecipes {
 
     public class PulverizerRecipe {
 
-        private ItemStack input, output, randomDrop;
+        private ItemStack output, randomDrop;
         private int outputAmount, randomDropAmoumt, percentageDrop;
 
-        public PulverizerRecipe(ItemStack input, ItemStack output, int outputAmount, ItemStack randomDrop, int randomDropAmount, int percentageDrop) {
-            this.input = input;
-            this.output = output;
-            this.randomDrop = randomDrop;
+        public PulverizerRecipe(Object output, int outputAmount, Object randomDrop, int randomDropAmount, int percentageDrop) {
+            this.output = output instanceof ItemStack ? (ItemStack) output : (((Tag) output).values().toArray()[0] instanceof Item ? new ItemStack((Item) ((Tag) output).values().toArray()[0]) : new ItemStack((Block) ((Tag) output).values().toArray()[0]));
+            this.randomDrop = randomDrop instanceof ItemStack ? (ItemStack) randomDrop : (((Tag) randomDrop).values().toArray()[0] instanceof Item ? new ItemStack((Item) ((Tag) randomDrop).values().toArray()[0]) : new ItemStack((Block) ((Tag) randomDrop).values().toArray()[0]));
             this.percentageDrop = percentageDrop;
             this.outputAmount = outputAmount;
             this.randomDropAmoumt = randomDropAmount;
-        }
-
-        public ItemStack getInput() {
-            return input;
         }
 
         public ItemStack getOutput() {

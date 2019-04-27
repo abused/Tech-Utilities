@@ -66,7 +66,10 @@ public class BlockEntityPulverizer extends BlockEntityBase implements IEnergyHan
     }
 
     public boolean canRun() {
+        ItemStack stack = inventory.get(0);
         PulverizerRecipes.PulverizerRecipe recipe = PulverizerRecipes.INSTANCE.getOutputRecipe(inventory.get(0));
+        PulverizerRecipes.INSTANCE.getOutputRecipe(stack);
+
         if(inventory.get(0).isEmpty() || recipe == null || recipe.getOutput().isEmpty() || storage.getEnergyStored() < getEnergyUsage()) {
             return false;
         }else if(!inventory.get(1).isEmpty()) {
