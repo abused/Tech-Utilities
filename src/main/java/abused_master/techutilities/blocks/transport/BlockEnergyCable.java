@@ -8,12 +8,14 @@ import abused_master.techutilities.utils.WrenchHelper;
 import nerdhub.cardinalenergy.api.IEnergyHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.VerticalEntityPosition;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateFactory;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -88,6 +90,11 @@ public class BlockEnergyCable extends BlockWithEntityBase implements IWrenchable
     @Override
     public BlockEntity createBlockEntity(BlockView blockView) {
         return new BlockEntityEnergyCable();
+    }
+
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, VerticalEntityPosition verticalEntityPosition) {
+        return Block.createCuboidShape(5, 5, 5, 11, 11, 11);
     }
 
     @Override
