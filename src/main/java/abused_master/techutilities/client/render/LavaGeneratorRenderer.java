@@ -17,7 +17,7 @@ public class LavaGeneratorRenderer extends BlockEntityRenderer<BlockEntityLavaGe
             GlStateManager.pushMatrix();
             GlStateManager.enableBlend();
             RenderHelper.translateAgainstPlayer(tile.getPos(), false);
-            RenderHelper.renderFluid(tile.tank.getFluidStack(), tile.getPos(), -0.06, 0, -0.06, 0.25, 0.25, 0.26, 0.87, tile.tank.getFluidAmount() / tile.tank.getFluidCapacity() * 0.75, 0.87);
+            RenderHelper.renderFluid(tile.tank.getFluidStack(), tile.getPos(), 0.20d, 0.26d, 0.20d, 0.01d, 0.0d, 0.01d, 0.59d, (double) tile.tank.getFluidAmount() / (double) tile.tank.getFluidCapacity() * 0.46d, 0.59d);
             GlStateManager.disableBlend();
             GlStateManager.popMatrix();
         }
