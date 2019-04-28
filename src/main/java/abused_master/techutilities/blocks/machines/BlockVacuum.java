@@ -4,6 +4,8 @@ import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.tiles.machine.BlockEntityVacuum;
+import abused_master.techutilities.utils.IWrenchable;
+import abused_master.techutilities.utils.WrenchHelper;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
@@ -18,7 +20,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockVacuum extends BlockWithEntityBase {
+public class BlockVacuum extends BlockWithEntityBase implements IWrenchable {
 
     public BlockVacuum() {
         super("vacuum", Material.STONE, 1.0f, TechUtilities.modItemGroup);
@@ -49,5 +51,10 @@ public class BlockVacuum extends BlockWithEntityBase {
     @Override
     public BlockEntity createBlockEntity(BlockView blockView) {
         return new BlockEntityVacuum();
+    }
+
+    @Override
+    public boolean onWrenched(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        return player.isSneaking() ? WrenchHelper.dropBlock(world, pos) : false;
     }
 }

@@ -2,6 +2,8 @@ package abused_master.techutilities.blocks.machines;
 
 import abused_master.abusedlib.blocks.BlockBase;
 import abused_master.techutilities.TechUtilities;
+import abused_master.techutilities.utils.IWrenchable;
+import abused_master.techutilities.utils.WrenchHelper;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.VerticalEntityPosition;
@@ -20,7 +22,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockConveyorBelt extends BlockBase {
+public class BlockConveyorBelt extends BlockBase implements IWrenchable {
 
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 
@@ -93,5 +95,10 @@ public class BlockConveyorBelt extends BlockBase {
     @Override
     public BlockRenderType getRenderType(BlockState var1) {
         return BlockRenderType.MODEL;
+    }
+
+    @Override
+    public boolean onWrenched(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        return player.isSneaking() ? WrenchHelper.dropBlock(world, pos) : WrenchHelper.rotateBlock(world, pos, state);
     }
 }

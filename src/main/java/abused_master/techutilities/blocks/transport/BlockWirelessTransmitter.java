@@ -3,9 +3,12 @@ package abused_master.techutilities.blocks.transport;
 import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.tiles.transport.BlockEntityWirelessTransmitter;
+import abused_master.techutilities.utils.IWrenchable;
+import abused_master.techutilities.utils.WrenchHelper;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.enums.WallMountLocation;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateFactory;
 import net.minecraft.util.math.BlockPos;
@@ -13,10 +16,11 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.ViewableWorld;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockWirelessTransmitter extends BlockWithEntityBase {
+public class BlockWirelessTransmitter extends BlockWithEntityBase implements IWrenchable {
 
     public BlockWirelessTransmitter() {
         super("wireless_transmitter", Material.STONE, 1.0f, TechUtilities.modItemGroup);
@@ -95,5 +99,10 @@ public class BlockWirelessTransmitter extends BlockWithEntityBase {
     @Override
     public BlockEntity createBlockEntity(BlockView blockView) {
         return new BlockEntityWirelessTransmitter();
+    }
+
+    @Override
+    public boolean onWrenched(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        return player.isSneaking() ? WrenchHelper.dropBlock(world, pos) : WrenchHelper.rotateBlock(world, pos, state);
     }
 }

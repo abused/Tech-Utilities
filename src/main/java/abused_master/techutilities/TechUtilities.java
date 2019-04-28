@@ -4,8 +4,11 @@ import abused_master.abusedlib.utils.Config;
 import abused_master.techutilities.registry.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 
 public class TechUtilities implements ModInitializer {
@@ -24,5 +27,14 @@ public class TechUtilities implements ModInitializer {
         ModBlockEntities.registerBlockEntities();
         ModBlockEntities.registerServerGUIs();
         ModRecipes.registerRecipes();
+
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+            if(player.getMainHandStack().getItem() == ModItems.WRENCH) {
+                player.getMainHandStack().getItem().useOnBlock(new ItemUsageContext(player, hand, hitResult));
+                return ActionResult.SUCCESS;
+            }
+
+            return ActionResult.PASS;
+        });
     }
 }

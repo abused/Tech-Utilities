@@ -3,24 +3,29 @@ package abused_master.techutilities.blocks.machines;
 import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.tiles.machine.BlockEntityMobGrinder;
+import abused_master.techutilities.utils.IWrenchable;
+import abused_master.techutilities.utils.WrenchHelper;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateFactory;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockMobGrinder extends BlockWithEntityBase {
+public class BlockMobGrinder extends BlockWithEntityBase implements IWrenchable {
 
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 
@@ -54,5 +59,10 @@ public class BlockMobGrinder extends BlockWithEntityBase {
     @Override
     public BlockEntity createBlockEntity(BlockView blockView) {
         return new BlockEntityMobGrinder();
+    }
+
+    @Override
+    public boolean onWrenched(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        return player.isSneaking() ? WrenchHelper.dropBlock(world, pos) : WrenchHelper.rotateBlock(world, pos, state);
     }
 }

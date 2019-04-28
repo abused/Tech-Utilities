@@ -4,6 +4,8 @@ import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.tiles.machine.BlockEntityPulverizer;
+import abused_master.techutilities.utils.IWrenchable;
+import abused_master.techutilities.utils.WrenchHelper;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -27,7 +29,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockPulverizer extends BlockWithEntityBase {
+public class BlockPulverizer extends BlockWithEntityBase implements IWrenchable {
 
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 
@@ -82,5 +84,10 @@ public class BlockPulverizer extends BlockWithEntityBase {
     @Override
     public BlockEntity createBlockEntity(BlockView blockView) {
         return new BlockEntityPulverizer();
+    }
+
+    @Override
+    public boolean onWrenched(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        return player.isSneaking() ? WrenchHelper.dropBlock(world, pos) : WrenchHelper.rotateBlock(world, pos, state);
     }
 }

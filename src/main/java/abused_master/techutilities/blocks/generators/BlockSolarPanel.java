@@ -3,6 +3,8 @@ package abused_master.techutilities.blocks.generators;
 import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.tiles.generator.BlockEntitySolarPanel;
+import abused_master.techutilities.utils.IWrenchable;
+import abused_master.techutilities.utils.WrenchHelper;
 import net.minecraft.block.BlockRenderLayer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
@@ -18,7 +20,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockSolarPanel extends BlockWithEntityBase {
+public class BlockSolarPanel extends BlockWithEntityBase implements IWrenchable {
 
     public EnumSolarPanelTypes solarPanelType;
 
@@ -64,5 +66,10 @@ public class BlockSolarPanel extends BlockWithEntityBase {
         BlockEntitySolarPanel solarPanel = new BlockEntitySolarPanel();
         solarPanel.setType(solarPanelType);
         return solarPanel;
+    }
+
+    @Override
+    public boolean onWrenched(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        return player.isSneaking() ? WrenchHelper.dropBlock(world, pos) : false;
     }
 }

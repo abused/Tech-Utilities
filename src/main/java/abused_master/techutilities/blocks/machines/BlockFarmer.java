@@ -4,6 +4,8 @@ import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.tiles.machine.BlockEntityFarmer;
+import abused_master.techutilities.utils.IWrenchable;
+import abused_master.techutilities.utils.WrenchHelper;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -21,7 +23,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockFarmer extends BlockWithEntityBase {
+public class BlockFarmer extends BlockWithEntityBase implements IWrenchable {
 
     public BlockFarmer() {
         super("farmer", Material.STONE, 1.0f, TechUtilities.modItemGroup);
@@ -63,5 +65,10 @@ public class BlockFarmer extends BlockWithEntityBase {
     @Override
     public BlockEntity createBlockEntity(BlockView blockView) {
         return new BlockEntityFarmer();
+    }
+
+    @Override
+    public boolean onWrenched(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        return player.isSneaking() ? WrenchHelper.dropBlock(world, pos) : false;
     }
 }

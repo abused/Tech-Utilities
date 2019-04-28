@@ -3,8 +3,11 @@ package abused_master.techutilities.blocks.transport;
 import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.tiles.transport.BlockEntityWirelessController;
+import abused_master.techutilities.utils.IWrenchable;
+import abused_master.techutilities.utils.WrenchHelper;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateFactory;
 import net.minecraft.state.property.EnumProperty;
@@ -12,10 +15,11 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockWirelessController extends BlockWithEntityBase {
+public class BlockWirelessController extends BlockWithEntityBase implements IWrenchable {
 
     public static final EnumProperty<ControllerState> STATE = EnumProperty.create("state", ControllerState.class);
 
@@ -59,6 +63,11 @@ public class BlockWirelessController extends BlockWithEntityBase {
     @Override
     public BlockEntity createBlockEntity(BlockView var1) {
         return new BlockEntityWirelessController();
+    }
+
+    @Override
+    public boolean onWrenched(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        return player.isSneaking() ? WrenchHelper.dropBlock(world, pos) : false;
     }
 
     public enum ControllerState implements StringRepresentable {

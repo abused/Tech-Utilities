@@ -24,6 +24,7 @@
   "item.techutilities.quarry_recorder" : "Quarry Recorder",
   "item.techutilities.energized_sword" : "Energized Sword",
   "item.techutilities.linker" : "Linker Tool",
+  "item.techutilities.wrench": "Utility Wrench",
 
   "__comment3": "Resource Blocks",
   "block.techutilities.copper_block" : "Copper Block",

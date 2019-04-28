@@ -5,6 +5,8 @@ import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.items.ItemQuarryRecorder;
 import abused_master.techutilities.registry.ModItems;
 import abused_master.techutilities.tiles.machine.BlockEntityQuarry;
+import abused_master.techutilities.utils.IWrenchable;
+import abused_master.techutilities.utils.WrenchHelper;
 import net.minecraft.block.BlockRenderLayer;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -25,7 +27,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-public class BlockQuarry extends BlockWithEntityBase {
+public class BlockQuarry extends BlockWithEntityBase implements IWrenchable {
 
     public BlockQuarry() {
         super("quarry", Material.STONE, 1.0f, TechUtilities.modItemGroup);
@@ -122,5 +124,10 @@ public class BlockQuarry extends BlockWithEntityBase {
     @Override
     public BlockEntity createBlockEntity(BlockView blockView) {
         return new BlockEntityQuarry();
+    }
+
+    @Override
+    public boolean onWrenched(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        return player.isSneaking() ? WrenchHelper.dropBlock(world, pos) : false;
     }
 }

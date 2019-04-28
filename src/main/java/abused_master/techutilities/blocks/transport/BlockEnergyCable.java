@@ -3,9 +3,12 @@ package abused_master.techutilities.blocks.transport;
 import abused_master.abusedlib.blocks.BlockWithEntityBase;
 import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.tiles.transport.BlockEntityEnergyCable;
+import abused_master.techutilities.utils.IWrenchable;
+import abused_master.techutilities.utils.WrenchHelper;
 import nerdhub.cardinalenergy.api.IEnergyHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateFactory;
 import net.minecraft.state.property.BooleanProperty;
@@ -13,10 +16,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockEnergyCable extends BlockWithEntityBase {
+public class BlockEnergyCable extends BlockWithEntityBase implements IWrenchable {
 
     public static final BooleanProperty[] PROPS = new BooleanProperty[] {
             BooleanProperty.create("down"),
@@ -84,5 +88,10 @@ public class BlockEnergyCable extends BlockWithEntityBase {
     @Override
     public BlockEntity createBlockEntity(BlockView blockView) {
         return new BlockEntityEnergyCable();
+    }
+
+    @Override
+    public boolean onWrenched(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        return player.isSneaking() ? WrenchHelper.dropBlock(world, pos) : false;
     }
 }
