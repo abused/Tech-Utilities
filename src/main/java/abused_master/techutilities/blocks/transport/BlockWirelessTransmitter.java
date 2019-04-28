@@ -8,11 +8,13 @@ import abused_master.techutilities.utils.WrenchHelper;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.enums.WallMountLocation;
+import net.minecraft.entity.VerticalEntityPosition;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateFactory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.ViewableWorld;
@@ -99,6 +101,11 @@ public class BlockWirelessTransmitter extends BlockWithEntityBase implements IWr
     @Override
     public BlockEntity createBlockEntity(BlockView blockView) {
         return new BlockEntityWirelessTransmitter();
+    }
+
+    @Override
+    public VoxelShape getOutlineShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, VerticalEntityPosition verticalEntityPosition_1) {
+        return Block.createCuboidShape(4.0D, 0.0D, 4.0D, 12.0D, 11.0D, 12.0D);
     }
 
     @Override

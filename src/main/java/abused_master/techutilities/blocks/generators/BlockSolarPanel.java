@@ -5,16 +5,17 @@ import abused_master.techutilities.TechUtilities;
 import abused_master.techutilities.tiles.generator.BlockEntitySolarPanel;
 import abused_master.techutilities.utils.IWrenchable;
 import abused_master.techutilities.utils.WrenchHelper;
-import net.minecraft.block.BlockRenderLayer;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Material;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.VerticalEntityPosition;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
@@ -66,6 +67,14 @@ public class BlockSolarPanel extends BlockWithEntityBase implements IWrenchable 
         BlockEntitySolarPanel solarPanel = new BlockEntitySolarPanel();
         solarPanel.setType(solarPanelType);
         return solarPanel;
+    }
+
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, VerticalEntityPosition verticalEntityPosition) {
+        VoxelShape topShape = Block.createCuboidShape(0.0D, 14.0D, 0.0D, 16.0D, 15.0D, 16.0D);
+        VoxelShape baseShape = Block.createCuboidShape(4.0D, 0.0D, 4.0D, 12.0D, 14.0D, 12.0D);
+
+        return VoxelShapes.union(topShape, baseShape);
     }
 
     @Override
