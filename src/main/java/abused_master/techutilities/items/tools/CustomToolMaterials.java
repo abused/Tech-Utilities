@@ -1,11 +1,13 @@
 package abused_master.techutilities.items.tools;
 
+import abused_master.techutilities.items.EnumResourceItems;
+import abused_master.techutilities.registry.ModItems;
 import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 
 public enum CustomToolMaterials implements ToolMaterial {
-    ENERGIZED_SWORD(3, -1, 8.0f, 12.0f, 22, Ingredient.ofItems(Items.DIAMOND));
+    ENERGIZED_SWORD(3, -1, 8.0f, 12.0f, 22, Ingredient.ofItems(EnumResourceItems.ENERGIZED_STEEL_INGOT.getItemIngot()));
 
     private int miningLevel;
     private int durability;

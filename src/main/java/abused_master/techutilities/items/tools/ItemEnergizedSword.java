@@ -1,6 +1,7 @@
 package abused_master.techutilities.items.tools;
 
 import abused_master.techutilities.TechUtilities;
+import abused_master.techutilities.utils.ItemHelper;
 import nerdhub.cardinalenergy.api.IEnergyItemHandler;
 import nerdhub.cardinalenergy.impl.ItemEnergyStorage;
 import net.minecraft.client.item.TooltipContext;
@@ -24,17 +25,16 @@ public class ItemEnergizedSword extends SwordItem implements IEnergyItemHandler 
 
     @Override
     public boolean onEntityDamaged(ItemStack stack, LivingEntity livingEntity, LivingEntity damagedEntity) {
-        if (storage.getEnergyStored(stack) >= 500) {
-            storage.extractEnergy(stack, 500);
+        int damageAmount = (int) (damagedEntity.getHealthMaximum() - damagedEntity.getHealth());
+        int energyUsage = (damageAmount == 0 ? (int) damagedEntity.getHealthMaximum() : damageAmount) * 50;
+
+        if (storage.getEnergyStored(stack) >= energyUsage) {
+            storage.extractEnergy(stack, energyUsage);
+            ItemHelper.updateItemDurability(stack, storage);
             return true;
         }
 
         return false;
-    }
-
-    @Override
-    public boolean canDamage() {
-        return getDurability() >= 500;
     }
 
     @Override

@@ -4,6 +4,7 @@ import abused_master.abusedlib.tiles.BlockEntityBase;
 import abused_master.techutilities.items.EnumResourceItems;
 import abused_master.techutilities.registry.ModBlockEntities;
 import abused_master.techutilities.registry.ModItems;
+import abused_master.techutilities.utils.ItemHelper;
 import abused_master.techutilities.utils.linker.ILinkerHandler;
 import nerdhub.cardinalenergy.api.IEnergyHandler;
 import nerdhub.cardinalenergy.api.IEnergyItemHandler;
@@ -63,13 +64,14 @@ public class BlockEntityEnergyCharger extends BlockEntityBase implements IEnergy
             }else {
                if(storage.canExtract(chargePerTick)) {
                    storage.extractEnergy(energyItemHandler.getEnergyStorage().receiveEnergy(stack, chargePerTick));
+                   ItemHelper.updateItemDurability(stack, energyItemHandler.getEnergyStorage());
                }
             }
         }
     }
 
     public boolean isEnergyFull(IEnergyItemHandler energyItemHandler, ItemStack stack) {
-        return energyItemHandler.getEnergyStorage().getEnergyStored(stack) == energyItemHandler.getEnergyStorage().getEnergyCapacity(stack);
+        return energyItemHandler.getEnergyStorage().getEnergyStored(stack) >= energyItemHandler.getEnergyStorage().getEnergyCapacity(stack);
     }
 
     @Override
