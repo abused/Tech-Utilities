@@ -66,9 +66,10 @@ public class BlockEntityPulverizer extends BlockEntityBase implements IEnergyHan
     }
 
     public boolean canRun() {
-        ItemStack stack = inventory.get(0);
         PulverizerRecipes.PulverizerRecipe recipe = PulverizerRecipes.INSTANCE.getOutputRecipe(inventory.get(0));
-        PulverizerRecipes.INSTANCE.getOutputRecipe(stack);
+        if(recipe != null) {
+            recipe.get();
+        }
 
         if(inventory.get(0).isEmpty() || recipe == null || recipe.getOutput().isEmpty() || storage.getEnergyStored() < getEnergyUsage()) {
             return false;
@@ -186,6 +187,7 @@ public class BlockEntityPulverizer extends BlockEntityBase implements IEnergyHan
             if (tag.containsKey("collectorPos")) {
                 tag.remove("collectorPos");
             }
+
             tag.put("blockPos", TagHelper.serializeBlockPos(pos));
             player.addChatMessage(new StringTextComponent("Saved block position!"), true);
         }

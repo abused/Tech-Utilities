@@ -10,6 +10,7 @@ import net.minecraft.util.Identifier;
 
 public class TechUtilities implements ModInitializer {
 
+    public static final String RESOURCES_TAG = "fabric";
     public static String MODID = "techutilities";
     public static ItemGroup modItemGroup = FabricItemGroupBuilder.build(new Identifier(MODID, "techutilities"), () -> new ItemStack(ModBlocks.ENERGY_FURNACE));
 

@@ -2,13 +2,12 @@ package abused_master.techutilities.registry;
 
 import abused_master.techutilities.items.EnumResourceItems;
 import com.google.common.collect.Maps;
-import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.tag.BlockTags;
+import net.minecraft.tag.ItemTags;
 import net.minecraft.tag.Tag;
 
 import java.util.Map;
@@ -33,8 +32,7 @@ public class PulverizerRecipes {
         registerRecipe(new ItemStack(Blocks.CHISELED_SANDSTONE), new ItemStack(Blocks.SAND), 2, ItemStack.EMPTY, 0, 0);
         registerRecipe(new ItemStack(Blocks.CLAY), new ItemStack(Items.CLAY_BALL), 4, ItemStack.EMPTY, 0, 0);
 
-        registerRecipe(new ItemStack(Items.COAL), new ItemStack(EnumResourceItems.COAL_DUST.getItemIngot()), 1, ItemStack.EMPTY, 0, 0);
-        registerRecipe(new ItemStack(Items.CHARCOAL), new ItemStack(EnumResourceItems.COAL_DUST.getItemIngot()), 1, ItemStack.EMPTY, 0, 0);
+        registerRecipe(ItemTags.COALS, new ItemStack(EnumResourceItems.COAL_DUST.getItemIngot()), 1, ItemStack.EMPTY, 0, 0);
         registerRecipe(new ItemStack(Items.BONE), new ItemStack(Items.BONE_MEAL), 6, ItemStack.EMPTY, 0, 0);
         registerRecipe(new ItemStack(Blocks.GLOWSTONE), new ItemStack(Items.GLOWSTONE_DUST), 4, ItemStack.EMPTY, 0, 0);
         registerRecipe(new ItemStack(Items.BLAZE_ROD), new ItemStack(Items.BLAZE_POWDER), 4, ItemStack.EMPTY, 0, 0);
@@ -61,9 +59,7 @@ public class PulverizerRecipes {
         registerRecipe(new ItemStack(Blocks.EMERALD_ORE), new ItemStack(Items.EMERALD), 2, new ItemStack(Items.EMERALD), 1, 10);
         registerRecipe(new ItemStack(Blocks.NETHER_QUARTZ_ORE), new ItemStack(Items.QUARTZ), 6, ItemStack.EMPTY, 0, 0);
 
-        for (Block woolEntry : BlockTags.WOOL.values()) {
-            registerRecipe(new ItemStack(woolEntry), new ItemStack(Items.STRING), 4, ItemStack.EMPTY, 0, 0);
-        }
+        registerRecipe(ItemTags.WOOL, new ItemStack(Items.STRING), 4, ItemStack.EMPTY, 0, 0);
     }
 
     public void registerRecipe(Object input, Object output, int outputAmount, Object randomDrop, int randomDropAmount, int percentageDrop) {
@@ -71,13 +67,11 @@ public class PulverizerRecipes {
     }
 
     public PulverizerRecipe getOutputRecipe(ItemStack input) {
-        for (Map.Entry<Object, PulverizerRecipe> entry : this.recipesMap.entrySet()) {
-            if(entry.getKey() instanceof ItemStack) {
-                if(input.getItem() == ((ItemStack) entry.getKey()).getItem()) {
-                    return entry.getValue();
-                }
-            }else if(entry.getKey() instanceof Tag) {
-                return ((Tag) entry.getKey()).contains(input.getItem()) ? entry.getValue() : null;
+        for (Object key : this.recipesMap.keySet()) {
+            if(key instanceof ItemStack && input.getItem() == ((ItemStack) key).getItem()) {
+                return this.recipesMap.get(key);
+            }else if(key instanceof Tag && ((Tag) key).contains(input.getItem())) {
+                return this.recipesMap.get(key);
             }
         }
 
@@ -115,6 +109,10 @@ public class PulverizerRecipes {
 
         public int getPercentageDrop() {
             return percentageDrop;
+        }
+
+        public PulverizerRecipe get() {
+            return this;
         }
     }
 }
